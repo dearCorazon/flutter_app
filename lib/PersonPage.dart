@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 class PersonPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return personPageState();
   }
 }

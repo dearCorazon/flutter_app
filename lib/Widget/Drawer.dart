@@ -24,7 +24,7 @@ class MDrawer extends  StatelessWidget{
                     builder: (context,child,model)=> Text('${model.email}'),
                   ),
                   currentAccountPicture:  GestureDetector(
-                    onTap:()=> Navigator.pushNamed(context, '/personPage'),
+                    onTap:()=> Navigator.pushNamed(context, '/login'),
                     child:  Icon(Icons.account_circle,size: 40.0)
                ),
                decoration:  BoxDecoration(
