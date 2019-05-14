@@ -24,6 +24,8 @@ dependencies:
   dio: 2.1.0
   unicorndial: ^1.1.5
   shared_preferences: ^0.5.2
+  scoped_model: ^1.0.1
+
 
 
 
