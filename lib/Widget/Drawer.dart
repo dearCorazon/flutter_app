@@ -5,10 +5,6 @@ class MDrawer extends  StatelessWidget{
   const MDrawer({
     Key key, }) : super(key: key);
   @override
-  void initState(){
-
-  }
-  @override
   Widget build(BuildContext context) {
     return  Drawer(
       child:   Container(

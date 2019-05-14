@@ -6,10 +6,18 @@ import 'package:flutter_app/PersonPage.dart';
 import 'package:flutter_app/KnowledgePage.dart';
 import 'package:flutter_app/DAO/SqliteDemo.dart';
 import 'package:flutter_app/DAO/DaoTest.dart';
+
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget{
-
+  // Myapp()async{
+  //   await _init();
+  // }
+  // _init()async{
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   await sharedPreferences.setString('name', 'name(not sign)');
+  //   await sharedPreferences.setString('email', 'null(not sign)');
+  // }
   @override
   Widget build(BuildContext context) {
 

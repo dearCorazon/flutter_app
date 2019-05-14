@@ -5,7 +5,7 @@ final String ColumnStatus='status';
 final String ColumnNextTime='nextTime';
 final String ColumnFollowType='followType';
 class Schedule{
-  static final _sql_createTableSchedule='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER)';
+  //static final _sql_createTableSchedule='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER)';
   int id;
   int testId;
   int userId;

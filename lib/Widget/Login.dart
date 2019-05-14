@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Log.dart';
+import 'package:flutter_app/Model/userModel.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 class Login extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -26,12 +29,16 @@ class Login extends StatelessWidget{
               ),
               Row(
                 children: <Widget>[
-                  RaisedButton(
-                    child: Text("login"),
-                    onPressed: (){
-                        Logv.Logprint("${_nameController.text}");
-                        Logv.Logprint("${_emailController.value.toString()}");
-                    },
+                  ScopedModel<userModel>(
+                    model: userModel(),
+                    child: RaisedButton(
+                      child: Text("login"),
+                      onPressed: (){
+                          
+                          Logv.Logprint("${_nameController.text}");
+                          Logv.Logprint("${_emailController.value.toString()}");
+                      },
+                    ),
                   ),
                   RaisedButton(
                     child: Text("Register"),
