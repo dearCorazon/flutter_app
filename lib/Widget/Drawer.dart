@@ -32,20 +32,6 @@ class MDrawer extends  StatelessWidget{
                 ),
 
               ),
-            //   UserAccountsDrawerHeader(
-            //    accountName: Text("Corazon"),
-            //    accountEmail: Text("chopperfan@qq.com"),
-            //    currentAccountPicture:  GestureDetector(
-            //      onTap:()=> Navigator.pushNamed(context, '/personPage'),
-            //      child:  Icon(Icons.account_circle,size: 40.0)
-            //    ),
-            //   decoration:  BoxDecoration(
-            //     image:  DecorationImage(
-            //         fit: BoxFit.fill,
-            //         image:  NetworkImage("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2610059453,2498942292&fm=200&gp=0.jpg")
-            //         )
-            //   ),
-            //  ),
               ListTile(
               title: new Text("Deck"),
               trailing: new Icon(Icons.arrow_forward),

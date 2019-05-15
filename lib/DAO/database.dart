@@ -3,27 +3,18 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:flutter_app/Log.dart';
-class Sqlite_helper{
+class DbProvider{
     static final _databasename= 'mydatabase';
     static final _databaseVersion =1;
     static final _sql_createTableTest='CREATE TABLE TEST(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,adderId INTEGER,question TEXT,chaos TEXT,answer TEXT,type INTEGER,catalog INTEGER,tag INTEGER)';
     static final _sql_createTableCatalog='CREATE TABLE CATALOG(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT,superiorId INTEGER)';
     static final _sql_createTableSchedule='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER)';
-    
-    Sqlite_helper._privateConstructor();
-    static final Sqlite_helper instance = Sqlite_helper._privateConstructor();
-    
     Database _database;
-  
-    Future<Database> get database async{
-      if(_database != null) return _database;
-      _database = await _initDatabase();
-      return _database;
-    }
+    String _path;
+    
     _initDatabase()async{
-      String _path;
-      Directory documentaryDirectory = await getApplicationDocumentsDirectory();
       Logv.Logprint("数据库初始化........");
+      Directory documentaryDirectory = await getApplicationDocumentsDirectory();
       print("logv:documentaryDiretory"+documentaryDirectory.toString());
       _path = join(documentaryDirectory.path,_databasename);
       print("logv:_path:"+_path);
@@ -35,6 +26,5 @@ class Sqlite_helper{
       } );
       var version =await _database.getVersion();
       Logv.Logprint("DB version:"+version.toString());
-      return _database;
     }
 }

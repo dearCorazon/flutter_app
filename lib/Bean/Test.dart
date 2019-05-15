@@ -1,5 +1,4 @@
-import 'package:flutter_app/DAO/Sqlite_helper.dart';
-import 'package:sqflite/sqflite.dart';
+
 final String ColumnId ='id';
 final String ColumnAdderId ='adderId';
 final String ColumnQuestion ='question';
