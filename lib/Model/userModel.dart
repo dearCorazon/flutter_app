@@ -1,5 +1,7 @@
+import 'package:flutter_app/Log.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class userModel extends Model{
   userModel(){
     _init();
@@ -11,8 +13,9 @@ class userModel extends Model{
   String get name => _name;
   _init()async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString('name', 'name(not sign)');
+    await sharedPreferences.setString('name', 'name(not sign1)');
     await sharedPreferences.setString('email', 'null(not sign)');
+    await Logv.Logprint("${sharedPreferences.getString("name")}");
   }
   void change_info(String email,String name)async{
     _email=email;
