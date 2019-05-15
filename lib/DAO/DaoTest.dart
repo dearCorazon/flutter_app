@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/Test.dart';
-import 'package:flutter_app/DAO/Sqlite_helper.dart';
 import 'package:flutter_app/Log.dart';
 import 'TestDao.dart';
 
@@ -27,7 +26,7 @@ class DaoTestState extends State<DaoTest>{
     TestDao testDao = new TestDao();
     tests = await testDao.queryAll();
     setState(() {
-  tests = tests;
+      tests = tests;
   });
   Logv.Logprint("initState: length of tests :" + tests.length.toString());
 }
@@ -66,11 +65,6 @@ class DaoTestState extends State<DaoTest>{
       body: Container(
         child: Column(
           children: <Widget>[
-             // RaisedButton(
-            //   child:Text("dabase create"),
-            //   onPressed: ()async{
-            //     Sqlite_helper sqlite_helper = new Sqlite_helper();
-            //   }),
             RaisedButton(
               child: Text("show database"),
               onPressed: ()async{

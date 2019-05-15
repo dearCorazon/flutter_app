@@ -7,7 +7,14 @@ class Catalog{
   int id;
   String name;
   int superiorId;
-  
+  Catalog.create(String name){
+    this.name=name;
+    superiorId= -1;
+  }
+  Catalog.createWithSuperior(String name,int superiorId){
+    this.name=name;
+    this.superiorId=superiorId;
+  }
   Catalog.fromMap(Map<String,dynamic> map){
     id=map[Columnid];
     name=map[Columnname];
