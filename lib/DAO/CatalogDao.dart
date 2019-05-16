@@ -11,6 +11,8 @@ class CatalogDao{
   String table="catalog";
   Database database;
   String _path;
+
+  
   Future<void> _open()async{
     Directory documentaryDirectory = await getApplicationDocumentsDirectory();
     print("logv:documentaryDiretory"+documentaryDirectory.toString());
@@ -22,7 +24,7 @@ class CatalogDao{
 
   Future<int> insert(Catalog catalog)async{
     await _open();
-    int result=await database.insert(table,catalog.toMap());
+    int result=await database.insert(table,catalog.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
     Logv.Logprint("result:"+result.toString());
     await database.close();
     return result;
@@ -45,6 +47,6 @@ class CatalogDao{
     return null;
   }
   
-  
+
 
 }

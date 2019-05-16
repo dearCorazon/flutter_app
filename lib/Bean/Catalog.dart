@@ -28,4 +28,9 @@ class Catalog{
     };
     return map;
   }
+  @override
+  String toString(){
+    return "id:"+id.toString()+" name:"+name+" superiorId:"+superiorId.toString();
+
+  }
   }

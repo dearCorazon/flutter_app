@@ -1,5 +1,6 @@
 import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
@@ -21,16 +22,18 @@ _init()async{
   Logv.Logprint("global init......................................");
   Database database=await Sqlite_helper.instance.database;
   print(database.toString());
-  Logv.Logprint("insert initial catalog data.........");
   CatalogDao catalogDao =CatalogDao();
-  await catalogDao.insert(Catalog.create("word"));
-  catalogDao.insert(Catalog.create("法律"));
-  catalogs=await catalogDao.queryAll() ;
-  Logv.Logprint("initial catlog are:............");
+  TestDao testDao = new TestDao();
+  catalogs=await catalogDao.queryAll();
+  Logv.Logprint("initial catlogs are:............");
   for(var e in catalogs){
-      Logv.Logprint(e.name);
+      Logv.Logprint(e.toString());
     }
- 
+  Logv.Logprint("initial tests are:............");
+  tests=await testDao.queryAll();
+  for(var e in tests){
+      Logv.Logprint(e.toString());
+    }
 }
 class MyApp extends StatelessWidget{
  
