@@ -13,6 +13,10 @@ class Schedule{
   int status;
   int followType;
   String nextTime;
+  void set setstatus(int newstatus){
+    status=newstatus;
+    //nexttime=Datetime.
+  }
   Schedule.create(int tid,int uid){
     this.testId=tid;
     this.userId=uid;

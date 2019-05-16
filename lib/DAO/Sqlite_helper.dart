@@ -6,10 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:flutter_app/Log.dart';
-// await catalogDao.insert(Catalog.create("word"));
-//   await catalogDao.insert(Catalog.create("法律"));
-//int result=await database.insert(table,catalog.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
-//int result=await database.insert(table,test.toMap());
 class Sqlite_helper{
     static final _databasename= 'mydatabase';
     static final _databaseVersion =1;
@@ -17,7 +13,7 @@ class Sqlite_helper{
     static final _sql_createTableCatalog='CREATE TABLE CATALOG(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT,superiorId INTEGER)';
     static final _sql_createTableSchedule='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER)';
     static final _sql_createTableCatalog2='CREATE TABLE CATALOG(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT UNIQUE,superiorId INTEGER)';
-    static final _sql_createTableSchedule2='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(testID,userID))';
+    static final _sql_createTableSchedule2='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testId INTEGER,userId INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(testID,userID))';
     //static final _sql_createTableSchedule3='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(id,testID,userID))';
     static final _sql_createTableSchedule3='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testId INTEGER,userId INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER)';
 
@@ -44,7 +40,7 @@ class Sqlite_helper{
           onCreate: (Database db,int version)async{
             Logv.Logprint("database onCreate:...........................");
             await db.execute(_sql_createTableCatalog2);
-            await db.execute(_sql_createTableSchedule3);
+            await db.execute(_sql_createTableSchedule2);
             await db.execute(_sql_createTableTest);
             await db.insert(tableTest,Test.create("1+1=?", "2").toMap());
             await db.insert(tableTest,Test.create("English", "英语").toMap());//TODO：一开始没有加await ，该语句执行，但后面的部分都没有执行，why？

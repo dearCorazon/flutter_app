@@ -10,13 +10,11 @@ class ScheduleDao{
   static final _databasename= 'mydatabase';
   static final _databaseVersion =1;
   String table="schedule";
-  Database database;
+  Database _database;
   String _path;
-  ScheduleDao(){
-    _open();
-  }
+
   Future<void> _open()async{
-    database = await Sqlite_helper.instance.database;
+    _database = await Sqlite_helper.instance.database;
     // Directory documentaryDirectory = await getApplicationDocumentsDirectory();
     // print("logv:documentaryDiretory"+documentaryDirectory.toString());
     // _path = join(documentaryDirectory.path,_databasename);
@@ -26,8 +24,8 @@ class ScheduleDao{
   }
   
   Future<int> insert(Schedule schedule)async{
-    // await _open();
-    int result=await database.insert(table,schedule.toMap());
+    await _open();
+    int result=await _database.insert(table,schedule.toMap());
     Logv.Logprint("result:"+result.toString());
     //await database.close();
     return result;
@@ -36,7 +34,7 @@ class ScheduleDao{
   Future<List<Schedule>> queryAll()async{
     List<Schedule> schedules=[];
     await _open();
-    List<Map> maps = await database.query(table,
+    List<Map> maps = await _database.query(table,
     columns: [ColumnId,ColumnTestId,ColumnUserId,ColumnStatus,ColumnNextTime,ColumnFollowType]);
     if(maps.length>0){
       for(int i=0;i<maps.length;i++){
@@ -49,6 +47,13 @@ class ScheduleDao{
     //await database.close();
     return null;
   }
+  
+  // Future<Schedule> update_status(int status)async{
+  //   Schedule schedule;
+  //   await _open();
+  //   _database.update(table, )
+  //   return schedule;
+  // }
   
 
 

@@ -16,11 +16,17 @@ import 'DAO/ScheduleDao.dart';
 
 void main() {
   _Dbinit();
- var schedule= Schedule.create(3, 1);
-  Logv.Logprint(schedule.toMap().toString());
+  test();
   runApp(MyApp());
 }
-
+void test(){
+  String now = DateTime.now().toIso8601String();
+  print(now);
+  DateTime dateTime = DateTime.parse(now);
+  print( dateTime.toIso8601String());
+  DateTime dateTime2=dateTime.add(Duration(days: 1));
+  print(dateTime2.toIso8601String());
+}
 // _init3()async{
 //   Logv.Logprint("......................schedule time stamp test.............");
 //   ScheduleDao scheduledao = new ScheduleDao();
