@@ -1,4 +1,5 @@
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/DAO/Sqlite_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -11,18 +12,15 @@ class TestDao{
   Database database;
   String _path;
   Future<void> _open()async{
+    database = await Sqlite_helper.instance.database;
     Directory documentaryDirectory = await getApplicationDocumentsDirectory();
-    print("logv:documentaryDiretory"+documentaryDirectory.toString());
     _path = join(documentaryDirectory.path,_databasename);
-    print("logv:_path:"+_path);
     database=await openDatabase(_path,version: _databaseVersion);
-    Logv.Logprint("database open?："+database.isOpen.toString());
    }
   Future<int> insert(Test test)async{
     await _open();
     int result=await database.insert(table,test.toMap());
     Logv.Logprint("result:"+result.toString());
-    await database.close();
     return result;
   }
   Future<List<Test>> queryAll()async{
@@ -34,17 +32,17 @@ class TestDao{
       for(int i=0;i<maps.length;i++){
         tests.add(Test.fromMap(maps[i]));
       }
-      await database.close();
+      //await database.close();
       return tests;
     }
     Logv.Logprint("error:no maps");
-    await database.close();
+    //await database.close();
     return null;
   }
   Future<void> delete(int id) async{
     await _open();
     int result=await database.delete(table,where: "$ColumnId=?",whereArgs: [id]);
-    database.close();
+    //database.close();
     Logv.Logprint("影响行数："+result.toString());
   }
   Future<Test>  query(int id)async{
@@ -58,7 +56,7 @@ class TestDao{
       database.close();
       return new Test.fromMap(maps.first);
     }
-    await database.close();
+    //await database.close();
     return null;
   }
 }

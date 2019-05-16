@@ -1,4 +1,5 @@
 import 'package:flutter_app/Bean/Catalog.dart';
+import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
@@ -11,49 +12,54 @@ import 'memory.dart';
 import 'package:flutter_app/PersonPage.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/DAO/DaoTest.dart';
+import 'DAO/ScheduleDao.dart';
 
-void main(){
-  _init();
+void main() {
+  _Dbinit();
+ var schedule= Schedule.create(3, 1);
+  Logv.Logprint(schedule.toMap().toString());
   runApp(MyApp());
 }
-_init()async{
-  List<Catalog> catalogs=[];
-  List<Test> tests=[];
+
+// _init3()async{
+//   Logv.Logprint("......................schedule time stamp test.............");
+//   ScheduleDao scheduledao = new ScheduleDao();
+//   scheduledao.insert(Schedule.create(1, -1));
+//   scheduledao.insert(Schedule.create(2, -1));
+//   List<Schedule> schedules=[];
+//   schedules=await scheduledao.queryAll();
+//   for (var e in schedules) {
+//     Logv.Logprint(e.toString());
+//   }
+// }
+_Dbinit() async {
   Logv.Logprint("global init......................................");
-  Database database=await Sqlite_helper.instance.database;
-  print(database.toString());
-  CatalogDao catalogDao =CatalogDao();
-  TestDao testDao = new TestDao();
-  catalogs=await catalogDao.queryAll();
-  Logv.Logprint("initial catlogs are:............");
-  for(var e in catalogs){
-      Logv.Logprint(e.toString());
-    }
-  Logv.Logprint("initial tests are:............");
-  tests=await testDao.queryAll();
-  for(var e in tests){
-      Logv.Logprint(e.toString());
-    }
+  await Sqlite_helper.instance.database;
+  ScheduleDao scheduleDao = new ScheduleDao();
+ List<Schedule> schedules=[];
+  schedules=await scheduleDao.queryAll();
+  for (var e in schedules) {
+    Logv.Logprint(e.toString());
+  }
+  
 }
-class MyApp extends StatelessWidget{
- 
+
+
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return new MaterialApp(
-      
       title: 'demo',
       theme: new ThemeData(
         primaryColor: Colors.blue,
       ),
-      home:   HomePage(),
-      routes: <String,WidgetBuilder>{
-        '/login':(BuildContext context)=>new Login(),
-        '/memory':(BuildContext context)=>new memory(),
-        '/personPage':(BuildContext context)=>new PersonPage(),
-        '/daotest':(BuildContext context)=>new DaoTest(),
+      home: HomePage(),
+      routes: <String, WidgetBuilder>{
+        '/login': (BuildContext context) => new Login(),
+        '/memory': (BuildContext context) => new memory(),
+        '/personPage': (BuildContext context) => new PersonPage(),
+        '/daotest': (BuildContext context) => new DaoTest(),
       },
     );
   }
 }
-

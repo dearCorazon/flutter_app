@@ -1,4 +1,5 @@
-final String ColumnId='id';
+ 
+import 'Test.dart';
 final String ColumnTestId='testId';
 final String ColumnUserId='userId';
 final String ColumnStatus='status';
@@ -12,6 +13,13 @@ class Schedule{
   int status;
   int followType;
   String nextTime;
+  Schedule.create(int tid,int uid){
+    this.testId=tid;
+    this.userId=uid;
+    status = 0;
+    followType= -1;
+    nextTime=DateTime.now().toIso8601String();
+  }
   Schedule.fromMap(Map<String,dynamic> map){
     id=map[ColumnId];
     testId=map[ColumnTestId];
@@ -30,5 +38,9 @@ class Schedule{
       ColumnNextTime:nextTime
     };
     return map;
+  }
+  @override
+  String toString(){
+    return "id=$id userId=${userId.toString()} Testid=${testId.toString()} status=$status nexttime=$nextTime";
   }
 }
