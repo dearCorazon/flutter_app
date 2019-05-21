@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/Sqlite_helper.dart';
 import 'package:sqflite/sqflite.dart';
@@ -5,6 +7,17 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:flutter_app/Log.dart';
+import 'package:flutter_app/Prefab.dart';
+//static final _sql_createTableTest='CREATE TABLE TEST(
+//   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+//   adderId INTEGER,
+//   question TEXT,
+//   chaos TEXT,
+//   answer TEXT,
+//   type INTEGER,
+//   catalog INTEGER,
+//   tag INTEGER)';
+
 class TestDao{
   static final _databasename= 'mydatabase';
   static final _databaseVersion =1;
@@ -58,6 +71,18 @@ class TestDao{
     }
     //await database.close();
     return null;
+  }
+  Future<int> card_number(int catalogId)async{
+    String sql='select count(*)as number from Test where catalog={catalogId}';
+    int result;
+    List<Map> maps = await database.rawQuery(sql, [ColumnNumber]);
+    if(maps.length>0){
+      return maps.first.values.first;
+    }
+    else{
+      Logv.Logprint("no maps,error");
+      return null; 
+    }
   }
 }
 

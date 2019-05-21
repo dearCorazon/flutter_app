@@ -3,8 +3,10 @@ import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
+import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'DAO/Sqlite_helper.dart';
 import 'Widget/Homepage.dart';
@@ -59,7 +61,10 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primaryColor: Colors.blue,
       ),
-      home: HomePage(),
+      home:  ChangeNotifierProvider<CatalogState>(
+        builder: (_) => CatalogState(), 
+        child:HomePage(),
+      ),
       routes: <String, WidgetBuilder>{
         '/login': (BuildContext context) => new Login(),
         '/memory': (BuildContext context) => new memory(),

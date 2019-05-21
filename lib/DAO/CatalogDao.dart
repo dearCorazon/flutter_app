@@ -11,7 +11,7 @@ class CatalogDao{
   String table="catalog";
   Database _database;
   String _path;
-  
+  String sql_fetchdata='select id,countfrom catalog where  ';
   Future<void> _open()async{
     Directory documentaryDirectory = await getApplicationDocumentsDirectory();
     _path = join(documentaryDirectory.path,_databasename);
@@ -34,12 +34,18 @@ class CatalogDao{
       for(int i=0;i<maps.length;i++){
         catalogs.add(Catalog.fromMap(maps[i]));
       }
-      
       return catalogs;
     }
     Logv.Logprint("error:no maps");
     
     return null;
   }
+  // Future<List<Catalog>> fetchData()async{
+  //   List<Catalog> catalogs=[];
+  //   await _open();
+
+  //   List<Map>maps = await _database.rawQuery(sql,)
+  //   return catalogs; 
+  // }
 
 } 
