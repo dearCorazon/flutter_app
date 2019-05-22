@@ -43,6 +43,7 @@ class DaoTestState extends State<DaoTest>{
             Row(
               children: <Widget>[
                 Text(tests[index].id.toString()),
+                Text("catalog:"+tests[index].catalogId.toString()),
                 RaisedButton(
                   child: Text("delete"),
                   onPressed: ()async{

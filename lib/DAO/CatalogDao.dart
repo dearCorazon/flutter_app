@@ -1,4 +1,5 @@
 import 'package:flutter_app/Bean/Catalog.dart';
+import 'package:flutter_app/Bean/Catalog_extra.dart';
 import 'package:flutter_app/DAO/Sqlite_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,7 +12,6 @@ class CatalogDao{
   String table="catalog";
   Database _database;
   String _path;
-  String sql_fetchdata='select id,countfrom catalog where  ';
   Future<void> _open()async{
     Directory documentaryDirectory = await getApplicationDocumentsDirectory();
     _path = join(documentaryDirectory.path,_databasename);
@@ -40,12 +40,36 @@ class CatalogDao{
     
     return null;
   }
-  // Future<List<Catalog>> fetchData()async{
-  //   List<Catalog> catalogs=[];
-  //   await _open();
+  Future<List<String>> queryAllCatalogNames()async{
+    await _open();
+    List<String> catalogs= [];
+    final String sql='select name from catalog';
+    List<Map> maps = await _database.rawQuery(sql);
+    for(Map map in maps){
+    map.forEach((key,value)=>catalogs.add(value));
+    }
+    return catalogs;
+  //    CatalogDao catalogDao = new CatalogDao();
+  
+  // List<Map> maps = await catalogDao.queryAllCatalogNames();
+  // Logv.Logprint("all catalogs name:"+maps.toString());
+ 
+  // Logv.Logprint("catalogs:"+catalogs.toString();
+  }
 
-  //   List<Map>maps = await _database.rawQuery(sql,)
-  //   return catalogs; 
-  // }
+  Future<List<Map>> fetchData()async{
+    //TODO:不能叫FectchData， 容易跟CatalogState 中的命名混乱
+  String sql='select  test.catalogId, catalog.name, count(all test.catalogId) as number '+
+  'from test,catalog '+
+  "where test.catalogId=catalog.id "+
+  "group by test.catalogId";
+  String sql_1='select count(distinct catalogId) as number from test ';
+  List<Catalog> catalogs=[];
+  List<Catalog_extra> catalogExtras=[];
+  await _open();
+  List<Map>maps = await _database.rawQuery(sql_1);
+  return maps; 
+}
+
 
 } 

@@ -51,12 +51,13 @@ class Test{
       ColumnAnswer:answer,
       ColumnType:type,
       ColumnTagID:tag,
-      ColumnChaos:chaos
+      ColumnChaos:chaos,
+      ColumnCatalogId:catalogId
     };
     return map;
   }
   @override
   String toString() {
-    return "id:${id.toString()}  question:$question  answer:$answer";
+    return "id:${id.toString()}  question:$question  answer:$answer,catalogid:$catalogId";
   }
 }

@@ -1,14 +1,18 @@
 final String Columnid='id';
 final String Columnname='name';
 final String ColumnsuperiorId='superiorId';
-final String Columnallcards='allcards';
+final String Columncards='cards';
 //static final _sql_createTableCatalog='CREATE TABLE CATALOG(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT,superiorId INTEGER)';
 
 class Catalog{
   int id;
   String name;
   int superiorId;
-  int allcards;
+  Catalog(int id,String name,int superiorId){
+    this.id=id;
+    this.name=name;
+    this.superiorId=superiorId;
+  }
 
   Catalog.create(String name){
     this.name=name;
@@ -30,19 +34,19 @@ class Catalog{
     id=map[Columnid];
     name=map[Columnname];
     superiorId=map[ColumnsuperiorId];
-    allcards=map[Columnallcards];
+   // allcards=map[Columnallcards];
   }
   Map<String,dynamic> toMap(){
     var map =<String,dynamic>{
       Columnid:id,
       Columnname:name,
       ColumnsuperiorId:superiorId,
-      Columnallcards:allcards,
+    //  Columnallcards:allcards,
     };
     return map;
   }
   @override
   String toString(){
-    return "id:"+id.toString()+" name:"+name+" superiorId:"+superiorId.toString()+"all cards:$allcards";
+    return "id:"+id.toString()+" name:"+name+" superiorId:"+superiorId.toString();
   }
   }

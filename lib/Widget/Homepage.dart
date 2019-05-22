@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
+import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Widget/ShowCatalog.dart';
 import 'package:provider/provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'Drawer.dart';
+import 'package:flutter_app/Widget/Addcards.dart';
 
 class HomePage extends StatelessWidget {
   TextEditingController catalog_controller = new TextEditingController();
@@ -26,7 +28,24 @@ class HomePage extends StatelessWidget {
               mini: true,
               heroTag: 'button2',
               onPressed: null,
-              child: IconButton(icon: Icon(Icons.add), onPressed: null))),
+              child: ChangeNotifierProvider<CatalogState>(
+                    builder: (_) => CatalogState(), 
+                    child: IconButton(
+                      icon: Icon(Icons.add), 
+                      onPressed: (){
+                        List<String> catalogs=catalogState.getAllcatalognames;
+                        Logv.Logprint("onpressesd:"+catalogs.toString());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:(context) => Addcards(catalogs)
+                          ),
+                        );
+                      }
+                    ),
+                    )
+          )
+      ),
       UnicornButton(
           currentButton: FloatingActionButton(
               mini: true,
@@ -73,7 +92,7 @@ class HomePage extends StatelessWidget {
                             onPressed: () async {
                               CatalogDao catalogDao = new CatalogDao();
                               await catalogDao.insert(
-                                  Catalog.create(catalog_controller.text));
+                              Catalog.create(catalog_controller.text));
                               catalogState.fetchData();
                               Navigator.of(context).pop();
                             },

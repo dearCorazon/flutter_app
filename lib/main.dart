@@ -1,9 +1,11 @@
 import 'package:flutter_app/Bean/Catalog.dart';
+import 'package:flutter_app/Bean/Catalog_extra.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
+import 'package:flutter_app/Widget/Addcards.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,25 +23,32 @@ void main() {
   test();
   runApp(MyApp());
 }
-void test(){
-  String now = DateTime.now().toIso8601String();
-  print(now);
-  DateTime dateTime = DateTime.parse(now);
-  print( dateTime.toIso8601String());
-  DateTime dateTime2=dateTime.add(Duration(days: 1));
-  print(dateTime2.toIso8601String());
+void test()async{
+ 
+  // Catalog catalog= Catalog.create("test");
+  // CatalogDao catalogDao = new CatalogDao();
+  // Logv.Logprint("catalog :${catalog.toString()}");
+  // Catalog_extra catalog_extra =Catalog_extra.create("test2", 2);
+  // Logv.Logprint("catalog extra: ${catalog_extra.toString()}");
+  // Logv.Logprint("catalog extra: ${catalog_extra.toMap()}");
+  // TestDao testDao = new TestDao();
+  // List<Map> maps= await catalogDao.fetchData();
+  // Logv.Logprint("maps:"+maps.toString());
+  // TestDao testDao = new TestDao();
+  // int result= await testDao.card_number(-1);
+  // Logv.Logprint("card number init: "+result.toString());
+  // await testDao.insert(Test.create("card", "卡片"));
+  // result= await testDao.card_number(-1);
+  // Logv.Logprint("card number after add: "+result.toString());
+
+  // String now = DateTime.now().toIso8601String();
+  // print(now);
+  // DateTime dateTime = DateTime.parse(now);
+  // print( dateTime.toIso8601String());
+  // DateTime dateTime2=dateTime.add(Duration(days: 1));
+  // print(dateTime2.toIso8601String());
 }
-// _init3()async{
-//   Logv.Logprint("......................schedule time stamp test.............");
-//   ScheduleDao scheduledao = new ScheduleDao();
-//   scheduledao.insert(Schedule.create(1, -1));
-//   scheduledao.insert(Schedule.create(2, -1));
-//   List<Schedule> schedules=[];
-//   schedules=await scheduledao.queryAll();
-//   for (var e in schedules) {
-//     Logv.Logprint(e.toString());
-//   }
-// }
+
 _Dbinit() async {
   Logv.Logprint("global init......................................");
   await Sqlite_helper.instance.database;
@@ -49,6 +58,7 @@ _Dbinit() async {
   for (var e in schedules) {
     Logv.Logprint(e.toString());
   }
+  
   
 }
 

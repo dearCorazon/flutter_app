@@ -69,18 +69,17 @@ class TestDao{
       database.close();
       return new Test.fromMap(maps.first);
     }
-    //await database.close();
     return null;
   }
   Future<int> card_number(int catalogId)async{
-    String sql='select count(*)as number from Test where catalog={catalogId}';
-    int result;
-    List<Map> maps = await database.rawQuery(sql, [ColumnNumber]);
+    await _open();
+    List<Map> maps = await database.rawQuery("select count(*)as number from Test where catalogId=$catalogId");
+    print(maps);
     if(maps.length>0){
       return maps.first.values.first;
     }
     else{
-      Logv.Logprint("no maps,error");
+      Logv.Logprint("no maps,error:");
       return null; 
     }
   }
