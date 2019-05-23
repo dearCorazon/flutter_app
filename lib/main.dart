@@ -24,7 +24,33 @@ void main() {
   runApp(MyApp());
 }
 void test()async{
- 
+  CatalogDao catalogDao = new CatalogDao();
+  List<Catalog> catalogs = await catalogDao.queryAll();
+  List<Map> maps = [];
+  String name;
+  catalogs.forEach(
+    (e){
+      maps.add(e.toMap());
+      }
+    
+  );
+  
+  // maps.forEach((map){
+  //   String name;
+  //   map["superiorName"]= name;
+
+  // });
+  //第一步：从对应的superiorId中找出对应的名字
+
+  //Logv.Logprint("map first test: ");
+  Logv.Logprint("maps:"+maps.toString());
+  Logv.Logprint("maps:"+getNameByID(maps,1));
+
+  // maps.forEach((map)async{
+  //     String superiorName;
+  //     superiorName = await catalogDao.queryAllCatalogNames();
+  //     map['superiorName']=superiorName;
+  // });
   // Catalog catalog= Catalog.create("test");
   // CatalogDao catalogDao = new CatalogDao();
   // Logv.Logprint("catalog :${catalog.toString()}");
@@ -48,7 +74,11 @@ void test()async{
   // DateTime dateTime2=dateTime.add(Duration(days: 1));
   // print(dateTime2.toIso8601String());
 }
-
+String getNameByID(List<Map> maps,int i){
+  String name;
+  name= maps.singleWhere((map)=>map["id"]==i).values.toList();
+  return name;
+}
 _Dbinit() async {
   Logv.Logprint("global init......................................");
   await Sqlite_helper.instance.database;

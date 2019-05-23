@@ -7,6 +7,8 @@ class CatalogState with ChangeNotifier{
     CatalogState(){
       fetchData();
     }
+    //todo：可优化的地方:先取出所有的List<Catalog> 再根据数据的要求再整理成List 或者map，数据处理再这个dart文件中搞
+  
     List<String> _allcatalogs=[];
     List<Catalog> _catalogs =[];
     List<Catalog_extra> _catalogExtras=[];
@@ -19,4 +21,7 @@ class CatalogState with ChangeNotifier{
     }
   List<Catalog> get getCatlalogs => _catalogs;
   List<String>  get getAllcatalognames => _allcatalogs;
+  void makedata(){
+    
+  }
 }

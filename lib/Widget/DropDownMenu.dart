@@ -38,9 +38,7 @@ class DropDownMenu_catalog extends StatefulWidget {
 
 class _StateCatalog extends State<DropDownMenu_catalog> {
   List<String> catalogs;
-  _StateCatalog(this.catalogs);
-  //List _catalogs = ["math", "English", "default"];
- 
+  _StateCatalog(this.catalogs); 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentCatalog;
   List<DropdownMenuItem<String>> getDropMenuItems() {
