@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
+import 'package:flutter_app/Provider/DropDownMenuState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
+import 'package:flutter_app/Widget/CardsList.dart';
 import 'package:flutter_app/Widget/Drawer.dart';
 import 'package:flutter_app/Widget/DropDownMenu.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +13,7 @@ class ShowAllCards extends StatelessWidget {
   Widget build(BuildContext context) {
     final catalogState = Provider.of<CatalogState>(context);
     final userState = Provider.of<UserState>(context);
+    final dropDownMenuCatlogState= Provider.of<DropDownMenuState>(context);
     return Container(
       child: Scaffold(
         appBar: AppBar(
@@ -18,8 +21,7 @@ class ShowAllCards extends StatelessWidget {
             child: DropDownMenu_catalog(catalogState.getAllCatalognamesExtra),
           ),
           actions: <Widget>[
-            Center(child: Text("90张卡片")),
-            //Container(child: DropDownMenu_catalog(catalogState.getAlllcatalognamesExtra)),
+            Center(child: Text("${dropDownMenuCatlogState.getcurrentNumber}张卡片")),
             IconButton(
             icon:Icon(Icons.add),
             onPressed: (){
@@ -36,6 +38,8 @@ class ShowAllCards extends StatelessWidget {
     
       drawer:  Mydrawer(), 
       body: Container(
+        child: CardsList(),
+        
         
       ),
       ),

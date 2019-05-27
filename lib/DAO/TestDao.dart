@@ -36,20 +36,34 @@ class TestDao{
     Logv.Logprint("result:"+result.toString());
     return result;
   }
-  Future<List<Test>> queryAll()async{
-    List<Test> tests=[];
+  Future<List<Test>> queryListByName(String name)async{
+    //首先根据目录名 找出目录iD
+    //再根据ID 找出该CatalogId==目录Id 的所有卡片
     await _open();
-    List<Map> maps = await database.query(table,
-    columns: [ColumnId,ColumnQuestion,ColumnAnswer]);
+    List<Test> tests=[];
+    String sql="select * from test,catalog where catalog.name='$name'and catalog.id=test.catalogid";
+    List<Map> maps = await database.rawQuery(sql);
     if(maps.length>0){
       for(int i=0;i<maps.length;i++){
         tests.add(Test.fromMap(maps[i]));
       }
-      //await database.close();
       return tests;
     }
     Logv.Logprint("error:no maps");
-    //await database.close();
+    return null;
+  }
+  Future<List<Test>> queryAll()async{
+    String sql = 'select * from test';
+    List<Test> tests=[];
+    await _open();
+    List<Map> maps = await database.rawQuery(sql);
+    if(maps.length>0){
+      for(int i=0;i<maps.length;i++){
+        tests.add(Test.fromMap(maps[i]));
+      }
+      return tests;
+    }
+    Logv.Logprint("error:no maps");
     return null;
   }
   Future<void> delete(int id) async{

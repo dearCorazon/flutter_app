@@ -44,6 +44,12 @@ class CatalogDao{
     Logv.Logprint("result:"+result.toString());
     return result;
    }
+  Future<int> allCardNumber()async{
+    await _open();
+    final String sql = 'select * from test';
+    List<Map> maps = await _database.rawQuery(sql);
+    return maps.length;
+  }
   Future<String> getNamebyId(int id)async{
     List<Map> maps = await _database.rawQuery("select name from catalog where id = $id");
     if(maps.length>0){
@@ -81,17 +87,27 @@ class CatalogDao{
  
   // Logv.Logprint("catalogs:"+catalogs.toString();
   }
-  Future<List> getIdbyName()async{
+  Future<int> getIdbyName(String name)async{
+    //TODE:优化函数名
     //首先拿到目录名 再在该目录对应的名字 找出对应的id
     //再拿到这个Id 找出卡片中superiorId 等于这个id 的数量
     int result;
-    final String sql2 = "select test.catalogId ,catalog.name,count(*) as number from test,catalog where test.catalogId=catalog.id";
-
-    //final String sql = "select test.catalogId ,catalog.name,count(*) as number from test,catalog where cataloag.name=$name and test.catalogId=catalog.id";
-    await _open();
-    List<Map>  maps = await _database.rawQuery(sql2);
-    return maps;
+    final String sql2 = "select test.catalogId ,catalog.name, count(*) as number from test,catalog where test.catalogId=catalog.id group by test.catalogId";
+    final String sql ="select test.catalogId ,catalog.name, count(*) as number from test,catalog where test.catalogId=catalog.id and catalog.name='$name' group by test.catalogId";
+    await _open();//TODO：重写
+    List<Map>  maps = await _database.rawQuery(sql);
+    Logv.Logprint(maps.toString());
+    Logv.Logprint(maps.first.toString());
+    maps.first.forEach((k,v){
+      //Logv.Logprint("k,v+"+k.toString()+v.toString());
+     // print(k+v);
+      if(k=='number'){result=int.parse(v.toString());}
+    });
+    return result;
   }
+  // Future<int> getNumberByCatalogName()async{
+  //   final String sql='select *from test where'
+  // }
   Future<List<Map>> fetchData()async{
     //TODO:不能叫FectchData， 容易跟CatalogState 中的命名混乱
   String sql='select  test.catalogId, catalog.name, count(all test.catalogId) as number '+

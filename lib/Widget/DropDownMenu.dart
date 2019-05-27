@@ -72,11 +72,9 @@ class _StateCatalog extends State<DropDownMenu_catalog> {
     return DropdownButton<String>(
         value: _currentCatalog,
         onChanged: (String newValue) {
-          setState(() {
-            //这里只能获取
-            
+          catalogDropdownMunuState.changeCurrentCatalogNumber(newValue);
+           setState(() {
             _currentCatalog = newValue;
-            
           });
         },
         items: _dropDownMenuItems);

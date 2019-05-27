@@ -65,6 +65,6 @@ class Test{
   }
   @override
   String toString() {
-    return "id:${id.toString()}  question:$question  answer:$answer,catalogid:$catalogId";
+    return "\nid:${id.toString()}  question:$question  answer:$answer,catalogid:$catalogId,type:$type,chaos:$chaos\n";
   }
 }
