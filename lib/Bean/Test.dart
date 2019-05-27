@@ -27,9 +27,16 @@ class Test{
   Test.create(String question,String answer){
     this.question=question;
     this.answer=answer;
-    this.type=-1;
-    this.catalogId=-1;
-    this.adderId=-1;
+    this.type=1;
+    this.catalogId=1;
+    this.adderId=1;
+  }
+  Test.createWithCatalog(String question,String answer,int catalogId){
+    this.question=question;
+    this.answer=answer;
+    this.type=1;
+    this.catalogId=catalogId;
+    this.adderId=1;
   }
 
   Test.fromMap(Map<String ,dynamic> map){

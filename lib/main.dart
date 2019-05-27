@@ -5,6 +5,8 @@ import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
+import 'package:flutter_app/Provider/DropDownMenuState.dart';
+import 'package:flutter_app/Provider/UserState.dart';
 import 'package:flutter_app/Widget/Addcards.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +29,21 @@ void test()async{
   CatalogDao catalogDao = new CatalogDao();
   List<Catalog> catalogs = await catalogDao.queryAll();
   List<Map> maps = [];
+  List<Map> maps2=[];
   String name;
+  maps2= await catalogDao.getIdbyName();
+  Logv.Logprint("test==============:"+maps2.toString());
+
+  List<String> a = ["quanbu"];
+  List<String> b = ["add","bdd","pdd"];
+  Logv.Logprint("add before"+a.toString());
+  a.addAll(b);
+  Logv.Logprint("add after:"+a.toString());
   catalogs.forEach(
     (e){
       maps.add(e.toMap());
       }
-    
+  
   );
   
   // maps.forEach((map){
@@ -76,41 +87,59 @@ void test()async{
 }
 String getNameByID(List<Map> maps,int i){
   String name;
-  name= maps.singleWhere((map)=>map["id"]==i).values.toList();
+ // name= maps.singleWhere((map)=>map["id"]==i).values.toList();
   return name;
 }
 _Dbinit() async {
-  Logv.Logprint("global init......................................");
-  await Sqlite_helper.instance.database;
-  ScheduleDao scheduleDao = new ScheduleDao();
- List<Schedule> schedules=[];
-  schedules=await scheduleDao.queryAll();
-  for (var e in schedules) {
-    Logv.Logprint(e.toString());
-  }
-  
-  
+  //目录iD  1 为默认 2 为网络安全法 3 为英语 
+   Logv.Logprint("Database init......................................");
+   await Sqlite_helper.instance.database;
+   CatalogDao catalogDao = new CatalogDao();
+   TestDao testDao = new TestDao();
+   testDao.insert(Test.createWithCatalog("网络","安全法" ,2));
+   testDao.insert(Test.createWithCatalog("网络安全法重要吗","重要" ,2));
+   testDao.insert(Test.createWithCatalog("网络安全法属于","法律" ,2));
+
+//   ScheduleDao scheduleDao = new ScheduleDao();
+//  List<Schedule> schedules=[];
+//   schedules=await scheduleDao.queryAll();
+//   for (var e in schedules) {
+//     Logv.Logprint(e.toString());
+//   }
 }
 
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'demo',
-      theme: new ThemeData(
-        primaryColor: Colors.blue,
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<DropDownMenuState>(
+            builder: (_) => DropDownMenuState(), 
+          ),
+          ChangeNotifierProvider<CatalogState>(
+            builder: (_) => CatalogState(), 
+          ),
+           ChangeNotifierProvider<UserState>(
+             builder: (context)=>UserState(),
+           ),
+        ],
+        child: MaterialApp(
+        title: 'demo',
+        theme: new ThemeData(
+          primaryColor: Colors.blue,
+        ),
+        home:  HomePage(),
+        // ChangeNotifierProvider<CatalogState>(
+        //   builder: (_) => CatalogState(), 
+        //   child:HomePage()
+        routes: <String, WidgetBuilder>{
+          '/login': (BuildContext context) => new Login(),
+          '/memory': (BuildContext context) => new memory(),
+          '/personPage': (BuildContext context) => new PersonPage(),
+          '/daotest': (BuildContext context) => new DaoTest(),
+        },
       ),
-      home:  ChangeNotifierProvider<CatalogState>(
-        builder: (_) => CatalogState(), 
-        child:HomePage(),
-      ),
-      routes: <String, WidgetBuilder>{
-        '/login': (BuildContext context) => new Login(),
-        '/memory': (BuildContext context) => new memory(),
-        '/personPage': (BuildContext context) => new PersonPage(),
-        '/daotest': (BuildContext context) => new DaoTest(),
-      },
     );
   }
 }

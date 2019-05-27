@@ -81,7 +81,17 @@ class CatalogDao{
  
   // Logv.Logprint("catalogs:"+catalogs.toString();
   }
+  Future<List> getIdbyName()async{
+    //首先拿到目录名 再在该目录对应的名字 找出对应的id
+    //再拿到这个Id 找出卡片中superiorId 等于这个id 的数量
+    int result;
+    final String sql2 = "select test.catalogId ,catalog.name,count(*) as number from test,catalog where test.catalogId=catalog.id";
 
+    //final String sql = "select test.catalogId ,catalog.name,count(*) as number from test,catalog where cataloag.name=$name and test.catalogId=catalog.id";
+    await _open();
+    List<Map>  maps = await _database.rawQuery(sql2);
+    return maps;
+  }
   Future<List<Map>> fetchData()async{
     //TODO:不能叫FectchData， 容易跟CatalogState 中的命名混乱
   String sql='select  test.catalogId, catalog.name, count(all test.catalogId) as number '+

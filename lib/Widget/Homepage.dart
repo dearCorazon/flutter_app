@@ -28,22 +28,19 @@ class HomePage extends StatelessWidget {
               mini: true,
               heroTag: 'button2',
               onPressed: null,
-              child: ChangeNotifierProvider<CatalogState>(
-                    builder: (_) => CatalogState(), 
-                    child: IconButton(
-                      icon: Icon(Icons.add), 
-                      onPressed: (){
-                        List<String> catalogs=catalogState.getAllcatalognames;
-                        Logv.Logprint("onpressesd:"+catalogs.toString());
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:(context) => Addcards(catalogs)
-                          ),
-                        );
-                      }
+              child: IconButton(
+                icon: Icon(Icons.add), 
+                onPressed: (){
+                  List<String> catalogs=catalogState.getAllCatalognames;
+                  Logv.Logprint("onpressesd:"+catalogs.toString());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:(context) => Addcards(catalogs)
                     ),
-                    )
+                  );
+                }
+              )
           )
       ),
       UnicornButton(
@@ -71,7 +68,7 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        drawer: MDrawer(),
+        drawer: Mydrawer(),
         body: Container(
           child: Column(
             children: <Widget>[
@@ -105,7 +102,7 @@ class HomePage extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: Scrollbar(child: ShowCatalog()),
+                  child: Scrollbar(child: ShowCatalogs()),
                 ),
               ),
               Text(

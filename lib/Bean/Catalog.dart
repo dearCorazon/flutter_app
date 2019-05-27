@@ -16,7 +16,7 @@ class Catalog{
 
   Catalog.create(String name){
     this.name=name;
-    superiorId= -1;
+    superiorId= 1;
   }
   bool isTop(){
     if(superiorId==-1){

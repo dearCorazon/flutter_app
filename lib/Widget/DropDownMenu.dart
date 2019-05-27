@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Log.dart';
+import 'package:flutter_app/Provider/DropDownMenuState.dart';
+import 'package:provider/provider.dart';
 
 class DropDownMenu_type extends StatefulWidget {
   @override
@@ -44,7 +46,7 @@ class _StateCatalog extends State<DropDownMenu_catalog> {
   List<DropdownMenuItem<String>> getDropMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
     for (String catalog in catalogs) {
-      items.add(DropdownMenuItem(
+      items.add(DropdownMenuItem( 
         value: catalog,
         child: Text(catalog),
       ));
@@ -66,11 +68,15 @@ class _StateCatalog extends State<DropDownMenu_catalog> {
 
   @override
   Widget build(BuildContext context) {
+    final catalogDropdownMunuState = Provider.of<DropDownMenuState>(context);
     return DropdownButton<String>(
         value: _currentCatalog,
         onChanged: (String newValue) {
           setState(() {
+            //这里只能获取
+            
             _currentCatalog = newValue;
+            
           });
         },
         items: _dropDownMenuItems);

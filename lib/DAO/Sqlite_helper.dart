@@ -45,8 +45,9 @@ class Sqlite_helper{
             await db.insert(tableTest,Test.create("1+1=?", "2").toMap());
             await db.insert(tableTest,Test.create("English", "英语").toMap());//TODO：一开始没有加await ，该语句执行，但后面的部分都没有执行，why？
             await db.insert(tableCatalog, Catalog.create("default").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
+            await db.insert(tableCatalog, Catalog.create("网络安全法").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
             await db.insert(tableCatalog, Catalog.create("English").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
-            await db.insert(tableCatalog, Catalog.create("法律").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
+
             var schedule= Schedule.create(3, 1);
             Logv.Logprint(schedule.toMap().toString());
             print("schedule1:${schedule.toString()}");
