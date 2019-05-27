@@ -38,7 +38,20 @@ class ShowAllCards extends StatelessWidget {
     
       drawer:  Mydrawer(), 
       body: Container(
-        child: CardsList(),
+        child: Column(
+          children: <Widget>[
+            Table(
+              children: [
+                TableRow(
+                  children:[
+                  Text("问题"),
+                  Text("答案"),]
+                )
+              ],
+            ),
+            CardsList(),
+          ],
+        ),
         
         
       ),

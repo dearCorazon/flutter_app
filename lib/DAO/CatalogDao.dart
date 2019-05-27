@@ -55,7 +55,19 @@ class CatalogDao{
     if(maps.length>0){
       return maps.first.values.toList().toString();
     }
-  } 
+  }
+  Future<int> getIdByName(String name)async{
+    int id;
+    await _open();
+    String sql = "select id from catalog where name='$name'";
+    List<Map> maps = await _database.rawQuery(sql);
+    maps.first.forEach((k,v){
+      if(k=='id'){
+        id = int.parse(v.toString());}
+    });
+    return id;
+    
+  }
   Future<List<Catalog>> queryAll()async{
     List<Catalog> catalogs=[];
     await _open();
@@ -87,7 +99,7 @@ class CatalogDao{
  
   // Logv.Logprint("catalogs:"+catalogs.toString();
   }
-  Future<int> getIdbyName(String name)async{
+  Future<int> getNumberbyName(String name)async{
     //TODE:优化函数名
     //首先拿到目录名 再在该目录对应的名字 找出对应的id
     //再拿到这个Id 找出卡片中superiorId 等于这个id 的数量
@@ -97,7 +109,7 @@ class CatalogDao{
     await _open();//TODO：重写
     List<Map>  maps = await _database.rawQuery(sql);
     Logv.Logprint(maps.toString());
-    Logv.Logprint(maps.first.toString());
+    //Logv.Logprint(maps.first.toString());
     maps.first.forEach((k,v){
       //Logv.Logprint("k,v+"+k.toString()+v.toString());
      // print(k+v);

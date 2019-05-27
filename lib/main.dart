@@ -4,6 +4,7 @@ import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
+import 'package:flutter_app/Provider/CardsAddState.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Provider/DropDownMenuState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_app/Widget/Addcards.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'DAO/Sqlite_helper.dart';
 import 'Widget/Homepage.dart';
 import 'memory.dart';
@@ -27,6 +27,9 @@ void main() async{
 void test()async{
   CatalogDao catalogDao = new CatalogDao();
   TestDao  testDao = new TestDao();
+  int id ;
+  id = await catalogDao.getIdByName("English");
+  Logv.Logprint("id:0000000000000000000000000000000000000000000:$id");
   List<Test> tests1=await testDao.queryListByName('English');
   Logv.Logprint("querybyname:))))))))))))))))"+tests1.toString());
   List<Test> tests=await testDao.queryAll();
@@ -35,7 +38,8 @@ void test()async{
   List<Map> maps = [];
   List<Map> maps2=[];
   String name;
-  int result= await catalogDao.getIdbyName('English');
+  //TODO:当数据为空时 ，会报错，所以理论上，当手机中没有数据时 ，也不会启动
+  int result= await catalogDao.getNumberbyName('English');
   Logv.Logprint("result ........"+result.toString());
   Logv.Logprint("test==============:"+maps2.toString());
   int length=await catalogDao.allCardNumber();
@@ -120,6 +124,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider<CardsAddState>(
+            builder: (context)=>CardsAddState(),
+          ),
           ChangeNotifierProvider<DropDownMenuState>(
             builder: (_) => DropDownMenuState(), 
           ),

@@ -13,7 +13,6 @@ class Catalog{
     this.name=name;
     this.superiorId=superiorId;
   }
-
   Catalog.create(String name){
     this.name=name;
     superiorId= 1;

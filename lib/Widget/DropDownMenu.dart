@@ -9,17 +9,19 @@ class DropDownMenu_type extends StatefulWidget {
 }
 
 class _State extends State<DropDownMenu_type> {
-  String dropdownValue='cards';
+  String dropdownValue='普通卡片';
   @override
   Widget build(BuildContext context) {
+    final dropdownMenuState = Provider.of<DropDownMenuState>(context);
     return DropdownButton<String>(
       value: dropdownValue,
       onChanged: (String newValue) {
+        dropdownMenuState.changeCardType(newValue);
         setState(() {
           dropdownValue = newValue;
         });
       },
-      items: <String>["cards", "single", "muti"]
+      items: <String>["普通卡片", "单选题", "多选题","大题"]
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem(
           value: value,
