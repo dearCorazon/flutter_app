@@ -5,7 +5,7 @@ final String ColumnUserId='userId';
 final String ColumnStatus='status';
 final String ColumnNextTime='nextTime';
 final String ColumnFollowType='followType';
-final String ColumnIsMarked='isMarked';
+final String ColumnIsmark='ismark';
 class Schedule{
   //static final _sql_createTableSchedule='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER)';
   int id;
@@ -14,7 +14,7 @@ class Schedule{
   int status;
   int followType;
   String nextTime;
-  int isMarked;
+  int ismark;
   void set setstatus(int newstatus){
     status=newstatus;
     //nexttime=Datetime.
@@ -24,7 +24,7 @@ class Schedule{
     this.userId=uid;
     status = 0;
     followType= -1;
-    isMarked=0;
+    ismark=0;
     nextTime=DateTime.now().toIso8601String();
   }
   Schedule.fromMap(Map<String,dynamic> map){
@@ -32,7 +32,7 @@ class Schedule{
     testId=map[ColumnTestId];
     userId=map[ColumnUserId];
     status=map[ColumnStatus];
-    isMarked=map[ColumnIsMarked];
+    ismark=map[ColumnIsmark];
     followType=map[ColumnFollowType];//TODO:代表时否为错题 收藏 后期改
     nextTime=map[ColumnNextTime];
   }
@@ -49,6 +49,6 @@ class Schedule{
   }
   @override
   String toString(){
-    return "id=$id userId=${userId.toString()} Testid=${testId.toString()} status=$status nexttime=$nextTime isMarked=$isMarked";
+    return "id=$id userId=${userId.toString()} Testid=${testId.toString()} status=$status nexttime=$nextTime isMarked=$ismark";
   }
 }

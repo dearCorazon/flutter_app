@@ -9,7 +9,7 @@ import 'package:flutter_app/Log.dart';
 class Sqlite_helper{
     static final _databasename= 'mydatabase';
     static final _databaseVersion =1;
-    static final _sql_createTableTest='CREATE TABLE TEST(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,adderId INTEGER,question TEXT,chaos TEXT,answer TEXT,type INTEGER,catalogId INTEGER,tag INTEGER)';
+    static final _sql_createTableTest='CREATE TABLE TEST(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,adderId INTEGER,question TEXT UNIQUE,chaos TEXT,answer TEXT,type INTEGER,catalogId INTEGER,tag INTEGER)';
     static final _sql_createTableCatalog='CREATE TABLE CATALOG(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT,superiorId INTEGER)';
     static final _sql_createTableSchedule='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER)';
     static final _sql_createTableCatalog2='CREATE TABLE CATALOG(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT UNIQUE,superiorId INTEGER)';
@@ -53,12 +53,12 @@ class Sqlite_helper{
             await db.insert(tableCatalog, Catalog.create("网络安全法").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =2 
             await db.insert(tableCatalog, Catalog.create("English").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =3
             
-            var schedule= Schedule.create(3, 1);
+            //var schedule= Schedule.create(3, 1);
             await db.insert(tableSchedule,Schedule.create(1, 1).toMap());
             await db.insert(tableSchedule,Schedule.create(2, 1).toMap());
             await db.insert(tableSchedule,Schedule.create(3, 1).toMap());
             await db.insert(tableSchedule,Schedule.create(4, 1).toMap());
-            Logv.Logprint(schedule.toMap().toString());
+            //Logv.Logprint(schedule.toMap().toString());
            // print("schedule1:${schedule.toString()}");
             
             //await db.insert(tableSchedule,Schedule.create(-1,1).toMap());

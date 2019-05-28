@@ -2,8 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
+import 'package:flutter_app/Log.dart';
 
 class  CardsShowState with ChangeNotifier{
+  
   CatalogDao catalogDao = new CatalogDao();
   TestDao testDao = new TestDao();
   //这部分的数据从CatalogList拿
@@ -13,6 +15,7 @@ class  CardsShowState with ChangeNotifier{
   int selcetedTagId;
   String selectedCatalogName;
   List<Test> currentList;
+  List<Test> currentListWithSchedule;
   int currentListIndex=0;
   void changeFirstButton(){
     isHide=!isHide;
@@ -30,6 +33,28 @@ class  CardsShowState with ChangeNotifier{
   void hideAnswer(){
     isHide=true;
     notifyListeners();
+  }
+  void changeScheduleNextTime(){
+    
+  }
+  void loadCardListWithSchedule(int maxlenth)async{
+    //每次最多load50个
+      int count =0;
+      currentListWithSchedule=[];
+      currentList.forEach((test)async{
+        String dateTime= await testDao.getDateTimebyId(test.id);
+        Logv.Logprint(dateTime);
+        Logv.Logprint("in loadCaloadCardListWithSchedule:");
+        
+        DateTime datetime =DateTime.parse(dateTime);
+        if(!datetime.isAfter(DateTime.now())){
+          currentListWithSchedule.add(test);
+          await notifyListeners();
+        }
+        if(count==maxlenth){await notifyListeners();return;}
+      });
+      await notifyListeners();
+
   }
   void loadCardList(int catalogId)async{
     //TODO:加入Schedule 时改进此算法 

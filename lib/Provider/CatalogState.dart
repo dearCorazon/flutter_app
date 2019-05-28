@@ -16,7 +16,7 @@ class CatalogState with ChangeNotifier{
     List<String> _allCatalogExtraNames=["全部"];
     List<Catalog> _catalogs =[];
     List<String> _allCatalogNames=[];
-
+    
     List<Catalog_extra> _catalogExtras=[];
     Future<void> fetchData()async{
       notifyListeners();

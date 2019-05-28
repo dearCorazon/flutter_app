@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/Sqlite_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,6 +21,7 @@ import 'package:flutter_app/Prefab.dart';
 //   tag INTEGER)';
 
 class TestDao{
+  ScheduleDao scheduleDao = new ScheduleDao();
   static final _databasename= 'mydatabase';
   static final _databaseVersion =1;
   String table="test";
@@ -32,10 +35,19 @@ class TestDao{
    }
   Future<int> insert(Test test)async{
     await _open();
-    int result=await database.insert(table,test.toMap());
-    Logv.Logprint("result:"+result.toString());
+    int result=await database.insert(table,test.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore,);
+    if (result!=null){
+       await  scheduleDao.insert(Schedule.create(result, 1));
+    }
+    else{
+      await Logv.Logprint("插入失败："+test.question+"重复");
+    }
+    // Logv.Logprint("test in testDao.insert...................");
+    // Logv.Logprint("result:"+result.toString());
+    // Logv.Logprint("test in testDao.insert...................");
     return result;
   }
+
   Future<List<Test>> queryListByCatalogId(int id)async{
     await _open();
     List<Test> tests=[];
@@ -60,6 +72,25 @@ class TestDao{
     }
     Logv.Logprint("error:no maps");
     return null;
+  }
+  Future<String> getDateTimebyId(int testId)async{
+    await _open();
+    String sql ='select schedule.nextTime from test,schedule where test.id=schedule.testid and test.id=$testId';
+    List<Map> maps;
+    maps=await database.rawQuery(sql);
+    await Logv.Logprint(maps.toString());
+    //return maps.first.values.toList().toString();
+    //TODO: maos里面有值但是取不出来不知道为什么
+    return maps.first.values.elementAt(0).toString();
+    // {
+    //   Logv.Logprint("$k,$v");
+    //   if(k.toString()=='nextTime'){
+    //     return v.toString();
+    //   }
+      
+    //   if(k=='nextTime'){
+    //     return v.toString();}
+    // });
   }
   Future<List<Test>> queryListByName(String name)async{
     //首先根据目录名 找出目录iD

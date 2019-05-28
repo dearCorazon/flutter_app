@@ -23,12 +23,19 @@ class ScheduleDao{
     // Logv.Logprint("database open? "+database.isOpen.toString());
   }
   Future<List<Map>> fetchDataByCatalog(int catalogId)async{
+    //static final _sql_createTableSchedule2='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testId INTEGER,userId INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(testID,userID))';
     //String sql2="select test.id as id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos from test,catalog where test.catalogid=$id and test.catalogid=catalog.id";
-    String sql='select test.id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos,schedule.status,schedule.nextTime,schedule.from test, where test.catalogId=$catalogId and schedule.testid=test.id';
+    String sql='select test.id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos,schedule.status,schedule.nextTime,schedule.ismark from test,schedule where test.catalogId=$catalogId and schedule.testid=test.id';
     await _open();
     List<Map> maps= await _database.rawQuery(sql);
     return maps;
 
+  }
+  Future<List<Map>> queryAll()async{
+    await _open();
+    String sql='select * from schedule';
+    List<Map> maps= await _database.rawQuery(sql);
+    return maps;
   }
   Future<int> insert(Schedule schedule)async{
     await _open();
@@ -38,7 +45,7 @@ class ScheduleDao{
     return result;
   }
 
-  Future<List<Schedule>> queryAll()async{
+  Future<List<Schedule>> queryAll2()async{
     List<Schedule> schedules=[];
     await _open();
     List<Map> maps = await _database.query(table,

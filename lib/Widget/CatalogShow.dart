@@ -14,7 +14,7 @@ class ShowCatalogs extends StatelessWidget{
     final cardsShowState = Provider.of<CardsShowState>(context);
     final catalogState = Provider.of<CatalogState>(context);
     Widget getWidget(){
-      if(cardsShowState.currentList==null){
+      if(cardsShowState.currentListWithSchedule==null){
         //TODO：太丑需要优化
         return Nodata();
       }
@@ -36,7 +36,9 @@ class ShowCatalogs extends StatelessWidget{
               await cardsShowState.loadCatalogInformation(selectedCatalogId,catalogState.getCatlalogs[index].name);
               await cardsShowState.loadCardList(selectedCatalogId);
               await cardsShowState.reloadCurrentListIndex();
-              await Logv.Logprint("当前目录要显示的List"+cardsShowState.currentList.toString());
+              await cardsShowState.loadCardListWithSchedule(50);
+              await Logv.Logprint("当前目录要显示的List(without schedule)"+cardsShowState.currentList.toString());
+              await Logv.Logprint("当前目录要显示的List(with schedule)"+cardsShowState.currentListWithSchedule.toString());
               await Navigator.push(
                 context, 
                 MaterialPageRoute(

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bean/Catalog_extra.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
+import 'package:flutter_app/ImportCards.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
 import 'package:flutter_app/Provider/CardsShowState.dart';
@@ -23,10 +27,44 @@ void main() async{
   await _Dbinit();
   await test();
   await runApp(MyApp());
-}
+} 
+
 void test()async{
+  String mapString= '[{id: 4, question: English, answer: 英语, type: 1, catalogId: 3, tag: null, chaos: null, status: 0, nextTime: 2019-05-28T14:10:28.327963, ismark: null}]';
+  //默认目录 ：1 默认 2  网络安全法 3 英语
   CatalogDao catalogDao = new CatalogDao();
   TestDao  testDao = new TestDao();
+  ScheduleDao scheduleDao= new ScheduleDao();
+  //测试ScheduleDao...........................................
+  // 
+  List<Map> maps= await scheduleDao.fetchDataByCatalog(3);
+  List<Map> maps2= await scheduleDao.queryAll();
+  Logv.Logprint("scheduleDao.fetchDataByCatalog test-> maps"+maps.toString());
+  Logv.Logprint("scheduleDao.queryAll() test-> maps"+maps2.toString());
+  //测试ScheduleDao....................................................
+  //测试是否能取出DateTime///////////////////////////////////////
+  String timeString  = await testDao.getDateTimebyId(3);
+  await Logv.Logprint("测试是否能取出DateTime$timeString");
+
+
+
+  //测试是否能取出DateTime///////////////////////////////////////
+  ////////////////////////////////////政治json测试
+  // var data = jsonDecode(json);
+  // int number = int.parse(data['number']);
+  // catalogDao.insert(Catalog.create("政治"));
+  // for(int i = 0; i < number; i++){
+  //   print("question: ${data['timu'][i]['question']}, answer: ${data['timu'][i]['answer']}");
+  //   testDao.insert(Test.createWithCatalog(data['timu'][i]['question'], data['timu'][i]['answer'], 4));
+  // }
+   ////////////////////////////////////政治json测试
+  //测试insert返回的参数是否是id...........................................
+  // await testDao.insert(Test.create("出来", "挨打"));
+  // await testDao.insert(Test.create("好", "惹"));
+
+  //结果为是
+  //测试insert返回的参数是否是id...........................................
+
   // int id ;
   // List<Test> tests2= await testDao.queryListByCatalogId(1);
   // Logv.Logprint("tests2:........................."+tests2[0].toString());
@@ -91,12 +129,16 @@ void test()async{
   // result= await testDao.card_number(-1);
   // Logv.Logprint("card number after add: "+result.toString());
 
-  // String now = DateTime.now().toIso8601String();
-  // print(now);
-  // DateTime dateTime = DateTime.parse(now);
-  // print( dateTime.toIso8601String());
-  // DateTime dateTime2=dateTime.add(Duration(days: 1));
-  // print(dateTime2.toIso8601String());
+  //测试DateTime...........................................
+  
+  String now = DateTime.now().toIso8601String();
+  print(now);
+  DateTime dateTime = DateTime.parse(now);
+  print( dateTime.toIso8601String());
+  DateTime dateTime2=dateTime.add(Duration(minutes: 1));
+  Logv.Logprint("time 1 is after time2:"+dateTime.isAfter(dateTime2).toString());
+  print(dateTime2.toIso8601String());
+  //测试DateTime.........................................
 }
 String getNameByID(List<Map> maps,int i){
   String name;
@@ -109,6 +151,8 @@ _Dbinit() async {
    await Sqlite_helper.instance.database;
    CatalogDao catalogDao = new CatalogDao();
    TestDao testDao = new TestDao();
+  //  ImportCards importCards = new ImportCards();
+  //  importCards.importZhengzhi();
   
 //   ScheduleDao scheduleDao = new ScheduleDao();
 //  List<Schedule> schedules=[];

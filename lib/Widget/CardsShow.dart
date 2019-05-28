@@ -11,13 +11,13 @@ class ShowSimpleCard extends StatelessWidget {
     final cardsShowState = Provider.of<CardsShowState>(context);
     _changeCardShowState() {
       int length;
-      if (cardsShowState.currentList == null) {
+      if (cardsShowState.currentListWithSchedule == null) {
         length = 0;
       } else {
-        length = cardsShowState.currentList.length;
+        length = cardsShowState.currentListWithSchedule.length;
       }
       Logv.Logprint("currentTest:${cardsShowState.currentListIndex}:" +
-          cardsShowState.currentList[cardsShowState.currentListIndex].question);
+          cardsShowState.currentListWithSchedule[cardsShowState.currentListIndex].question);
       //Logv.Logprint("in 显示答案Button：当前内容：${cardsShowState.currentList[cardsShowState.currentListIndex].toString()}");
 
       //Logv.Logprint("下一条显示的内容："+cardsShowState.currentList[cardsShowState.currentListIndex].question);
@@ -35,7 +35,7 @@ class ShowSimpleCard extends StatelessWidget {
         return Text("");
       } else {
         return Text(
-            cardsShowState.currentList[cardsShowState.currentListIndex].answer);
+            cardsShowState.currentListWithSchedule[cardsShowState.currentListIndex].answer);
       }
     }
 
@@ -111,7 +111,7 @@ class ShowSimpleCard extends StatelessWidget {
               ),
             ),
             Text(cardsShowState
-                .currentList[cardsShowState.currentListIndex].question),
+                .currentListWithSchedule[cardsShowState.currentListIndex].question),
             // Text(cardsShowState.currentList[cardsShowState.currentListIndex].answer),
             // Text("隐藏的答案"),
             getHideAnswer(),
