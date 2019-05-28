@@ -38,23 +38,32 @@ class Sqlite_helper{
       print("logv:_path:"+_path);
       _database= await openDatabase(_path,version: _databaseVersion,
           onCreate: (Database db,int version)async{
-            Logv.Logprint("database onCreate:...........................");
+            await Logv.Logprint("database onCreate:...........................");
+            await Logv.Logprint("建表：");
             await db.execute(_sql_createTableCatalog2);
             await db.execute(_sql_createTableSchedule2);
             await db.execute(_sql_createTableTest);
+            await Logv.Logprint("插入初始数据：");
             await db.insert(tableTest,Test.create("1+1=?", "2").toMap());//default 
             await db.insert(tableTest,Test.create("1+2=?", "3").toMap());//default 
             await db.insert(tableTest,Test.create("1+3=?", "4").toMap());//default 
             await db.insert(tableTest,Test.createWithCatalog("English", "英语",3).toMap());//TODO：一开始没有加await ，该语句执行，但后面的部分都没有执行，why？
+
             await db.insert(tableCatalog, Catalog.create("default").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =1
             await db.insert(tableCatalog, Catalog.create("网络安全法").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =2 
             await db.insert(tableCatalog, Catalog.create("English").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =3
+            
             var schedule= Schedule.create(3, 1);
+            await db.insert(tableSchedule,Schedule.create(1, 1).toMap());
+            await db.insert(tableSchedule,Schedule.create(2, 1).toMap());
+            await db.insert(tableSchedule,Schedule.create(3, 1).toMap());
+            await db.insert(tableSchedule,Schedule.create(4, 1).toMap());
             Logv.Logprint(schedule.toMap().toString());
-            print("schedule1:${schedule.toString()}");
+           // print("schedule1:${schedule.toString()}");
+            
             //await db.insert(tableSchedule,Schedule.create(-1,1).toMap());
-            await db.insert(tableSchedule,Schedule.create(4,1).toMap());
-            await db.insert(tableSchedule,schedule.toMap());
+            //await db.insert(tableSchedule,Schedule.create(4,1).toMap());
+            //await db.insert(tableSchedule,schedule.toMap());
       } );
       var version =await _database.getVersion();
       Logv.Logprint("DB version:"+version.toString());

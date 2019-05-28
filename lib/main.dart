@@ -27,37 +27,37 @@ void main() async{
 void test()async{
   CatalogDao catalogDao = new CatalogDao();
   TestDao  testDao = new TestDao();
-  int id ;
-  List<Test> tests2= await testDao.queryListByCatalogId(1);
-  Logv.Logprint("tests2:........................."+tests2[0].toString());
-  id = await catalogDao.getIdByName("English");
-  Logv.Logprint("id:0000000000000000000000000000000000000000000:$id");
-  List<Test> tests1=await testDao.queryListByName('English');
-  Logv.Logprint("querybyname:))))))))))))))))"+tests1.toString());
-  List<Test> tests=await testDao.queryAll();
-  Logv.Logprint("all test:....................."+tests.toString());
-  List<Catalog> catalogs = await catalogDao.queryAll();
-  List<Map> maps = [];
-  List<Map> maps2=[];
-  String name;
+  // int id ;
+  // List<Test> tests2= await testDao.queryListByCatalogId(1);
+  // Logv.Logprint("tests2:........................."+tests2[0].toString());
+  // id = await catalogDao.getIdByName("English");
+  // Logv.Logprint("id:0000000000000000000000000000000000000000000:$id");
+  // List<Test> tests1=await testDao.queryListByName('English');
+  // Logv.Logprint("querybyname:))))))))))))))))"+tests1.toString());
+  // List<Test> tests=await testDao.queryAll();
+  // Logv.Logprint("all test:....................."+tests.toString());
+  // List<Catalog> catalogs = await catalogDao.queryAll();
+  // List<Map> maps = [];
+  // List<Map> maps2=[];
+  // String name;
   //TODO:当数据为空时 ，会报错，所以理论上，当手机中没有数据时 ，也不会启动
-  int result= await catalogDao.getNumberbyName('English');
-  Logv.Logprint("result ........"+result.toString());
-  Logv.Logprint("test==============:"+maps2.toString());
-  int length=await catalogDao.allCardNumber();
-  //await testDao.insert(Test.createWithCatalog("aaas\n", "asdasd\n\n\n\n\n\n\n\n\n\n\n", 2));
-  Logv.Logprint("all cards number "+length.toString());
-  List<String> a = ["quanbu"];
-  List<String> b = ["add","bdd","pdd"];
-  Logv.Logprint("add before"+a.toString());
-  a.addAll(b);
-  Logv.Logprint("add after:"+a.toString());
-  catalogs.forEach(
-    (e){
-      maps.add(e.toMap());
-      }
+  // int result= await catalogDao.getNumberbyName('English');
+  // Logv.Logprint("result ........"+result.toString());
+  // Logv.Logprint("test==============:"+maps2.toString());
+  // int length=await catalogDao.allCardNumber();
+  // //await testDao.insert(Test.createWithCatalog("aaas\n", "asdasd\n\n\n\n\n\n\n\n\n\n\n", 2));
+  // Logv.Logprint("all cards number "+length.toString());
+  // List<String> a = ["quanbu"];
+  // List<String> b = ["add","bdd","pdd"];
+  // Logv.Logprint("add before"+a.toString());
+  // a.addAll(b);
+  // Logv.Logprint("add after:"+a.toString());
+  // catalogs.forEach(
+  //   (e){
+  //     maps.add(e.toMap());
+  //     }
   
-  );
+  // );
 
   // maps.forEach((map){
   //   String name;
@@ -67,7 +67,7 @@ void test()async{
   //第一步：从对应的superiorId中找出对应的名字
 
   //Logv.Logprint("map first test: ");
-  Logv.Logprint("maps:"+maps.toString());
+  //Logv.Logprint("maps:"+maps.toString());
   // Logv.Logprint("maps:"+getNameByID(maps,1));
 
   // maps.forEach((map)async{
@@ -136,7 +136,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<CatalogState>(
             builder: (_) => CatalogState(), 
           ),
-           ChangeNotifierProvider<UserState>(
+          ChangeNotifierProvider<UserState>(
              builder: (context)=>UserState(),
            ),
         ],

@@ -8,7 +8,7 @@ class PanelList_memory extends StatefulWidget {
   }
 }
 class _PanelList_memory extends State<PanelList_memory>{
-  //TODO:命名是不是有问题，跟上面那个一mu一样
+ 
   var currentPanelIndex=-1;
   List<int>mList;
   _PanelList_memory(){

@@ -12,7 +12,7 @@ class ScheduleDao{
   String table="schedule";
   Database _database;
   String _path;
-
+  //static final _sql_createTableSchedule2='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testId INTEGER,userId INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(testID,userID))';
   Future<void> _open()async{
     _database = await Sqlite_helper.instance.database;
     // Directory documentaryDirectory = await getApplicationDocumentsDirectory();
@@ -22,7 +22,14 @@ class ScheduleDao{
     // database=await openDatabase(_path,version: _databaseVersion);
     // Logv.Logprint("database open? "+database.isOpen.toString());
   }
-  
+  Future<List<Map>> fetchDataByCatalog(int catalogId)async{
+    //String sql2="select test.id as id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos from test,catalog where test.catalogid=$id and test.catalogid=catalog.id";
+    String sql='select test.id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos,schedule.status,schedule.nextTime,schedule.from test, where test.catalogId=$catalogId and schedule.testid=test.id';
+    await _open();
+    List<Map> maps= await _database.rawQuery(sql);
+    return maps;
+
+  }
   Future<int> insert(Schedule schedule)async{
     await _open();
     int result=await _database.insert(table,schedule.toMap());
