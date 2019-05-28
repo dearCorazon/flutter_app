@@ -28,12 +28,14 @@ void test()async{
   CatalogDao catalogDao = new CatalogDao();
   TestDao  testDao = new TestDao();
   int id ;
+  List<Test> tests2= await testDao.queryListByCatalogId(1);
+  Logv.Logprint("tests2:........................."+tests2[0].toString());
   id = await catalogDao.getIdByName("English");
   Logv.Logprint("id:0000000000000000000000000000000000000000000:$id");
   List<Test> tests1=await testDao.queryListByName('English');
   Logv.Logprint("querybyname:))))))))))))))))"+tests1.toString());
   List<Test> tests=await testDao.queryAll();
-  Logv.Logprint(tests.toString());
+  Logv.Logprint("all test:....................."+tests.toString());
   List<Catalog> catalogs = await catalogDao.queryAll();
   List<Map> maps = [];
   List<Map> maps2=[];

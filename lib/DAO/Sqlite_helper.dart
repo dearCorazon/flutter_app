@@ -42,12 +42,13 @@ class Sqlite_helper{
             await db.execute(_sql_createTableCatalog2);
             await db.execute(_sql_createTableSchedule2);
             await db.execute(_sql_createTableTest);
-            await db.insert(tableTest,Test.create("1+1=?", "2").toMap());
-            await db.insert(tableTest,Test.create("English", "英语").toMap());//TODO：一开始没有加await ，该语句执行，但后面的部分都没有执行，why？
-            await db.insert(tableCatalog, Catalog.create("default").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
-            await db.insert(tableCatalog, Catalog.create("网络安全法").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
-            await db.insert(tableCatalog, Catalog.create("English").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
-
+            await db.insert(tableTest,Test.create("1+1=?", "2").toMap());//default 
+            await db.insert(tableTest,Test.create("1+2=?", "3").toMap());//default 
+            await db.insert(tableTest,Test.create("1+3=?", "4").toMap());//default 
+            await db.insert(tableTest,Test.createWithCatalog("English", "英语",3).toMap());//TODO：一开始没有加await ，该语句执行，但后面的部分都没有执行，why？
+            await db.insert(tableCatalog, Catalog.create("default").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =1
+            await db.insert(tableCatalog, Catalog.create("网络安全法").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =2 
+            await db.insert(tableCatalog, Catalog.create("English").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =3
             var schedule= Schedule.create(3, 1);
             Logv.Logprint(schedule.toMap().toString());
             print("schedule1:${schedule.toString()}");

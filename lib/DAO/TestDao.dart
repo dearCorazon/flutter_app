@@ -36,6 +36,31 @@ class TestDao{
     Logv.Logprint("result:"+result.toString());
     return result;
   }
+  Future<List<Test>> queryListByCatalogId(int id)async{
+    await _open();
+    List<Test> tests=[];
+  //    Test.fromMap(Map<String ,dynamic> map){
+  //   id=map[ColumnId];
+  //   adderId=map[ColumnAdderId];
+  //   question=map[ColumnQuestion];
+  //   answer=map[ColumnAnswer];
+  //   type=map[ColumnType];
+  //   catalogId=map[ColumnCatalogId];
+  //   tag=map[ColumnTagID];
+  //   chaos=map[ColumnChaos];
+  // }
+    String sql="select test.id as id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos from test,catalog where test.catalogid=$id and test.catalogid=catalog.id";
+    List<Map> maps = await database.rawQuery(sql);
+    Logv.Logprint("in queryListByCatalogId:"+maps.toString());
+    if(maps.length>0){
+      for(int i=0;i<maps.length;i++){
+        tests.add(Test.fromMap(maps[i]));
+      }
+      return tests;
+    }
+    Logv.Logprint("error:no maps");
+    return null;
+  }
   Future<List<Test>> queryListByName(String name)async{
     //首先根据目录名 找出目录iD
     //再根据ID 找出该CatalogId==目录Id 的所有卡片
