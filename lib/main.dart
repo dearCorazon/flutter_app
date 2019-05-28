@@ -5,10 +5,10 @@ import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
+import 'package:flutter_app/Provider/CardsShowState.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Provider/DropDownMenuState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
-import 'package:flutter_app/Widget/Addcards.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -107,9 +107,7 @@ _Dbinit() async {
    await Sqlite_helper.instance.database;
    CatalogDao catalogDao = new CatalogDao();
    TestDao testDao = new TestDao();
-  //  testDao.insert(Test.createWithCatalog("网络","安全法" ,2));
-  //  testDao.insert(Test.createWithCatalog("网络安全法重要吗","重要" ,2));
-  //  testDao.insert(Test.createWithCatalog("网络安全法属于","法律" ,3));
+  
 //   ScheduleDao scheduleDao = new ScheduleDao();
 //  List<Schedule> schedules=[];
 //   schedules=await scheduleDao.queryAll();
@@ -124,6 +122,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider<CardsShowState>(
+            builder: (context)=>CardsShowState(),
+          ),
           ChangeNotifierProvider<CardsAddState>(
             builder: (context)=>CardsAddState(),
           ),

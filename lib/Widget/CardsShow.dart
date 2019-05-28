@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Provider/CardsShowState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
 import 'package:provider/provider.dart';
 import 'Drawer.dart';
 
 class ShowSimpleCard extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
+    final cardsShowState = Provider.of<CardsShowState>(context);
     return Container(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("demo"),
+          title: Text(cardsShowState.selectedCatalogName),//catalogname
           actions: <Widget>[
             Text("catalog"),
-            RaisedButton(child: Text("banban"),),
+            RaisedButton(child: Text("baiban"),),
             RaisedButton(child: Text("clear"),),
-            IconButton(icon: Icon(Icons.collections),onPressed: (){},),
+            IconButton(icon: Icon(Icons.collections),onPressed: (){
+              //和Schedule有关，收藏
+            },),
             Text("menu"),
           ],
         ),

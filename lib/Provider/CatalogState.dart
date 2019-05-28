@@ -20,9 +20,11 @@ class CatalogState with ChangeNotifier{
     List<Catalog_extra> _catalogExtras=[];
     Future<void> fetchData()async{
       notifyListeners();
+      _allCatalogExtraNames=["全部"];
       CatalogDao catalogDao = new CatalogDao();
       _catalogs = await catalogDao. queryAll();
       _allCatalogNames= await catalogDao.queryAllCatalogNames();
+      //每调用一次fetchData _allCatalogExtraNames 就要加一次；
        _allCatalogExtraNames.addAll(_allCatalogNames);
       Logv.Logprint("inCatalog State fetchData:.............all Extra name:"+_allCatalogExtraNames.toString());
       notifyListeners();

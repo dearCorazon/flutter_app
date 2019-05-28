@@ -6,14 +6,24 @@ import 'package:flutter_app/Provider/UserState.dart';
 import 'package:flutter_app/Widget/CardsList.dart';
 import 'package:flutter_app/Widget/Drawer.dart';
 import 'package:flutter_app/Widget/DropDownMenu.dart';
+import 'package:flutter_app/Widget/NoDataWidget.dart';
 import 'package:provider/provider.dart';
 
 class ShowAllCards extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     final catalogState = Provider.of<CatalogState>(context);
     final userState = Provider.of<UserState>(context);
     final dropDownMenuCatlogState= Provider.of<DropDownMenuState>(context);
+    Widget getWidget(){
+    if(dropDownMenuCatlogState.getCurrentCardList!=null){
+      return CardsList();
+    }
+      else{
+        return Nodata();
+      }
+    }
     return Container(
       child: Scaffold(
         appBar: AppBar(
@@ -49,7 +59,11 @@ class ShowAllCards extends StatelessWidget {
                 )
               ],
             ),
-            CardsList(),
+            Expanded(
+              child: Container(
+                //TODO:不能滚动
+                child: Scrollbar(child: getWidget())),
+            ),
           ],
         ),
         

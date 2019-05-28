@@ -3,6 +3,7 @@ import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
 
 class ShowCatalog extends StatefulWidget {
+  //TODO:参考准备弃用
   @override
   _State createState() => _State();
 }

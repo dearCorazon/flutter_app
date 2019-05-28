@@ -3,11 +3,11 @@ import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
-import 'package:flutter_app/Widget/ShowCatalog.dart';
+import 'package:flutter_app/Widget/CardsAdd.dart';
+import 'package:flutter_app/Widget/CatalogShow.dart';
 import 'package:provider/provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'Drawer.dart';
-import 'package:flutter_app/Widget/Addcards.dart';
 
 class HomePage extends StatelessWidget {
   TextEditingController catalog_controller = new TextEditingController();

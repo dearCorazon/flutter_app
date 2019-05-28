@@ -110,6 +110,10 @@ class CatalogDao{
     List<Map>  maps = await _database.rawQuery(sql);
     Logv.Logprint(maps.toString());
     //Logv.Logprint(maps.first.toString());
+    if(maps.length==0){
+      Logv.Logprint("in CatalofDao.getNumberbyName():return null" );
+      return 0;
+    }
     maps.first.forEach((k,v){
       //Logv.Logprint("k,v+"+k.toString()+v.toString());
      // print(k+v);
