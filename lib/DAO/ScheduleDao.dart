@@ -1,10 +1,9 @@
+import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/DAO/Sqlite_helper.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:path/path.dart';
 import 'package:flutter_app/Log.dart';
 class ScheduleDao{
   static final _databasename= 'mydatabase';
@@ -14,6 +13,7 @@ class ScheduleDao{
   String _path;
   //static final _sql_createTableSchedule2='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testId INTEGER,userId INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(testID,userID))';
   Future<void> _open()async{
+    //TODO：可以组建一个超级类 拉通存储就会方便许多
     _database = await Sqlite_helper.instance.database;
     // Directory documentaryDirectory = await getApplicationDocumentsDirectory();
     // print("logv:documentaryDiretory"+documentaryDirectory.toString());
@@ -32,6 +32,119 @@ class ScheduleDao{
     return maps;
 
   }
+
+  Future<int> getScheduleIdTestIdByTestId(int testId)async{
+    await _open();
+    final String sql = 'select schedule.id from test,schedule where schedule.testId=test.id';
+    List<Map> maps =await  _database.rawQuery(sql);
+    Logv.Logprint("getScheduleIdTestIdByTestId"+maps.toString());
+    if(maps!=null){
+      int result =int.parse(maps.first['id'].toString());
+      return result;
+    }
+
+  }
+  Future<List<Test>> loadCardswithSchedule(int catalogId,int length)async{
+    int count= 0;
+    List<Map> maps =await fetchDataByCatalog(catalogId);
+    List<Map> newmaps=[];
+    for (var map in maps){
+    String datatimeString = map['nextTime'];
+    //Logv.Logprint("timeString :"+datatimeString);
+    DateTime datetime = DateTime.parse(datatimeString);
+    if ( !datetime.isAfter(DateTime.now())) {
+          //Logv.Logprint("pick" + test.id.toString() + test.question);
+          newmaps.add(map);
+          //Logv.Logprint("length:"+currentListWithSchedule.toString());
+        }
+    }
+    List<Test> newtests =[];
+    for(var map in newmaps){
+    newtests.add(Test.fromMap(map));
+    count++;
+    if(count==length){ return newtests;}
+    }
+    return newtests;
+  }
+  Future<List<Map>> queryAllStatus()async{
+    await _open();
+    final String sql ='select catalog.id,schedule.staus from schedule,catalog where catalog' ;
+    
+  }
+  Future<int> addStatus(int testId)async{
+    await _open();
+    int scheduleId= await getSceduleIdbyeTestId(testId);
+    int status =await getStatusBySchduleId(scheduleId);
+    status++;
+    String sql = 'update schedule set status=$status where id=$scheduleId';
+    int result = await _database.rawUpdate(sql);
+    Logv.Logprint("in addStatus 影响行数$result");
+    return result;  
+  }
+  Future<int> subStatus(int testId)async{
+    //TODO:在显示 showcards时显示当前status的值 并且显示属于那一档
+    await _open();
+    int scheduleId= await getSceduleIdbyeTestId(testId);
+    int status =await getStatusBySchduleId(scheduleId);
+    status--;
+    String sql = 'update schedule set status=$status where id=$scheduleId';
+    int result = await _database.rawUpdate(sql);
+    Logv.Logprint("in addStatus 影响行数$result");
+    return result;  
+  }
+//  Future<void> status_add(int id,bool add)async{
+//    int status =await query_status(id);
+//    print("修改前Status：$status");
+//    String sql='UPDATE knowledge SET status = ?  WHERE id = ? ';
+//    if(add){status++;}
+//    else{
+//      status--;
+//    }
+//    print("status应为：$status");
+//    int count = await _database.rawUpdate(sql,[status ,id]);
+//    status=await query_status(id);
+//    print("修改后Status：$status");
+//  }
+Future<List<CatalogStatusNumbers>> loadCatalogStatusNumbersList()async{
+  //这里也需要一个超级大类
+  await _open();
+  CatalogDao catalogDao = new CatalogDao();
+  List<CatalogStatusNumbers> catalogStatusNumbers=[];
+  List<int> ints =await catalogDao.fetcbAllCatalogId();
+    for (var i  in ints ){
+    int status1=0;
+    int status2=0;
+    int status3=0;
+    int status4=0;
+    Logv.Logprint("尝试取出每个目录下的所有 schedule 每个记忆状态下的个数\n");
+    List<Map> maps_h=await fetchDataByCatalog(i);
+  //取出所有的List
+    Logv.Logprint("fetchDataByCatalogmaps_h:\n"+maps_h.toString());
+    int number=0;
+    for(var map in maps_h){
+      int status =int.parse(map['status'].toString());
+      if(status<0){
+       status1++;
+      }
+      if(status>=0&&status<20){
+       status2++;
+      }
+      if(status>=20&&status<50){
+       status3++;
+      }
+      if(status>=50){
+       status4++;
+      }
+      number++;
+      i= int.parse(map[ColumnCatalogId].toString());
+      //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
+  }
+    CatalogStatusNumbers catalogStatusNumber=CatalogStatusNumbers.create(i, number, status1, status2, status3, status4);
+    catalogStatusNumbers.add(catalogStatusNumber);
+    Logv.Logprint("catalogStatusNumbers:\n"+catalogStatusNumber.toString());
+    }
+    return catalogStatusNumbers;
+}
   Future<List<Map>> queryAll()async{
     await _open();
     String sql='select * from schedule';
@@ -73,6 +186,19 @@ class ScheduleDao{
     }
 
   }
+  Future<List<Map>> queryAllByCatalogId(int catalogId)async{
+    List<Map> maps= await fetchDataByCatalog(catalogId);
+    return maps;
+
+  }
+  Future<List<Map>> getStatusNumber()async{
+    await _open();//<0 0-20  without20-50 >50
+    String sql ='select catalog.id,count(*) as number,count(case when status<0 then 1 else 0 end ) as status1,count(case when status between 0 and 20 then 1 else 0 end) as status2,count(case when status not between 20 and 50 then 1 else 0 end) as status3,count(case when status >50 then 1 else 0 end)as status4 from catalog,schedule,test where schedule.testId=test.id and test.catalogId=catalog.id group by catalog.id ';
+    List<Map> maps =await _database.rawQuery(sql);
+    return maps;
+  }
+
+
   Future<List<Schedule>> queryAll2()async{
     List<Schedule> schedules=[];
     await _open();

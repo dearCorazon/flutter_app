@@ -1,27 +1,31 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsShowState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
+import 'package:flutter_app/Utils/MemoryAlgorithm.dart';
 import 'package:provider/provider.dart';
 import 'Drawer.dart';
 class ShowSimpleCardFuture extends StatelessWidget {
+  Memory memory = new Memory();
   //此处能获取到的数据为 cardsShowState 即当前显示的Test的信息
-  @override
+  @override 
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-          future: getTests(context),
+          future: getTestswithScedule(context),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
                     case ConnectionState.none:
                     case ConnectionState.waiting:
                     //TODO；跳转闪烁 还有这里的重绘问题
-                      return new Center(
-                        child: new CupertinoActivityIndicator()
-                      );
+                      // return new Center(
+                      //   child: new CupertinoActivityIndicator()
+                      // );
                     default:
                       if (snapshot.hasError)
                         return Text('Error: ${snapshot.error}');
@@ -32,12 +36,13 @@ class ShowSimpleCardFuture extends StatelessWidget {
   )
   );
 }
+
 Future<List<Test>> getTestswithScedule(BuildContext context)async{
   final cardsShowState = Provider.of<CardsShowState>(context);
   List<Test> tests;
-  TestDao testDao = new TestDao();
-  tests= await testDao.loadCardListWithSchedule(cardsShowState.selectedCatalogId,50);
-  
+  ScheduleDao scheduleDao= new ScheduleDao();
+  tests= await scheduleDao.loadCardswithSchedule(cardsShowState.selectedCatalogId,50); 
+  return tests;
 }
 Future<List<Test>> getTests(BuildContext context)async{
     final cardsShowState = Provider.of<CardsShowState>(context);
@@ -45,7 +50,7 @@ Future<List<Test>> getTests(BuildContext context)async{
     TestDao testDao = new TestDao();
     tests=await testDao.queryListByCatalogId(cardsShowState.selectedCatalogId);
     return  tests;
-  }
+}
 _changeCardShowState(BuildContext context,List<Test> tests) {
   final cardsShowState = Provider.of<CardsShowState>(context);
   int length;
@@ -70,6 +75,8 @@ _changeCardShowState(BuildContext context,List<Test> tests) {
 
 Widget _getWidget(BuildContext context, AsyncSnapshot snapshot) {
   final cardsShowState = Provider.of<CardsShowState>(context);
+  //TODO:这里能拿到catalogID 就能显示 熟悉程度
+  //TODO:点击后改变status
   List<Test> tests = snapshot.data;
   return 
     Container(
@@ -79,10 +86,10 @@ Widget _getWidget(BuildContext context, AsyncSnapshot snapshot) {
                   actions: <Widget>[
                     Text("catalog"),
                     RaisedButton(
-                      child: Text("baiban"),
+                      child: Text("白板"),
                     ),
                     RaisedButton(
-                      child: Text("clear"),
+                      child: Text("清除"),
                     ),
                     IconButton(
                       icon: Icon(Icons.collections),
@@ -140,13 +147,18 @@ Widget getButton(BuildContext context,List<Test> tests) {
         children: <Widget>[
           RaisedButton(
             child: Text("认识"),
-            onPressed: () {
+            onPressed: () async {
+              //在meomory来处理 要拿到scheduleId 或者 testid
+               memory.pressButtonKnown(tests[cardsShowState.currentListIndex].id);
               _changeCardShowState(context,tests);
+              
+
             },
           ),
           RaisedButton(
             child: Text("不认识"),
-            onPressed: () {
+            onPressed: () async {
+               memory.pressButtonUnKnown(tests[cardsShowState.currentListIndex].id);
               _changeCardShowState(context,tests);
             },
           )

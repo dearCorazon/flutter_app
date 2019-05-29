@@ -52,17 +52,7 @@ class TestDao{
   Future<List<Test>> queryListByCatalogId(int id)async{
     await _open();
     List<Test> tests=[];
-    //TODO：这个无报错
-  //    Test.fromMap(Map<String ,dynamic> map){
-  //   id=map[ColumnId];
-  //   adderId=map[ColumnAdderId];
-  //   question=map[ColumnQuestion];
-  //   answer=map[ColumnAnswer];
-  //   type=map[ColumnType];
-  //   catalogId=map[ColumnCatalogId];
-  //   tag=map[ColumnTagID];
-  //   chaos=map[ColumnChaos];
-  // }
+  
     String sql="select test.id as id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos from test,catalog where test.catalogid=$id and test.catalogid=catalog.id";
     List<Map> maps = await database.rawQuery(sql);
     Logv.Logprint("in queryListByCatalogId:"+maps.toString());
@@ -100,26 +90,15 @@ class TestDao{
     return currentList;
   }
   Future<List<Test>> loadCardListWithSchedule(int catalogId,int maxlength) async {
-    List<Test> currentListWithSchedule;
+    List<Test> currentListWithSchedule=new List<Test>();
     List<Test> currentList;
     //每次最多load50个
     int count = 0;
     currentList = await queryListByCatalogId(catalogId);
-    await currentList.forEach((test) async {
-    String dateTime = await getDateTimebyId(test.id);
-    DateTime datetime = DateTime.parse(dateTime);
-      if ( count <= maxlength) {
-        if ( !datetime.isAfter(DateTime.now())) {
-          //await Logv.Logprint("pick" + test.id.toString() + test.question);
-          currentListWithSchedule.add(test);
-          count++;
-          //Logv.Logprint(currentListWithSchedule.length.toString());
-        }
-      }
-    });
-    return currentListWithSchedule;
+    
     // Logv.Logprint("currentListWithSchedule in state:"+currentListWithSchedule.toString());
   }
+
   Future<List<Test>> queryListByName(String name)async{
     //首先根据目录名 找出目录iD
     //再根据ID 找出该CatalogId==目录Id 的所有卡片

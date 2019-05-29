@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_app/Bean/Catalog.dart';
+import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Catalog_extra.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
@@ -24,6 +26,13 @@ import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/DAO/DaoTest.dart';
 
 void main() async{
+  //TODO:登录注册
+  //调度
+  //TODO：Drawer 返回主页
+  //TODO：准备选择题的模板
+  //TODO：同步
+  //TODO:美化
+
   await _Dbinit();
   await test();
   await runApp(MyApp());
@@ -42,20 +51,58 @@ void test()async{
   Logv.Logprint("scheduleDao.fetchDataByCatalog test-> maps"+maps.toString());
   Logv.Logprint("scheduleDao.queryAll() test-> maps"+maps2.toString());
   Schedule  schedule=await scheduleDao.queryBytestId(2);
- 
+  await catalogDao.fetcbAllCatalogId();
+  //fetcbAllCatalogId()
+  List<CatalogStatusNumbers>  lists= await  loadCatalogStatusNumbersList();
+  Logv.Logprint("CatalogStatusNumbers()()()()()()()()()())\n"+lists.toString());
+  
+  ///Logv.Logprint("fetcbAllCatalogId()................................................\n"+ints.toString());
   //测试ScheduleDao....................................................
   //测试是否能取出DateTime/////////////////////////////////////// 
   String timeString  = await testDao.getDateTimebyId(3);
   await Logv.Logprint("测试是否能取出DateTime$timeString");
   DateTime dateTime3 = DateTime.parse(timeString);
   Logv.Logprint(dateTime3.isAfter(DateTime.now()).toString());
-  //测试是否能取出DateTime///////////////////////////////////////
+  List<Map> maps_90 = await scheduleDao.getStatusNumber();
+  Logv.Logprint("scheduleDao.getStatusNumber():00000000000000000000000000000000000000000000000\n"+maps_90.toString());
+  
 
+  //测试是否能取出DateTime///////////////////////////////////////
+  int result2_1= await scheduleDao.addStatus(1);
+
+  //测试是否能取出DateTime///////////////////////////////////////
+  //测试是否能取出DateTime///////////////////////////////////////
+  //List<Test> tests = await testDao.loadCardListWithSchedule(4, 20);
+ // Logv.Logprint(" testDao.loadCardListWithSchedule:"+tests.toString());
   //测试Schedule updateNexttime///////
   // Logv.Logprint("测试Schedule updateNexttime");
   // await  scheduleDao.updateNexttime(DateTime.now().toIso8601String(), 1);
   // Logv.Logprint("测试Schedule updateNexttime");
 
+  // List<Map> maps3= await  scheduleDao.fetchDataByCatalog(4);
+  // Logv.Logprint("all maps:\n"+maps3.toString());
+  // List<Map> newmaps=[];
+  // for (var map in maps3){
+  //   String datatimeString = map['nextTime'];
+  //   //Logv.Logprint("timeString :"+datatimeString);
+  //   DateTime datetime = DateTime.parse(datatimeString);
+  //   if ( !datetime.isAfter(DateTime.now())) {
+  //         //Logv.Logprint("pick" + test.id.toString() + test.question);
+  //         newmaps.add(map);
+  //         //Logv.Logprint("length:"+currentListWithSchedule.toString());
+  //       }
+  // }
+  // Logv.Logprint("new  maps:\n"+maps3.toString());
+  // List<Test> newtests =[];
+  // for(var map in newmaps){
+  //   newtests.add(Test.fromMap(map));
+  // }
+  // Logv.Logprint("new  List<Test>:\n"+newtests.toString());
+  //List<Test> maps3= await  scheduleDao.loadCardswithSchedule(4);
+  //Logv.Logprint("test scheduleDao.loadCardswithSchedule(4)\n"+maps3.toString());
+  //getScheduleIdTestIdByTestId
+  // int id= await scheduleDao.getSceduleIdbyeTestId(100);
+  // Logv.Logprint("ID is ++++++++++++++++++++++++++++++++++++++++++;/n $id");
 
   //测试Schedule updateNexttime///////
   ////////////////////////////////////政治json测试
@@ -75,7 +122,7 @@ void test()async{
   //测试insert返回的参数是否是id...........................................
 
   // int id ;
-  // List<Test> tests2= await testDao.queryListByCatalogId(1);
+   //List<Test> tests2= await testDao.queryListByCatalogId(1);
   // Logv.Logprint("tests2:........................."+tests2[0].toString());
   // id = await catalogDao.getIdByName("English");
   // Logv.Logprint("id:0000000000000000000000000000000000000000000:$id");
@@ -139,7 +186,11 @@ void test()async{
   // Logv.Logprint("card number after add: "+result.toString());
 
   //测试DateTime...........................................
+  //尝试取出每个目录下的所有 schedule 每个记忆状态下的个数
   
+  
+  
+  //尝试取出每个目录下的所有 schedule 每个记忆状态下的个数
   String now = DateTime.now().toIso8601String();
   print(now);
   DateTime dateTime = DateTime.parse(now);
@@ -170,7 +221,77 @@ _Dbinit() async {
 //     Logv.Logprint(e.toString());
 //   }
 }
-
+Future<List<CatalogStatusNumbers>> loadCatalogStatusNumbersList()async{
+  CatalogDao catalogDao = new CatalogDao();
+  List<CatalogStatusNumbers> catalogStatusNumbers=[];
+  List<int> ints =await catalogDao.fetcbAllCatalogId();
+    for (var i  in ints ){
+    ScheduleDao scheduleDao= new ScheduleDao();
+    int status1=0;
+    int status2=0;
+    int status3=0;
+    int status4=0;
+    Logv.Logprint("尝试取出每个目录下的所有 schedule 每个记忆状态下的个数\n");
+    List<Map> maps_h=await scheduleDao.fetchDataByCatalog(i);
+  //取出所有的List
+    Logv.Logprint("fetchDataByCatalogmaps_h:\n"+maps_h.toString());
+    int number=0;
+    for(var map in maps_h){
+      int status =int.parse(map['status'].toString());
+      if(status<0){
+       status1++;
+      }
+      if(status>=0&&status<20){
+       status2++;
+      }
+      if(status>=20&&status<50){
+       status3++;
+      }
+      if(status>=50){
+       status4++;
+      }
+      number++;
+      i= int.parse(map[ColumnCatalogId].toString());
+      //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
+  }
+    CatalogStatusNumbers catalogStatusNumber=CatalogStatusNumbers.create(i, number, status1, status2, status3, status4);
+    catalogStatusNumbers.add(catalogStatusNumber);
+    Logv.Logprint("catalogStatusNumbers:\n"+catalogStatusNumber.toString());
+    }
+    return catalogStatusNumbers;
+}
+_setList(int catalogId)async{
+    ScheduleDao scheduleDao= new ScheduleDao();
+    int status1=0;
+    int status2=0;
+    int status3=0;
+    int status4=0;
+    Logv.Logprint("尝试取出每个目录下的所有 schedule 每个记忆状态下的个数\n");
+    List<Map> maps_h=await scheduleDao.fetchDataByCatalog(catalogId);
+  //取出所有的List
+    Logv.Logprint("fetchDataByCatalogmaps_h:\n"+maps_h.toString());
+    int number=0;
+    for(var map in maps_h){
+      int status =int.parse(map['status'].toString());
+      if(status<0){
+       status1++;
+      }
+      if(status>=0&&status<20){
+       status2++;
+      }
+      if(status>=20&&status<50){
+       status3++;
+      }
+      if(status>=50){
+       status4++;
+      }
+      number++;
+      catalogId= int.parse(map[ColumnCatalogId].toString());
+      //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
+  }
+    CatalogStatusNumbers catalogStatusNumber=CatalogStatusNumbers.create(catalogId, number, status1, status2, status3, status4);
+    Logv.Logprint("catalogStatusNumbers:\n"+catalogStatusNumber.toString());
+  }
 
 class MyApp extends StatelessWidget {
   @override

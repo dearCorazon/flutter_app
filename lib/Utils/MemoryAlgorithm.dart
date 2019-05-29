@@ -8,10 +8,8 @@ class Memory{
   Duration duration2minutes= new Duration(minutes: 2);
   Duration duration5minutes= new Duration(minutes: 5);
   ScheduleDao scheduleDao = new ScheduleDao();
-  void addStatus(int testId)async{
-    Schedule schedule = await scheduleDao.queryBytestId(testId);
 
-  }
+  
   void subStatus(){}
   void addNextitme(int testId)async{
     //in showSimple 
@@ -25,31 +23,31 @@ class Memory{
     String currentTimeString =schedule.nextTime;
     DateTime currenNexttime= DateTime.parse(currentTimeString);
     DateTime newNextime;
-    if(status<0){
+    //等级分为陌生  有点印象  良好 熟悉
+    //当前算法为  如果 陌生 不认识：认识  （+3分钟  +2分钟 ）
+    if(status<0){//陌生
       newNextime=DateTime.parse(currentTimeString).add(duration1minute);
       newtimeString=newNextime.toIso8601String();
       await scheduleDao.updateNexttime(newtimeString, scheduleId);
+      await scheduleDao.addStatus(scheduleId);
     }
-    if(status>0&&status<20){
+    if(status>0&&status<20){//有点印象（30分钟 + 50分钟）
       newNextime=DateTime.parse(currentTimeString).add(duration2minutes);
       newtimeString=newNextime.toIso8601String();
       await scheduleDao.updateNexttime(newtimeString, scheduleId);
     }
-    if(status>20&&status<50){
+    if(status>=20&&status<=50){//良好（+1天 + 2天）
       newNextime=DateTime.parse(currentTimeString).add(duration5minutes);
       newtimeString=newNextime.toIso8601String();
       await scheduleDao.updateNexttime(newtimeString, scheduleId);
     }
-    if(status>50&&status<100){
+    if(status>50){//熟悉（3天 5 天）
       newNextime=DateTime.parse(currentTimeString).add(duration1day);
       newtimeString=newNextime.toIso8601String();
       await scheduleDao.updateNexttime(newtimeString, scheduleId);
-    } 
-    if(status>100){
-      newNextime=DateTime.parse(currentTimeString).add(duration2days);
-      newtimeString=newNextime.toIso8601String();
-      await scheduleDao.updateNexttime(newtimeString, scheduleId);
     }
+    
+
     // switch (status) {
     //   case <0:{break;}
     //   case 2:{break;}  
@@ -67,7 +65,18 @@ class Memory{
     //   default:
     // }
     // await scheduleDao.updateNexttime(newtimeString, scheduleId);
-
+    
   }
-
+void pressButtonKnown(int testid)async{
+      //TODO：：11111111111111111111\
+      await scheduleDao.addStatus(testid);
+      await addNextitme(testid);
+      //await addStatus(testId);
+      //add status 
+      //scheduleDao.
+    }
+    void pressButtonUnKnown(int testid)async{
+      await scheduleDao.subStatus(testid);
+      await addNextitme(testid);
+    }
 }

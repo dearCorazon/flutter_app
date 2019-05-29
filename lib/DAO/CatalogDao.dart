@@ -38,6 +38,24 @@ class CatalogDao{
     });
     return maps;
   }
+  // Future<List<Catalog_extra>> getStatusNumber()async{
+  //   await _open();
+  //   final String sql = 'select ';
+    
+    
+    
+  // }
+  Future<List<int>> fetcbAllCatalogId()async{
+    await _open();
+    final String sql= 'select * from catalog';
+    List<Map> maps= await _database.rawQuery(sql);
+    Logv.Logprint("fetcbAllCatalogId():.........................\n"+maps.toString());
+    List<int> catalogIdlist =[];
+    for(var map in maps){
+       catalogIdlist.add(int.parse(map['id'].toString())); 
+    }
+    return catalogIdlist;  
+  }
   Future<int> insert(Catalog catalog)async{
     await _open();
     int result=await _database.insert(table,catalog.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
@@ -50,6 +68,7 @@ class CatalogDao{
     List<Map> maps = await _database.rawQuery(sql);
     return maps.length;
   }
+  
   Future<String> getNamebyId(int id)async{
     List<Map> maps = await _database.rawQuery("select name from catalog where id = $id");
     if(maps.length>0){

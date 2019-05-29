@@ -1,6 +1,10 @@
 import 'package:flutter_app/Bean/Catalog.dart';
 class Catalog_extra extends Catalog{
   int cards;
+  int status1numbers;
+  int status2numbers;
+  int status3numbers;
+  int status4numbers;
   
   Catalog_extra.create(String name,int cards) : super.create(name){
     this.cards=cards;
@@ -17,8 +21,6 @@ class Catalog_extra extends Catalog{
     };
     return map;
   } 
-    
-  // }
 
   @override
   String toString(){

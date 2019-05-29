@@ -5,6 +5,8 @@ import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 
 class CardsShowState with ChangeNotifier {
+ 
+
   int lenthmax=50;
   CatalogDao catalogDao = new CatalogDao();
   TestDao testDao = new TestDao();
@@ -15,12 +17,18 @@ class CardsShowState with ChangeNotifier {
   int selcetedTagId;
   String selectedCatalogName;
   
-  List<Test> currentList=  new List<Test>();
+  List<Test> currentList= [Test.create("1", "2")];
   List<Test> currentListWithSchedule = new List<Test>();
   int currentListIndex = 0;
   void refreshListIndex(){
      currentListIndex = 0;
      notifyListeners();
+  }
+  void loadCurrentCardList(List<Test> tests){
+    currentList.addAll(tests);
+    currentList=tests;
+    notifyListeners();
+    
   }
   void setSelectedtId(int catalogId){
     selectedCatalogId = catalogId;

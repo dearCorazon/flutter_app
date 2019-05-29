@@ -13,7 +13,7 @@ class ShowCatalogs extends StatelessWidget{
   Widget build(BuildContext context) {
     final cardsShowState = Provider.of<CardsShowState>(context);
     final catalogState = Provider.of<CatalogState>(context);
-   
+    //TODO：改进一下Schedule的查询算法 按找staus排序
      return ListView.builder(
       shrinkWrap: true,
       itemCount: catalogState.getCatlalogs.length,
@@ -22,14 +22,9 @@ class ShowCatalogs extends StatelessWidget{
         children: <Widget>[
           ListTile(
             onTap: (){
-
-              int selectedCatalogId;
+              //int selectedCatalogId;
               cardsShowState.refreshListIndex();
               cardsShowState.setSelectedtId(catalogState.getCatlalogs[index].id);
-              //await cardsShowState.loadCatalogInformation(selectedCatalogId,catalogState.getCatlalogs[index].name);
-              //await cardsShowState.reloadCurrentListIndex();
-              //await cardsShowState.loadCardListWithSchedule();
-              //Future.delayed(Duration(milliseconds:900 ));
               Navigator.push(
                 context, 
                 MaterialPageRoute(
@@ -38,7 +33,7 @@ class ShowCatalogs extends StatelessWidget{
             },
             title: Text(
                 "id " + catalogState.getCatlalogs[index].id.toString() + catalogState.getCatlalogs[index].name),
-            subtitle: Text("superior:" + catalogState.getCatlalogs[index].superiorId.toString()),
+            subtitle: Text("${catalogState.getSingleById(catalogState.getCatlalogs[index].id).number} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status1} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status2} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status3} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status4 }"),
           ),
           Divider(
             height: 2.0,
