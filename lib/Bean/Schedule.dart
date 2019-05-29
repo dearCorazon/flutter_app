@@ -43,7 +43,8 @@ class Schedule{
       ColumnTestId:testId,
       ColumnStatus:status,
       ColumnFollowType:followType,
-      ColumnNextTime:nextTime
+      ColumnNextTime:nextTime,
+      ColumnIsmark:ismark
     };
     return map;
   }

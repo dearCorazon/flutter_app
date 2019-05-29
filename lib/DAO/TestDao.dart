@@ -1,3 +1,4 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
@@ -9,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:flutter_app/Log.dart';
-import 'package:flutter_app/Prefab.dart';
+
 //static final _sql_createTableTest='CREATE TABLE TEST(
 //   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 //   adderId INTEGER,
@@ -51,6 +52,7 @@ class TestDao{
   Future<List<Test>> queryListByCatalogId(int id)async{
     await _open();
     List<Test> tests=[];
+    //TODO：这个无报错
   //    Test.fromMap(Map<String ,dynamic> map){
   //   id=map[ColumnId];
   //   adderId=map[ColumnAdderId];
@@ -91,6 +93,32 @@ class TestDao{
     //   if(k=='nextTime'){
     //     return v.toString();}
     // });
+  }
+  Future<List<Test>> loadCardList(int catalogId) async {
+    List<Test> currentList;
+    currentList = await queryListByCatalogId(catalogId);
+    return currentList;
+  }
+  Future<List<Test>> loadCardListWithSchedule(int catalogId,int maxlength) async {
+    List<Test> currentListWithSchedule;
+    List<Test> currentList;
+    //每次最多load50个
+    int count = 0;
+    currentList = await queryListByCatalogId(catalogId);
+    await currentList.forEach((test) async {
+    String dateTime = await getDateTimebyId(test.id);
+    DateTime datetime = DateTime.parse(dateTime);
+      if ( count <= maxlength) {
+        if ( !datetime.isAfter(DateTime.now())) {
+          //await Logv.Logprint("pick" + test.id.toString() + test.question);
+          currentListWithSchedule.add(test);
+          count++;
+          //Logv.Logprint(currentListWithSchedule.length.toString());
+        }
+      }
+    });
+    return currentListWithSchedule;
+    // Logv.Logprint("currentListWithSchedule in state:"+currentListWithSchedule.toString());
   }
   Future<List<Test>> queryListByName(String name)async{
     //首先根据目录名 找出目录iD

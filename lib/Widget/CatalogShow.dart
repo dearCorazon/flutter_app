@@ -13,16 +13,7 @@ class ShowCatalogs extends StatelessWidget{
   Widget build(BuildContext context) {
     final cardsShowState = Provider.of<CardsShowState>(context);
     final catalogState = Provider.of<CatalogState>(context);
-    Widget getWidget(){
-      if(cardsShowState.currentListWithSchedule==null){
-        //TODO：太丑需要优化
-        return Nodata();
-      }
-      else{
-
-        return ShowSimpleCard();
-      }
-    }
+   
      return ListView.builder(
       shrinkWrap: true,
       itemCount: catalogState.getCatlalogs.length,
@@ -30,19 +21,19 @@ class ShowCatalogs extends StatelessWidget{
       return Column(
         children: <Widget>[
           ListTile(
-            onTap: ()async{
+            onTap: (){
+
               int selectedCatalogId;
-              selectedCatalogId= catalogState.getCatlalogs[index].id;
-              await cardsShowState.loadCatalogInformation(selectedCatalogId,catalogState.getCatlalogs[index].name);
-              await cardsShowState.loadCardList(selectedCatalogId);
-              await cardsShowState.reloadCurrentListIndex();
-              await cardsShowState.loadCardListWithSchedule(50);
-              await Logv.Logprint("当前目录要显示的List(without schedule)"+cardsShowState.currentList.toString());
-              await Logv.Logprint("当前目录要显示的List(with schedule)"+cardsShowState.currentListWithSchedule.toString());
-              await Navigator.push(
+              cardsShowState.refreshListIndex();
+              cardsShowState.setSelectedtId(catalogState.getCatlalogs[index].id);
+              //await cardsShowState.loadCatalogInformation(selectedCatalogId,catalogState.getCatlalogs[index].name);
+              //await cardsShowState.reloadCurrentListIndex();
+              //await cardsShowState.loadCardListWithSchedule();
+              //Future.delayed(Duration(milliseconds:900 ));
+              Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context)=> getWidget()
+                  builder: (context)=>  ShowSimpleCardFuture()
               ));
             },
             title: Text(
@@ -58,6 +49,56 @@ class ShowCatalogs extends StatelessWidget{
   );
   }
 }
+
+// class ShowCatalogswithFuture extends StatelessWidget{
+//   @override
+//   Widget build(BuildContext context) {
+//     final cardsShowState = Provider.of<CardsShowState>(context);
+//     final catalogState = Provider.of<CatalogState>(context);
+//     Widget getWidget(){
+//       if(cardsShowState.currentListWithSchedule.length==0){
+//         //TODO：太丑需要优化
+//         return Nodata();
+//       }
+//       else{
+//         return ShowSimpleCard();
+//       }
+//     }
+//      return ListView.builder(
+//       shrinkWrap: true,
+//       itemCount: catalogState.getCatlalogs.length,
+//       itemBuilder: (BuildContext context, int index) {
+//       return Column(
+//         children: <Widget>[
+//           ListTile(
+//             onTap: ()async{
+//               int selectedCatalogId;
+//               selectedCatalogId= catalogState.getCatlalogs[index].id;
+//               await cardsShowState.loadCatalogInformation(selectedCatalogId,catalogState.getCatlalogs[index].name);
+//               await cardsShowState.loadCardList(selectedCatalogId);
+//               await cardsShowState.reloadCurrentListIndex();
+//               await cardsShowState.loadCardListWithSchedule();
+//               Future.delayed(Duration(milliseconds:900 ));
+//               //TODO：如果数据多时 还是只能delayde执行
+//               Navigator.push(
+//                 context, 
+//                 MaterialPageRoute(
+//                   builder: (context)=> getWidget()
+//               ));
+//             },
+//             title: Text(
+//                 "id " + catalogState.getCatlalogs[index].id.toString() + catalogState.getCatlalogs[index].name),
+//             subtitle: Text("superior:" + catalogState.getCatlalogs[index].superiorId.toString()),
+//           ),
+//           Divider(
+//             height: 2.0,
+//           ),
+//         ],
+//       );
+//     },
+//   );
+//   }
+// }
 // class ShowCatalog extends StatefulWidget {
 //   //TODO:参考准备弃用
 //   @override

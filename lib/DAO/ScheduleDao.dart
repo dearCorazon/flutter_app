@@ -22,6 +22,7 @@ class ScheduleDao{
     // database=await openDatabase(_path,version: _databaseVersion);
     // Logv.Logprint("database open? "+database.isOpen.toString());
   }
+
   Future<List<Map>> fetchDataByCatalog(int catalogId)async{
     //static final _sql_createTableSchedule2='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testId INTEGER,userId INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(testID,userID))';
     //String sql2="select test.id as id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos from test,catalog where test.catalogid=$id and test.catalogid=catalog.id";
@@ -44,7 +45,34 @@ class ScheduleDao{
     //await database.close();
     return result;
   }
+  Future<int> getSceduleIdbyeTestId(int testId)async{
+    await _open();
+    final String sql ='select schedule.id from schedule,test where test.id=$testId and schedule.testid=test.id';
+    List<Map> maps = await _database.rawQuery(sql);
+    if(maps.length>0){
+      Logv.Logprint("in scheduleDao.getSceduleIdbyeTestId:"+maps.toString());
+      int  result = int.parse(maps.first.values.elementAt(0).toString());
+      Logv.Logprint("in scheduleDao.getSceduleIdbyeTestId:"+result.toString());
+      return result;
+    }else{
+        Logv.Logprint("in scheduleDao.getSceduleIdbyeTestId:no maps");
+    }
+    
+  }
+  Future<int> getStatusBySchduleId(int testId)async{
+    final String  sql='select schedule.status from schedule,test where test.id=$testId and schedule.testid=test.id';
+    await _open();
+    List<Map> maps = await _database.rawQuery(sql);
+    if(maps.length>0){
+      Logv.Logprint("in scheduleDao.getStatusBySchduleId:"+maps.toString());
+      int  result = int.parse(maps.first.values.elementAt(0).toString());
+      Logv.Logprint("in scheduleDao.getStatusBySchduleId:"+result.toString());
+      return result;
+    }else{
+        Logv.Logprint("in scheduleDao.getStatusBySchduleId:no maps");
+    }
 
+  }
   Future<List<Schedule>> queryAll2()async{
     List<Schedule> schedules=[];
     await _open();
@@ -61,7 +89,27 @@ class ScheduleDao{
     //await database.close();
     return null;
   }
-  
+  Future<void> updateNexttime(String newtimeString,int id)async{
+    await _open();
+    String sql2='UPDATE knowledge SET status = ?  WHERE id = ? ';
+    final String sql ='UPDATE schedule SET nexttime = "$newtimeString"  WHERE id = $id ';
+    int result  = await _database.rawUpdate(sql);
+    Logv.Logprint("in Schedule updateNexttime , the number of changes made $result");
+  }
+  Future<Schedule> queryBytestId(int testId)async{
+    await _open();
+    final String sql = 'select schedule.id,status,nexttime,ismark from test,schedule where test.id=$testId and schedule.testid=test.id ';
+    //TODO: ismark 不知为何为空 应该已经解决了
+    List<Map> maps = await _database.rawQuery(sql);
+    Logv.Logprint("in Schedule queryBytestId ,maps="+maps.toString());
+     if(maps.length>0){
+      Schedule schedule=  Schedule.fromMap(maps.first);
+      Logv.Logprint("in Schedule queryBytestId ,map="+schedule.toString());
+      //await database.close();
+      return schedule;
+    }
+    
+  }
   // Future<Schedule> update_status(int status)async{
   //   Schedule schedule;
   //   await _open();

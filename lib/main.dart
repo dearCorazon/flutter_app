@@ -41,14 +41,23 @@ void test()async{
   List<Map> maps2= await scheduleDao.queryAll();
   Logv.Logprint("scheduleDao.fetchDataByCatalog test-> maps"+maps.toString());
   Logv.Logprint("scheduleDao.queryAll() test-> maps"+maps2.toString());
+  Schedule  schedule=await scheduleDao.queryBytestId(2);
+ 
   //测试ScheduleDao....................................................
-  //测试是否能取出DateTime///////////////////////////////////////
+  //测试是否能取出DateTime/////////////////////////////////////// 
   String timeString  = await testDao.getDateTimebyId(3);
   await Logv.Logprint("测试是否能取出DateTime$timeString");
-
-
-
+  DateTime dateTime3 = DateTime.parse(timeString);
+  Logv.Logprint(dateTime3.isAfter(DateTime.now()).toString());
   //测试是否能取出DateTime///////////////////////////////////////
+
+  //测试Schedule updateNexttime///////
+  // Logv.Logprint("测试Schedule updateNexttime");
+  // await  scheduleDao.updateNexttime(DateTime.now().toIso8601String(), 1);
+  // Logv.Logprint("测试Schedule updateNexttime");
+
+
+  //测试Schedule updateNexttime///////
   ////////////////////////////////////政治json测试
   // var data = jsonDecode(json);
   // int number = int.parse(data['number']);
@@ -186,9 +195,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
         title: 'demo',
-        theme: new ThemeData(
-          primaryColor: Colors.blue,
-        ),
+        theme: ThemeData.light(),
         home:  HomePage(),
         // ChangeNotifierProvider<CatalogState>(
         //   builder: (_) => CatalogState(), 
