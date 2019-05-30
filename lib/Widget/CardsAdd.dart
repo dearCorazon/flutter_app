@@ -27,16 +27,6 @@ class Addcards extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: Icon(Icons.check),
-        //     onPressed: (){
-        //       Logv.Logprint();
-        //       Logv.Logprint("quesiton:"+cardsAddState.question);
-        //       Logv.Logprint("answer:"+cardsAddState.answer);
-        //     },
-        //   ),
-        // ],
         title: Text("添加卡片"),
       ),
       body: Container(

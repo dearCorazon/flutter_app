@@ -12,13 +12,12 @@ class ShowCatalogs extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController newnamecontroller = new TextEditingController();
     ScheduleDao scheduleDao = new ScheduleDao();
-    CatalogDao catalogDao= new CatalogDao();
+    CatalogDao catalogDao = new CatalogDao();
     final cardsShowState = Provider.of<CardsShowState>(context);
     final catalogState = Provider.of<CatalogState>(context);
     return ListView.builder(
       shrinkWrap: true,
       itemCount: catalogState.getCatlalogs.length,
-      
       itemBuilder: (BuildContext context, int index) {
         return Column(
           children: <Widget>[
@@ -27,41 +26,53 @@ class ShowCatalogs extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return SimpleDialog(children: <Widget>[
-                        Scrollbar(
-                            child: (ListView(
-                              shrinkWrap: true,
+                      return Container(
+                        child: SimpleDialog(children: <Widget>[
+                          (Column(
                             children: <Widget>[
                               ListTile(
                                 title: Text('重命名'),
-                                onTap: (){
+                                onTap: () {
                                   showDialog(
-                                    context:  context,
-                                    builder: (BuildContext context){
-                                      return SimpleDialog(
-                                        children: <Widget>[
-                                          TextFormField(
-                                            controller: newnamecontroller,
-                                            validator:  (val)=>(val==null||val.isEmpty)? "不能为空":null,
-                                            onFieldSubmitted: (value)async{
-                                              await catalogDao.updateNameCatalogId(value, catalogState.getCatlalogs[index].id);
-                                              await catalogState.reloadCatlogs();
-                                              await catalogState.reloadAllCatalogNames();
-                                              await catalogState.reloadAllCatalognamesExtra();
-                                              Navigator.pop(context);Navigator.pop(context);
-                                            },
-
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          child: SimpleDialog(
+                                            children: <Widget>[
+                                              TextFormField(
+                                                controller: newnamecontroller,
+                                                validator: (val) =>
+                                                    (val == null || val.isEmpty)
+                                                        ? "不能为空"
+                                                        : null,
+                                                onFieldSubmitted: (value) async {
+                                                  await catalogDao
+                                                      .updateNameCatalogId(
+                                                          value,
+                                                          catalogState
+                                                              .getCatlalogs[index]
+                                                              .id);
+                                                  await catalogState
+                                                      .reloadCatlogs();
+                                                  await catalogState
+                                                      .reloadAllCatalogNames();
+                                                  await catalogState
+                                                      .reloadAllCatalognamesExtra();
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      );
-                                    }
-                                  );
+                                        );
+                                      });
                                 },
                               ),
                               ListTile(
                                 title: Text('删除'),
-                                onTap: ()async{
-                                  await catalogDao.deleteAllcardsByCatalogId(catalogState.getCatlalogs[index].id);
+                                onTap: () async {
+                                  await catalogDao.deleteAllcardsByCatalogId(
+                                      catalogState.getCatlalogs[index].id);
                                   await catalogState.reloadCatlogs();
                                   await catalogState.reloadAllCatalogNames();
                                   await catalogState.reloadAllCatalognamesExtra();
@@ -73,8 +84,8 @@ class ShowCatalogs extends StatelessWidget {
                               ),
                             ],
                           )),
-                        ),
-                      ]);
+                        ]),
+                      );
                     });
               },
               onTap: () {
@@ -86,9 +97,7 @@ class ShowCatalogs extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => ShowSimpleCardFuture()));
               },
-              title: Text("id " +
-                  catalogState.getCatlalogs[index].id.toString() +
-                  catalogState.getCatlalogs[index].name),
+              title: Text(catalogState.getCatlalogs[index].name),
               subtitle: Text(
                   "${catalogState.getSingleById(catalogState.getCatlalogs[index].id).number} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status1} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status2} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status3} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status4}"),
             ),

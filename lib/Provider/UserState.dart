@@ -2,9 +2,7 @@
 import 'package:flutter/material.dart';
 
 class UserState with ChangeNotifier{
-  UserState(){
-     
-  }
+  
   int userid=1;
   String email='未登录';
   bool status =false;

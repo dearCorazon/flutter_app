@@ -9,6 +9,7 @@ import 'package:flutter_app/Provider/CardsShowState.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
 import 'package:flutter_app/Utils/MemoryAlgorithm.dart';
+import 'package:flutter_app/Widget/CardEdit.dart';
 import 'package:provider/provider.dart';
 import 'Drawer.dart';
 import 'package:flutter_app/Utils/Prefab.dart';
@@ -25,10 +26,6 @@ class ShowSimpleCardFuture extends StatelessWidget {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
-                //TODO；跳转闪烁 还有这里的重绘问题
-                // return new Center(
-                //   child: new CupertinoActivityIndicator()
-                // );
                 default:
                   if (snapshot.hasError)
                     return Text('Error: ${snapshot.error}');
@@ -37,7 +34,6 @@ class ShowSimpleCardFuture extends StatelessWidget {
               }
             }));
   }
-
   Future<List<Test>> getTestswithScedule(BuildContext context) async {
     final cardsShowState = Provider.of<CardsShowState>(context);
     List<Test> tests;
@@ -92,25 +88,23 @@ class ShowSimpleCardFuture extends StatelessWidget {
     final catalogState =Provider.of<CatalogState>(context);
     final cardsShowState = Provider.of<CardsShowState>(context);
     final TextEditingController statusController  = new TextEditingController(text:"0");
+    
     //TODO:这里能拿到catalogID 就能显示 熟悉程度
     //TODO:点击后改变status
     List<CardComplete> tests = snapshot.data;
     return Container(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(""), //catalogname
+          title: Text(tests[0].name), //catalogname
           actions: <Widget>[
-            Text("catalog"),
-            RaisedButton(
-              child: Text("白板"),
-            ),
-            RaisedButton(
-              child: Text("清除"),
-            ),
             IconButton(
-              icon: Icon(Icons.collections),
+              icon: Icon(Icons.create),
               onPressed: () {
-                //和Schedule有关，收藏
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context)=>CardEdit(tests[cardsShowState.currentListIndex])
+                ));
+                
+
               },
             ),
             IconButton(
@@ -148,50 +142,32 @@ class ShowSimpleCardFuture extends StatelessWidget {
                   );
               },
             )
-            // PopupMenuButton<int>(
-            //   onSelected: (value){
-            //       switch (value) {
-            //         case 1:{Logv.Logprint("selected: 编辑");break;}
-            //         case 2:{Logv.Logprint("selected:");break;} 
-            //           break;
-            //         default:
-            //       }
-            //   },
-            //   itemBuilder: (BuildContext context)=><PopupMenuItem<int>>[
-            //     const PopupMenuItem<int>(
-            //       value: 1,
-            //       child: Text('编辑'),
-            //     ),
-            //     const PopupMenuItem<int>(
-            //       value: 2,
-            //       child: Text('重设进度'),
-            //     )
-            //   ],
 
-            // ), //TODO:做成下拉菜单
           ],
         ),
         drawer: Mydrawer(),
         body: Container(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Text("1"),
-                  Text("2"),
-                  Text("3"),
-                  Text("time machine"),
-                ],
-              ),
-            ),
             Row(children: <Widget>[
-              Text(tests[cardsShowState.currentListIndex].status.toString()),
-              Text(getmemorytInfo(tests[cardsShowState.currentListIndex].status)),
+              Expanded(
+                child:  Text(tests[cardsShowState.currentListIndex].status.toString()),
+              ),
+             Expanded(
+               child: Text(getmemorytInfo(tests[cardsShowState.currentListIndex].status)),
+             ),
             ],),
-            Text(tests[cardsShowState.currentListIndex].question),
+            Divider(),
+            Card(child: Text(tests[cardsShowState.currentListIndex].question)),
+            Divider(),
+            
             getHideAnswer(context, tests),
-            getButton(context, tests),
+            
+            Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: getButton(context, tests)),
+            
           ],
         )),
       ),
@@ -220,24 +196,28 @@ class ShowSimpleCardFuture extends StatelessWidget {
       return Container(
         child: Row(
           children: <Widget>[
-            RaisedButton(
-              child: Text("认识"),
-              onPressed: () async {
-                //在meomory来处理 要拿到scheduleId 或者 testid
-                memory.pressButtonKnown(
-                    tests[cardsShowState.currentListIndex].testId,
-                    tests[cardsShowState.currentListIndex].scheduleId);
-                _changeCardShowState(context, tests);
-              },
+            Expanded(
+                          child: RaisedButton(
+                child: Text("认识"),
+                onPressed: () async {
+                  //在meomory来处理 要拿到scheduleId 或者 testid
+                  memory.pressButtonKnown(
+                      tests[cardsShowState.currentListIndex].testId,
+                      tests[cardsShowState.currentListIndex].scheduleId);
+                  _changeCardShowState(context, tests);
+                },
+              ),
             ),
-            RaisedButton(
-              child: Text("不认识"),
-              onPressed: () async {
-                memory.pressButtonUnKnown(
-                    tests[cardsShowState.currentListIndex].testId,
-                    tests[cardsShowState.currentListIndex].scheduleId);
-                _changeCardShowState(context, tests);
-              },
+            Expanded(
+                          child: RaisedButton(
+                child: Text("不认识"),
+                onPressed: () async {
+                  memory.pressButtonUnKnown(
+                      tests[cardsShowState.currentListIndex].testId,
+                      tests[cardsShowState.currentListIndex].scheduleId);
+                  _changeCardShowState(context, tests);
+                },
+              ),
             )
           ],
         ),
@@ -352,7 +332,7 @@ class ShowSimpleCardFuture extends StatelessWidget {
 //                   Text("time machine"),
 //                 ],
 //               ),
-//             ),
+//             ),R
 //             Text(cardsShowState
 //                 .currentListWithSchedule[cardsShowState.currentListIndex]
 //                 .question),

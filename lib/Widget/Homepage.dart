@@ -123,13 +123,8 @@ class HomePage extends StatelessWidget {
         floatingActionButton: UnicornDialer(
             parentButton: Icon(Icons.add), childButtons: buttonlist),
         appBar: AppBar(
-          title: Text('demo'),
+          title: Text('大学生法律知识记忆系统'),
           actions: <Widget>[
-            MaterialButton(
-                child: Text("db"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/daotest");
-                }),
             IconButton(icon: Icon(Icons.sync), onPressed: () {}),
             IconButton(
               icon: Icon(Icons.menu),
@@ -143,11 +138,11 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  child: Scrollbar(child: ShowCatalogswithFuture1()),
+                  child: Scrollbar(child: ShowCatalogs()),
                 ),
               ),
               Text(
-                "今天学习了 张卡片，用了 分钟",
+                "今天学习了 张卡片",
               ),
             ],
           ),

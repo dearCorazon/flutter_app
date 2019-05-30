@@ -51,8 +51,8 @@ void test()async{
   ScheduleDao scheduleDao= new ScheduleDao();
   //List<Map> maps =await scheduleDao.fetchCardsCompleteByCatalog(2);
   Api api = new Api();
-   List <CardComplete> cards= await scheduleDao.loadCardListwithRSchedule(3,20);
-   Logv.Logprint("\n099999999999999999999999999999999999999999999999978567567 \n"+cards.toString());
+   //List <CardComplete> cards= await scheduleDao.loadCardListwithRSchedule(3,20);
+  // Logv.Logprint("\n099999999999999999999999999999999999999999999999978567567 \n"+cards.toString());
   //await scheduleDao.loadCatalogStatusNumbersList();
   //await api.register("8989@qq.com" , "123456");
   // int id =await api.login("8989@qq.com" , "123456");
@@ -337,7 +337,7 @@ class MyApp extends StatelessWidget {
            ),
         ],
         child: MaterialApp(
-        title: 'demo',
+        title: '大学生网络安全法记忆系统',
         theme: ThemeData.light(),
         home:  HomePage(),
         // ChangeNotifierProvider<CatalogState>(
