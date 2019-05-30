@@ -13,13 +13,36 @@ class HomePage extends StatelessWidget {
   TextEditingController catalog_controller = new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final catalogState = Provider.of<CatalogState>(context);
+    final catalogState = Provider.of<CatalogState>(context); 
     final buttonlist = [
       UnicornButton(
           currentButton: FloatingActionButton(
               mini: true,
               heroTag: 'button1',
               onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SimpleDialog(
+                        title: Text("添加目录"),
+                        children: <Widget>[
+                          TextField(
+                            controller: catalog_controller,
+                          ),
+                          FlatButton(
+                            child: Text("添加"),
+                            onPressed: () async {
+                              CatalogDao catalogDao = new CatalogDao();
+                              await catalogDao.insert(
+                              Catalog.create(catalog_controller.text));
+                              catalogState.fetchData();
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    },
+                  );
                 // addCatalogDialog(context);
               },
               child: Icon(Icons.category))),
@@ -58,8 +81,6 @@ class HomePage extends StatelessWidget {
                       builder: (BuildContext context) {
                         return Container();
                       }
-                      
-
                   ));
 
               }))),
@@ -86,34 +107,6 @@ class HomePage extends StatelessWidget {
         body: Container(
           child: Column(
             children: <Widget>[
-              RaisedButton(
-                child: Text("添加目录"),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SimpleDialog(
-                        title: Text("添加目录"),
-                        children: <Widget>[
-                          TextField(
-                            controller: catalog_controller,
-                          ),
-                          FlatButton(
-                            child: Text("添加"),
-                            onPressed: () async {
-                              CatalogDao catalogDao = new CatalogDao();
-                              await catalogDao.insert(
-                              Catalog.create(catalog_controller.text));
-                              catalogState.fetchData();
-                              Navigator.of(context).pop();
-                            },
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
               Expanded(
                 child: Container(
                   child: Scrollbar(child: ShowCatalogs()),

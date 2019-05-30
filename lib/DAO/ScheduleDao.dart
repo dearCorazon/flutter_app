@@ -60,6 +60,16 @@ class ScheduleDao{
     }
     
   }
+  // Future<void> delete(int catalogId)async{
+  //   await _open();
+  //   //String sql1 ='delete  from test,schedule where schedule.testId=test.id and test.id = test.catalogId and test.catalogId=$catalogId';
+  //   String sql2 ='delete  from test where test.catalogId = $catalogId';
+  //   String sql3= 'delete from catalog where id= $catalogId';
+  //   int result2= await  _database.rawDelete(sql2);
+  //   int result3 = await  _database.rawDelete(sql3);
+  //    //await  _database.rawDelete(sql3);
+  //   Logv.Logprint("删除test表$result2 行 删除目录表$result3 行");
+  // }
   Future<int> getScheduleIdTestIdByTestId(int testId)async{
     await _open();
     final String sql = 'select schedule.id from test,schedule where schedule.testId=test.id';
@@ -93,13 +103,14 @@ class ScheduleDao{
     }
     return newtests;
   }
+  
    Future<List<CardComplete>> loadCardListwithSchedule(int catalogId,int length)async{
     int count= 0;
     List<Map> maps =await fetchCardsCompleteByCatalog(catalogId);
     List<Map> newmaps=[];
     for (var map in maps){
     String datatimeString = map['nextTime'];
-    Logv.Logprint("loadCardListwithSchedule:map=====================---------------- \n"+map.toString());
+    //Logv.Logprint("loadCardListwithSchedule:map=====================---------------- \n"+map.toString());
     DateTime datetime = DateTime.parse(datatimeString);
     if ( !datetime.isAfter(DateTime.now())) {
           //Logv.Logprint("pick" + test.id.toString() + test.question);
@@ -120,9 +131,15 @@ class ScheduleDao{
     final String sql ='select catalog.id,schedule.staus from schedule,catalog where catalog' ;
     
   }
-  Future<int> addStatus(int testId)async{
+  Future<int> updateStatusByScheduleId(int scheduleId,int newstatus)async{
+     await _open();
+     String sql = 'update schedule set status=$newstatus where id=$scheduleId';
+     int result = await _database.rawUpdate(sql);
+     Logv.Logprint("in updateStatusByScheduleId 影响行数$result");
+     return result; 
+  }
+  Future<int> addStatus(int scheduleId)async{
     await _open();
-    int scheduleId= await getSceduleIdbyeTestId(testId);
     int status =await getStatusBySchduleId(scheduleId);
     status++;
     String sql = 'update schedule set status=$status where id=$scheduleId';
@@ -130,10 +147,9 @@ class ScheduleDao{
     Logv.Logprint("in addStatus 影响行数$result");
     return result;  
   }
-  Future<int> subStatus(int testId)async{
+  Future<int> subStatus(int scheduleId)async{
     //TODO:在显示 showcards时显示当前status的值 并且显示属于那一档
     await _open();
-    int scheduleId= await getSceduleIdbyeTestId(testId);
     int status =await getStatusBySchduleId(scheduleId);
     status--;
     String sql = 'update schedule set status=$status where id=$scheduleId';
@@ -172,16 +188,16 @@ Future<List<CatalogStatusNumbers>> loadCatalogStatusNumbersList()async{
     int number=0;
     for(var map in maps_h){
       int status =int.parse(map['status'].toString());
-      if(status<0){
+      if(status<=0){
        status1++;
       }
-      if(status>=0&&status<20){
+      if(status>0&&status<20){
        status2++;
       }
-      if(status>=20&&status<50){
+      if(status>=20&&status<=50){
        status3++;
       }
-      if(status>=50){
+      if(status>50){
        status4++;
       }
       number++;

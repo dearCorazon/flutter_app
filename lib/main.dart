@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/Bean/CardComplete.dart';
 import 'package:flutter_app/Bean/Catalog.dart';
@@ -16,9 +17,11 @@ import 'package:flutter_app/Provider/CardsShowState.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Provider/DropDownMenuState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
+import 'package:flutter_app/Utils/Api.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'DAO/Sqlite_helper.dart';
 import 'Widget/Homepage.dart';
 import 'memory.dart';
@@ -28,7 +31,7 @@ import 'package:flutter_app/DAO/DaoTest.dart';
 
 void main() async{
   //TODO:登录注册
-  //调度
+  //TODO:从网络获取题库
   //TODO：Drawer 返回主页
   //TODO：准备选择题的模板
   //TODO：同步
@@ -46,9 +49,13 @@ void test()async{
   TestDao  testDao = new TestDao();
   ScheduleDao scheduleDao= new ScheduleDao();
   List<Map> maps =await scheduleDao.fetchCardsCompleteByCatalog(1);
-  Logv.Logprint(maps.toString());
-  List<CardComplete> cards = await scheduleDao.loadCardListwithSchedule(1,50);
-  Logv.Logprint("8989898998989989898989898989\n"+cards.toString());
+  Api api = new Api();
+  //await api.register("8989@qq.com" , "123456");
+  int id =await api.login("8989@qq.com" , "123456");
+  //await scheduleDao.delete(1);
+  // Logv.Logprint(maps.toString());
+  // List<CardComplete> cards = await scheduleDao.loadCardListwithSchedule(1,50);
+  // Logv.Logprint("8989898998989989898989898989\n"+cards.toString());
   //测试ScheduleDao...........................................
   // 
   // List<Map> maps= await scheduleDao.fetchDataByCatalog(3);
@@ -218,6 +225,8 @@ _Dbinit() async {
    await Sqlite_helper.instance.database;
    CatalogDao catalogDao = new CatalogDao();
    TestDao testDao = new TestDao();
+   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+   
   //  ImportCards importCards = new ImportCards();
   //  importCards.importZhengzhi();
   

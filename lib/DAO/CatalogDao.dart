@@ -45,6 +45,18 @@ class CatalogDao{
     
     
   // }
+   Future<void> deleteAllcardsByCatalogId(int catalogId)async{
+    await _open();
+    String name='删除未成功';
+    name= await getNamebyId(catalogId);
+    //String sql1 ='delete  from test,schedule where schedule.testId=test.id and test.id = test.catalogId and test.catalogId=$catalogId';
+    String sql2 ='delete  from test where test.catalogId = $catalogId';
+    String sql3= 'delete from catalog where id= $catalogId';
+    int result2= await  _database.rawDelete(sql2);
+    int result3 = await  _database.rawDelete(sql3);
+     //await  _database.rawDelete(sql3);
+    Logv.Logprint("删除test表$result2 行 删除目录表$result3 行 名为$name");
+  }
   Future<List<int>> fetcbAllCatalogId()async{
     await _open();
     final String sql= 'select * from catalog';
@@ -55,6 +67,16 @@ class CatalogDao{
        catalogIdlist.add(int.parse(map['id'].toString())); 
     }
     return catalogIdlist;  
+  }
+  Future<int> updateNameCatalogId(String name,int catalogId)async{
+    String sql= 'update  catalog set name="$name" where id=$catalogId';
+     //String sql = 'update schedule set status=$status where id=$scheduleId';
+    await _open();
+    int result = await _database.rawUpdate(sql);
+    Logv.Logprint(" in updateNameCatalogId: 修改目录名 成功为1：$result");
+    return result;
+    
+
   }
   Future<int> insert(Catalog catalog)async{
     await _open();

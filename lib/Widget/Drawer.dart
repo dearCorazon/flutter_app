@@ -79,8 +79,7 @@ class Mydrawer extends StatelessWidget {
           child: ListView(
             children: <Widget>[
               UserAccountsDrawerHeader(
-                accountEmail: Text(userState.getEmail),
-                accountName: Text("UID:"+userState.getId.toString()),
+                accountEmail: Text(userState.email),
                 currentAccountPicture: GestureDetector(
                       onTap: () => Navigator.pushNamed(context, '/login'),
                       child: Icon(Icons.account_circle, size: 40.0)),

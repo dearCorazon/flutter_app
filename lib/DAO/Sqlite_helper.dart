@@ -9,6 +9,7 @@ import 'package:flutter_app/Log.dart';
 class Sqlite_helper{
     static final _databasename= 'mydatabase';
     static final _databaseVersion =1;
+    static final _sql_createTableUser="CREATE TABLE User(id INTEGER NOT NULL PRIMARY KEY ,email TEXT NOT NULL)";
     static final _sql_createTableTest='CREATE TABLE TEST(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,adderId INTEGER,question TEXT UNIQUE,chaos TEXT,answer TEXT,type INTEGER,catalogId INTEGER,tag INTEGER)';
     static final _sql_createTableCatalog='CREATE TABLE CATALOG(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT,superiorId INTEGER)';
     static final _sql_createTableSchedule='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,testID INTEGER,userID INTEGER,status INTEGER,nextTime TEXT,followType INTEGER)';
@@ -43,6 +44,7 @@ class Sqlite_helper{
             await db.execute(_sql_createTableCatalog2);
             await db.execute(_sql_createTableSchedule2);
             await db.execute(_sql_createTableTest);
+            await db.execute(_sql_createTableUser);
             await Logv.Logprint("插入初始数据：");
             await db.insert(tableTest,Test.create("1+1=?", "2").toMap());//default 
             await db.insert(tableTest,Test.create("1+2=?", "3").toMap());//default 

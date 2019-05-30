@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Model/userModel.dart';
+import 'package:flutter_app/Utils/Api.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class Login extends StatelessWidget{
+  Api api = new Api();
   @override
   Widget build(BuildContext context) {
-    TextEditingController _nameController = new TextEditingController();
-    TextEditingController _emailController= new TextEditingController();;
-    return new Scaffold(
+    TextEditingController _emailController = new TextEditingController();
+    TextEditingController _passwordController= new TextEditingController();;
+    return  Scaffold(
         appBar: new AppBar(
-          title:  new Text("login"),
+          title:  new Text("登录注册"),
           leading: IconButton(icon: Icon(Icons.arrow_back)),
         ),
         body:Container(
@@ -20,29 +22,30 @@ class Login extends StatelessWidget{
                 textAlign: TextAlign.center,
                 controller: _emailController,
                 decoration: InputDecoration(
-                  
+              
                 ),
               ),
               TextField(
                 textAlign: TextAlign.center,
-                controller: _nameController,
+                controller: _passwordController,
+                obscureText: true,
               ),
               Row(
                 children: <Widget>[
-                  ScopedModel<userModel>(
-                    model: userModel(),
-                    child: RaisedButton(
-                      child: Text("login"),
-                      onPressed: (){
-                          
-                          Logv.Logprint("${_nameController.text}");
-                          Logv.Logprint("${_emailController.value.toString()}");
-                      },
-                    ),
+                  RaisedButton(
+                    child: Text("login"),
+                    onPressed: ()async{
+                        await api.login(_emailController.text, _passwordController.text);
+                        Logv.Logprint(_passwordController.text);
+                        Logv.Logprint(_emailController.value.toString());
+                        Navigator.pop(context);
+                    },
                   ),
                   RaisedButton(
                     child: Text("Register"),
-                    onPressed: (){
+                    onPressed: ()async{
+                      await api.register(_emailController.value.toString(), _passwordController.text);
+                      Navigator.pop(context);
                     },
                   ),
                 ],

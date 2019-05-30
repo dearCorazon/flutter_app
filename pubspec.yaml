@@ -27,7 +27,7 @@ dependencies:
   scoped_model: ^1.0.1
   provider : ^2.0.1
   intl: ^0.15.8
-
+  font_awesome_flutter: ^8.4.0
 
 
   # The following adds the Cupertino Icons font to your application.

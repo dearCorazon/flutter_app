@@ -25,7 +25,7 @@ class Memory{
     DateTime newNextime;
     //等级分为陌生  有点印象  良好 熟悉
     //当前算法为  如果 陌生 不认识：认识  （+3分钟  +2分钟 ）
-    if(status<0){//陌生
+    if(status<=0){//陌生
       newNextime=DateTime.parse(currentTimeString).add(duration1minute);
       newtimeString=newNextime.toIso8601String();
       await scheduleDao.updateNexttime(newtimeString, scheduleId);
@@ -67,16 +67,16 @@ class Memory{
     // await scheduleDao.updateNexttime(newtimeString, scheduleId);
     
   }
-void pressButtonKnown(int testid)async{
+void pressButtonKnown(int testid,int scheduleId)async{
       //TODO：：11111111111111111111\
-      await scheduleDao.addStatus(testid);
+      await scheduleDao.addStatus(scheduleId);
       await addNextitme(testid);
       //await addStatus(testId);
       //add status 
       //scheduleDao.
     }
-    void pressButtonUnKnown(int testid)async{
-      await scheduleDao.subStatus(testid);
+void pressButtonUnKnown(int testid,int scheduleId)async{
+      await scheduleDao.subStatus(scheduleId);
       await addNextitme(testid);
     }
 }

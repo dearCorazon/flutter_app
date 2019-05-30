@@ -40,7 +40,7 @@ class ShowAllCards extends StatelessWidget {
             IconButton(
               icon:Icon(Icons.search),
               onPressed: (){
-                Logv.Logprint(userState.getStatus.toString());
+                //Logv.Logprint(userState.getStatus.toString());
                 Logv.Logprint(catalogState.getAllCatalognames.toString());
               },)
           ],

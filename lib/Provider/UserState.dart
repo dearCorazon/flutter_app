@@ -2,18 +2,21 @@
 import 'package:flutter/material.dart';
 
 class UserState with ChangeNotifier{
-  String name= '本地用户';
-  int _userid=1;//代表本地用户
-  String _email='未登录';
-  bool _status =false;
-  void fetchData(){
-    ChangeNotifier();
+  UserState(){
+     
   }
-  void login(){
-    _status=true;
+  int userid=1;
+  String email='未登录';
+  bool status =false;
+  void update(int id , String email){
+    this.userid = id;
+    this.email=email;
+    notifyListeners();
+  }
+  void login(int id , String email){
+    update(id,email);
+    status=true;
+    notifyListeners();
   }
   
-  int get  getId => _userid;
-  String get getEmail => _email;
-  bool get getStatus=> _status; 
 }
