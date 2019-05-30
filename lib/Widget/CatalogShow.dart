@@ -98,8 +98,16 @@ class ShowCatalogs extends StatelessWidget {
                         builder: (context) => ShowSimpleCardFuture()));
               },
               title: Text(catalogState.getCatlalogs[index].name),
-              subtitle: Text(
-                  "${catalogState.getSingleById(catalogState.getCatlalogs[index].id).number} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status1} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status2} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status3} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status4}"),
+              subtitle: Row(
+                children: <Widget>[
+                  Text("${catalogState.getSingleById(catalogState.getCatlalogs[index].id).number}",style: TextStyle(color: Colors.blue)),
+                  Text(" ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status1}",style: TextStyle(color: Colors.red),),
+                  Text(" ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status2}",style: TextStyle(color:  Colors.yellow)),
+                  Text(" ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status4}",style: TextStyle(color:  Colors.green),),
+                ],
+              )
+              // Text(
+              //     "${catalogState.getSingleById(catalogState.getCatlalogs[index].id).number} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status1} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status2} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status3} ${catalogState.getSingleById(catalogState.getCatlalogs[index].id).status4}"),
             ),
             Divider(
               height: 2.0,
