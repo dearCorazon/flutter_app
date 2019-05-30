@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/Bean/CardComplete.dart';
 import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Catalog_extra.dart';
@@ -44,31 +45,37 @@ void test()async{
   CatalogDao catalogDao = new CatalogDao();
   TestDao  testDao = new TestDao();
   ScheduleDao scheduleDao= new ScheduleDao();
+  List<Map> maps =await scheduleDao.fetchCardsCompleteByCatalog(1);
+  Logv.Logprint(maps.toString());
+  List<CardComplete> cards = await scheduleDao.loadCardListwithSchedule(1,50);
+  Logv.Logprint("8989898998989989898989898989\n"+cards.toString());
   //测试ScheduleDao...........................................
   // 
-  List<Map> maps= await scheduleDao.fetchDataByCatalog(3);
-  List<Map> maps2= await scheduleDao.queryAll();
-  Logv.Logprint("scheduleDao.fetchDataByCatalog test-> maps"+maps.toString());
-  Logv.Logprint("scheduleDao.queryAll() test-> maps"+maps2.toString());
-  Schedule  schedule=await scheduleDao.queryBytestId(2);
-  await catalogDao.fetcbAllCatalogId();
-  //fetcbAllCatalogId()
-  List<CatalogStatusNumbers>  lists= await  loadCatalogStatusNumbersList();
-  Logv.Logprint("CatalogStatusNumbers()()()()()()()()()())\n"+lists.toString());
+  // List<Map> maps= await scheduleDao.fetchDataByCatalog(3);
+  // List<Map> maps2= await scheduleDao.queryAll();
+  // Logv.Logprint("scheduleDao.fetchDataByCatalog test-> maps"+maps.toString());
+  // Logv.Logprint("scheduleDao.queryAll() test-> maps"+maps2.toString());
+  // Schedule  schedule=await scheduleDao.queryBytestId(2);
+  // await catalogDao.fetcbAllCatalogId();
+  // //fetcbAllCatalogId()
+  // List<CatalogStatusNumbers>  lists= await  loadCatalogStatusNumbersList();
+  // Logv.Logprint("CatalogStatusNumbers()()()()()()()()()())\n"+lists.toString());
   
   ///Logv.Logprint("fetcbAllCatalogId()................................................\n"+ints.toString());
   //测试ScheduleDao....................................................
   //测试是否能取出DateTime/////////////////////////////////////// 
-  String timeString  = await testDao.getDateTimebyId(3);
-  await Logv.Logprint("测试是否能取出DateTime$timeString");
-  DateTime dateTime3 = DateTime.parse(timeString);
-  Logv.Logprint(dateTime3.isAfter(DateTime.now()).toString());
-  List<Map> maps_90 = await scheduleDao.getStatusNumber();
-  Logv.Logprint("scheduleDao.getStatusNumber():00000000000000000000000000000000000000000000000\n"+maps_90.toString());
-  
+  // String timeString  = await testDao.getDateTimebyId(3);
+  // await Logv.Logprint("测试是否能取出DateTime$timeString");
+  // DateTime dateTime3 = DateTime.parse(timeString);
+  // Logv.Logprint(dateTime3.isAfter(DateTime.now()).toString());
+  // List<Map> maps_90 = await scheduleDao.getStatusNumber();
+  // Logv.Logprint("scheduleDao.getStatusNumber():00000000000000000000000000000000000000000000000\n"+maps_90.toString());
+  // List<CardComplete> cards;
+  // cards=await scheduleDao.fetchCardCompletrAll();
+  // Logv.Logprint("1902999933212432423947934812938118312893901283\n"+cards.toString());
 
   //测试是否能取出DateTime///////////////////////////////////////
-  int result2_1= await scheduleDao.addStatus(1);
+  // int result2_1= await scheduleDao.addStatus(1);
 
   //测试是否能取出DateTime///////////////////////////////////////
   //测试是否能取出DateTime///////////////////////////////////////
@@ -191,13 +198,13 @@ void test()async{
   
   
   //尝试取出每个目录下的所有 schedule 每个记忆状态下的个数
-  String now = DateTime.now().toIso8601String();
-  print(now);
-  DateTime dateTime = DateTime.parse(now);
-  print( dateTime.toIso8601String());
-  DateTime dateTime2=dateTime.add(Duration(minutes: 1));
-  Logv.Logprint("time 1 is after time2:"+dateTime.isAfter(dateTime2).toString());
-  print(dateTime2.toIso8601String());
+  // String now = DateTime.now().toIso8601String();
+  // print(now);
+  // DateTime dateTime = DateTime.parse(now);
+  // print( dateTime.toIso8601String());
+  // DateTime dateTime2=dateTime.add(Duration(minutes: 1));
+  // Logv.Logprint("time 1 is after time2:"+dateTime.isAfter(dateTime2).toString());
+  // print(dateTime2.toIso8601String());
   //测试DateTime.........................................
 }
 String getNameByID(List<Map> maps,int i){

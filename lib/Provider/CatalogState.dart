@@ -17,7 +17,6 @@ class CatalogState with ChangeNotifier{
     List<Catalog> _catalogs =[];
     List<String> _allCatalogNames=[];
     List<CatalogStatusNumbers> catalogStatusNumbersList =[];
-    
     List<Catalog_extra> _catalogExtras=[];
     Future<void> fetchData()async{
       notifyListeners();

@@ -1,4 +1,3 @@
-import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/Utils/Prefab.dart';
 class CatalogStatusNumbers{
   int catalogId;

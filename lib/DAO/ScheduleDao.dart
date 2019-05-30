@@ -1,3 +1,4 @@
+import 'package:flutter_app/Bean/CardComplete.dart';
 import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
@@ -32,7 +33,33 @@ class ScheduleDao{
     return maps;
 
   }
-
+  Future<List<Map>> fetchCardsCompleteByCatalog(int catalogId)async{
+    String sql='select test.id as testId,adderId,question,answer,type,test.tag,test.chaos,test.catalogId as catalogId,catalog.name,superiorId,schedule.id as scheduleId,schedule.testId,schedule.status,schedule.nextTime,schedule.ismark from test,schedule,catalog where  test.catalogId=$catalogId and test.catalogId=catalog.id and schedule.testid=test.id and catalog.id=test.catalogId order by status asc';
+    //static final _sql_createTableSchedule2='CREATE TABLE SCHEDULE(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,testId INTEGER,userId INTEGER,status INTEGER,nextTime TEXT,followType INTEGER,ismark INTEGER,UNIQUE(testID,userID))';
+    //String sql2="select test.id as id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos from test,catalog where test.catalogid=$id and test.catalogid=catalog.id";
+    //String sql='select test.id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos,schedule.status,schedule.nextTime,schedule.ismark from test,schedule where test.catalogId=$catalogId and schedule.testid=test.id';
+    await _open();
+    List<Map> maps= await _database.rawQuery(sql);
+    return maps;
+  }
+  Future<List<CardComplete>> fetchCardCompletrAll()async{//order by status
+    await _open();
+    String sql='select test.id as testId,adderId,question,answer,type,test.tag,test.chaos,test.catalogId as catalogId,catalog.name,superiorId,schedule.id as scheduleId,schedule.testId,schedule.status,schedule.nextTime,schedule.ismark from test,schedule,catalog where test.catalogId=catalog.id and schedule.testid=test.id and catalog.id=test.catalogId ';
+    List<Map> maps= await _database.rawQuery(sql);
+    Logv.Logprint(maps.toString());
+    List<CardComplete> cardComletes=[];
+    if(maps.length>0){
+      for(int i=0;i<maps.length;i++){
+        cardComletes.add(CardComplete.fromMap(maps[i]));
+      }
+      //await database.close();
+      return cardComletes;
+    }
+    else{
+      Logv.Logprint("in ScheduleDaofetchCardCompletrAll() \n no maps");
+    }
+    
+  }
   Future<int> getScheduleIdTestIdByTestId(int testId)async{
     await _open();
     final String sql = 'select schedule.id from test,schedule where schedule.testId=test.id';
@@ -65,6 +92,28 @@ class ScheduleDao{
     if(count==length){ return newtests;}
     }
     return newtests;
+  }
+   Future<List<CardComplete>> loadCardListwithSchedule(int catalogId,int length)async{
+    int count= 0;
+    List<Map> maps =await fetchCardsCompleteByCatalog(catalogId);
+    List<Map> newmaps=[];
+    for (var map in maps){
+    String datatimeString = map['nextTime'];
+    Logv.Logprint("loadCardListwithSchedule:map=====================---------------- \n"+map.toString());
+    DateTime datetime = DateTime.parse(datatimeString);
+    if ( !datetime.isAfter(DateTime.now())) {
+          //Logv.Logprint("pick" + test.id.toString() + test.question);
+          newmaps.add(map);
+          //Logv.Logprint("length:"+currentListWithSchedule.toString());
+        }
+    }
+    List<CardComplete> cardsComplete =[];
+    for(var map in newmaps){
+    cardsComplete.add(CardComplete.fromMap(map));
+    count++;
+    if(count==length){ return cardsComplete;}
+    }
+    return cardsComplete;
   }
   Future<List<Map>> queryAllStatus()async{
     await _open();
@@ -233,15 +282,8 @@ Future<List<CatalogStatusNumbers>> loadCatalogStatusNumbersList()async{
       Logv.Logprint("in Schedule queryBytestId ,map="+schedule.toString());
       //await database.close();
       return schedule;
-    }
-    
+    } 
   }
-  // Future<Schedule> update_status(int status)async{
-  //   Schedule schedule;
-  //   await _open();
-  //   _database.update(table, )
-  //   return schedule;
-  // }
   
 
 

@@ -5,8 +5,6 @@ import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 
 class CardsShowState with ChangeNotifier {
- 
-
   int lenthmax=50;
   CatalogDao catalogDao = new CatalogDao();
   TestDao testDao = new TestDao();

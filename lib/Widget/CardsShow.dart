@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Bean/CardComplete.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
@@ -50,6 +51,13 @@ Future<List<Test>> getTests(BuildContext context)async{
     TestDao testDao = new TestDao();
     tests=await testDao.queryListByCatalogId(cardsShowState.selectedCatalogId);
     return  tests;
+}
+Future<List<CardComplete>> getCardswithSchedule(BuildContext context)async{
+  final cardsShowState = Provider.of<CardsShowState>(context);
+  List<CardComplete> cardComplete;
+  ScheduleDao scheduleDao= new ScheduleDao();
+  cardComplete= await scheduleDao.loadCardListwithSchedule(cardsShowState.selectedCatalogId,50); 
+  return cardComplete;
 }
 _changeCardShowState(BuildContext context,List<Test> tests) {
   final cardsShowState = Provider.of<CardsShowState>(context);
