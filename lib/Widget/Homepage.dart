@@ -3,6 +3,8 @@ import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
+import 'package:flutter_app/Utils/Api.dart';
+import 'package:flutter_app/Utils/ImportCards.dart';
 import 'package:flutter_app/Widget/CardsAdd.dart';
 import 'package:flutter_app/Widget/CatalogShow.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,8 @@ import 'package:unicorndial/unicorndial.dart';
 import 'Drawer.dart';
 
 class HomePage extends StatelessWidget {
+  Api api = new Api();
+  ImportCards importCards = new ImportCards();
   TextEditingController catalog_controller = new TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -76,12 +80,42 @@ class HomePage extends StatelessWidget {
                 icon: Icon(
                   Icons.create), 
                 onPressed: (){
-                  Navigator.push(context, 
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return Container();
-                      }
-                  ));
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      // return Container(
+                      //  padding: new EdgeInsets.all(20.0),
+                      //   child: Card(
+                      //   color: Colors.blueAccent,
+                      //       child: Text("获取考研政治题库"),
+                      //       shape:RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.all(Radius.circular(20.0)),),
+                      //       clipBehavior: Clip.antiAlias,
+                      //       semanticContainer: false,
+                      //     ),
+                      // );
+                      return SimpleDialog(
+                        children: <Widget>[
+                          ListTile(
+                            title: Text("获取考研政治题库"),
+                            onTap: ()async{
+                              String jsonString = await api.getZhengzhi();
+                              await importCards.imortCardsByJson(jsonString, "政治");
+                              //await catalogState.reloadAllCatalogNames();
+                              //await catalogState.reloadAllCatalognamesExtra();
+                              //await catalogState.reloadCatlogs();
+                              //Future.delayed(Duration(seconds :1));
+                              Navigator.pop(context);
+                             // Navigator.pop(context);
+                            
+                            },
+                          )
+                        ],
+                        
+                      );
+                    }
+                  );
+                
 
               }))),
     ];
@@ -109,7 +143,7 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  child: Scrollbar(child: ShowCatalogs()),
+                  child: Scrollbar(child: ShowCatalogswithFuture1()),
                 ),
               ),
               Text(

@@ -10,7 +10,6 @@ import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
-import 'package:flutter_app/ImportCards.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
 import 'package:flutter_app/Provider/CardsShowState.dart';
@@ -30,6 +29,8 @@ import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/DAO/DaoTest.dart';
 
 void main() async{
+  //更新目录列表在
+
   //TODO:登录注册
   //TODO:从网络获取题库
   //TODO：Drawer 返回主页
@@ -48,10 +49,15 @@ void test()async{
   CatalogDao catalogDao = new CatalogDao();
   TestDao  testDao = new TestDao();
   ScheduleDao scheduleDao= new ScheduleDao();
-  List<Map> maps =await scheduleDao.fetchCardsCompleteByCatalog(1);
+  //List<Map> maps =await scheduleDao.fetchCardsCompleteByCatalog(2);
   Api api = new Api();
+   List <CardComplete> cards= await scheduleDao.loadCardListwithRSchedule(3,20);
+   Logv.Logprint("\n099999999999999999999999999999999999999999999999978567567 \n"+cards.toString());
+  //await scheduleDao.loadCatalogStatusNumbersList();
   //await api.register("8989@qq.com" , "123456");
-  int id =await api.login("8989@qq.com" , "123456");
+  // int id =await api.login("8989@qq.com" , "123456");
+  // await api.getZhengzhi();
+  //await testDao.loadCardListWithCatalogName('全部');
   //await scheduleDao.delete(1);
   // Logv.Logprint(maps.toString());
   // List<CardComplete> cards = await scheduleDao.loadCardListwithSchedule(1,50);
@@ -237,77 +243,77 @@ _Dbinit() async {
 //     Logv.Logprint(e.toString());
 //   }
 }
-Future<List<CatalogStatusNumbers>> loadCatalogStatusNumbersList()async{
-  CatalogDao catalogDao = new CatalogDao();
-  List<CatalogStatusNumbers> catalogStatusNumbers=[];
-  List<int> ints =await catalogDao.fetcbAllCatalogId();
-    for (var i  in ints ){
-    ScheduleDao scheduleDao= new ScheduleDao();
-    int status1=0;
-    int status2=0;
-    int status3=0;
-    int status4=0;
-    Logv.Logprint("尝试取出每个目录下的所有 schedule 每个记忆状态下的个数\n");
-    List<Map> maps_h=await scheduleDao.fetchDataByCatalog(i);
-  //取出所有的List
-    Logv.Logprint("fetchDataByCatalogmaps_h:\n"+maps_h.toString());
-    int number=0;
-    for(var map in maps_h){
-      int status =int.parse(map['status'].toString());
-      if(status<0){
-       status1++;
-      }
-      if(status>=0&&status<20){
-       status2++;
-      }
-      if(status>=20&&status<50){
-       status3++;
-      }
-      if(status>=50){
-       status4++;
-      }
-      number++;
-      i= int.parse(map[ColumnCatalogId].toString());
-      //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
-  }
-    CatalogStatusNumbers catalogStatusNumber=CatalogStatusNumbers.create(i, number, status1, status2, status3, status4);
-    catalogStatusNumbers.add(catalogStatusNumber);
-    Logv.Logprint("catalogStatusNumbers:\n"+catalogStatusNumber.toString());
-    }
-    return catalogStatusNumbers;
-}
-_setList(int catalogId)async{
-    ScheduleDao scheduleDao= new ScheduleDao();
-    int status1=0;
-    int status2=0;
-    int status3=0;
-    int status4=0;
-    Logv.Logprint("尝试取出每个目录下的所有 schedule 每个记忆状态下的个数\n");
-    List<Map> maps_h=await scheduleDao.fetchDataByCatalog(catalogId);
-  //取出所有的List
-    Logv.Logprint("fetchDataByCatalogmaps_h:\n"+maps_h.toString());
-    int number=0;
-    for(var map in maps_h){
-      int status =int.parse(map['status'].toString());
-      if(status<0){
-       status1++;
-      }
-      if(status>=0&&status<20){
-       status2++;
-      }
-      if(status>=20&&status<50){
-       status3++;
-      }
-      if(status>=50){
-       status4++;
-      }
-      number++;
-      catalogId= int.parse(map[ColumnCatalogId].toString());
-      //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
-  }
-    CatalogStatusNumbers catalogStatusNumber=CatalogStatusNumbers.create(catalogId, number, status1, status2, status3, status4);
-    Logv.Logprint("catalogStatusNumbers:\n"+catalogStatusNumber.toString());
-  }
+// Future<List<CatalogStatusNumbers>> loadCatalogStatusNumbersList()async{
+//   CatalogDao catalogDao = new CatalogDao();
+//   List<CatalogStatusNumbers> catalogStatusNumbers=[];
+//   List<int> ints =await catalogDao.fetcbAllCatalogId();
+//     for (var i  in ints ){
+//     ScheduleDao scheduleDao= new ScheduleDao();
+//     int status1=0;
+//     int status2=0;
+//     int status3=0;
+//     int status4=0;
+//     Logv.Logprint("尝试取出每个目录下的所有 schedule 每个记忆状态下的个数\n");
+//     List<Map> maps_h=await scheduleDao.fetchDataByCatalog(i);
+//   //取出所有的List
+//     Logv.Logprint("fetchDataByCatalogmaps_h:\n"+maps_h.toString());
+//     int number=0;
+//     for(var map in maps_h){
+//       int status =int.parse(map['status'].toString());
+//       if(status<0){
+//        status1++;
+//       }
+//       if(status>=0&&status<20){
+//        status2++;
+//       }
+//       if(status>=20&&status<50){
+//        status3++;
+//       }
+//       if(status>=50){
+//        status4++;
+//       }
+//       number++;
+//       i= int.parse(map[ColumnCatalogId].toString());
+//       //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
+//   }
+//     CatalogStatusNumbers catalogStatusNumber=CatalogStatusNumbers.create(i, number, status1, status2, status3, status4);
+//     catalogStatusNumbers.add(catalogStatusNumber);
+//     Logv.Logprint("catalogStatusNumbers:\n"+catalogStatusNumber.toString());
+//     }
+//     return catalogStatusNumbers;
+// }
+// _setList(int catalogId)async{
+//     ScheduleDao scheduleDao= new ScheduleDao();
+//     int status1=0;
+//     int status2=0;
+//     int status3=0;
+//     int status4=0;
+//     Logv.Logprint("尝试取出每个目录下的所有 schedule 每个记忆状态下的个数\n");
+//     List<Map> maps_h=await scheduleDao.fetchDataByCatalog(catalogId);
+//   //取出所有的List
+//     Logv.Logprint("fetchDataByCatalogmaps_h:\n"+maps_h.toString());
+//     int number=0;
+//     for(var map in maps_h){
+//       int status =int.parse(map['status'].toString());
+//       if(status<0){
+//        status1++;
+//       }
+//       if(status>=0&&status<20){
+//        status2++;
+//       }
+//       if(status>=20&&status<50){
+//        status3++;
+//       }
+//       if(status>=50){
+//        status4++;
+//       }
+//       number++;
+//       catalogId= int.parse(map[ColumnCatalogId].toString());
+//       //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
+//   }
+//     CatalogStatusNumbers catalogStatusNumber=CatalogStatusNumbers.create(catalogId, number, status1, status2, status3, status4);
+//     Logv.Logprint("catalogStatusNumbers:\n"+catalogStatusNumber.toString());
+//   }
 
 class MyApp extends StatelessWidget {
   @override

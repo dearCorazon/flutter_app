@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/Sqlite_helper.dart';
 import 'package:sqflite/sqflite.dart';
@@ -88,6 +89,19 @@ class TestDao{
     List<Test> currentList;
     currentList = await queryListByCatalogId(catalogId);
     return currentList;
+  }
+  Future<List<Test>> loadCardListWithCatalogName(String catalogName)async{
+    List<Test> currentList;
+    CatalogDao catalogDao = new CatalogDao();
+    if(catalogName=='全部'){
+      currentList= await queryAll();
+      return currentList;
+    }
+    else{
+      int catalogId=await catalogDao.getIdByName(catalogName);
+      currentList= await queryListByCatalogId(catalogId);
+      return currentList;
+    }
   }
   Future<List<Test>> loadCardListWithSchedule(int catalogId,int maxlength) async {
     List<Test> currentListWithSchedule=new List<Test>();

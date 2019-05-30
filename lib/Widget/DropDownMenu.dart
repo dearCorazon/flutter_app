@@ -74,6 +74,7 @@ class _StateCatalog extends State<DropDownMenu_catalog> {
     return DropdownButton<String>(
         value: _currentCatalog,
         onChanged: (String newValue) {
+          catalogDropdownMunuState.loadCurrentCatologName(newValue);
           catalogDropdownMunuState.changeCurrentCatalogNumber(newValue);
            setState(() {
             _currentCatalog = newValue;

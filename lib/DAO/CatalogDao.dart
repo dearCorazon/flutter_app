@@ -107,7 +107,6 @@ class CatalogDao{
         id = int.parse(v.toString());}
     });
     return id;
-    
   }
   Future<List<Catalog>> queryAll()async{
     List<Catalog> catalogs=[];
@@ -178,6 +177,4 @@ class CatalogDao{
   List<Map>maps = await _database.rawQuery(sql_1);
   return maps; 
 }
-
-
 } 

@@ -6,11 +6,13 @@ import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 
 class DropDownMenuState with ChangeNotifier{
+  //代表下来菜单的状态
   TestDao testDao= new TestDao();
   CatalogDao catalogDao = new CatalogDao();
   int catalogId;
   int cardType=1;//为1代表普通卡片，2 代表单选题，3 代表多选题，4 代表 大题 
   //大题和普通卡片 可以合并为一个类型？
+  String currentSelectedCatalogName='全部';
   DropDownMenuState(){
     _init();
   }
@@ -48,7 +50,10 @@ class DropDownMenuState with ChangeNotifier{
     notifyListeners();
   }
 
-
+  void loadCurrentCatologName(String name){
+    currentSelectedCatalogName= name;
+    notifyListeners();
+  }
   void changeCurrentCatalogNumber(String name)async{
    CatalogDao catalogDao = new CatalogDao();
    if(name=='全部'){

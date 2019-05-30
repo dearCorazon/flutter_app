@@ -15,4 +15,11 @@ class Api{
     Logv.Logprint("Api:********************************login\n"+response.data.toString());
     return int.parse(response.data.toString());
   }
+  Future<String> getZhengzhi()async{
+    Dio dio = new Dio();
+    var url='http://148.70.98.252:8080/Testv/getbanklist';
+    Response response = await dio.get(url);
+    Logv.Logprint("Api:********************************login\n"+response.data.toString());
+    return response.data;
+    }
 }
