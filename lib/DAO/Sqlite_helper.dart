@@ -1,6 +1,7 @@
 import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -62,6 +63,13 @@ class Sqlite_helper{
             await db.insert(tableSchedule,Schedule.create(4, 1).toMap());
             //Logv.Logprint(schedule.toMap().toString());
            // print("schedule1:${schedule.toString()}");
+
+            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+            await sharedPreferences.setString('name', '本地用户');
+            await sharedPreferences.setString('email', 'null');
+            await sharedPreferences.setInt('userId', 1);
+            await sharedPreferences.setBool('isLogin', false);
+            await Logv.Logprint("用户信息初始化 userId为"+"${sharedPreferences.getInt("userId")}");
             
             //await db.insert(tableSchedule,Schedule.create(-1,1).toMap());
             //await db.insert(tableSchedule,Schedule.create(4,1).toMap());

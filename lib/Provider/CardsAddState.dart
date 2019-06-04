@@ -4,6 +4,7 @@ class CardsAddState with ChangeNotifier{
   String question='';
   String answer='';
   List<String> chaos=[''];
+  int catalogId;
   void loadQuestion(String question){
     this.question= question;
     notifyListeners();
@@ -15,6 +16,11 @@ class CardsAddState with ChangeNotifier{
   void loadSimpleCard(String name,String answer,List<String> chaos){
     this.question=question;
     this.answer=answer;
+    notifyListeners();
+  }
+  
+  void loadCatalogId(int catalogId){
+    this.catalogId=catalogId;
     notifyListeners();
   }
 }

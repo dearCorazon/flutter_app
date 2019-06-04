@@ -27,8 +27,6 @@ class DropDownMenuState with ChangeNotifier{
       case "大题":{cardType=4;notifyListeners();}
       break;
     }
-   
-
   }
   _init()async{
     _currentNumber = await catalogDao.allCardNumber();

@@ -1,4 +1,5 @@
 import 'package:flutter_app/Bean/CardComplete.dart';
+import 'package:flutter_app/Bean/CatalogExtra.dart';
 import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
@@ -49,8 +50,49 @@ class ScheduleDao {
             maps.toString());
     return maps;
   }
+  Future<List<CardComplete>> fetchCardComletesByCatalogId(int catalogId)async{
+    await _open();
+    String sql =
+        'select test.id as testId,adderId,question,answer,type,test.tag,test.chaos,test.catalogId as catalogId,catalog.name,superiorId,schedule.id as scheduleId,schedule.testId,schedule.status,schedule.nextTime,schedule.ismark from test,schedule,catalog where test.catalogId=catalog.id and schedule.testid=test.id and catalog.id=test.catalogId  and catalog.id=$catalogId';
+    List<Map> maps = await _database.rawQuery(sql);
+    Logv.Logprint(maps.toString());
+    List<CardComplete> cardComletes = [];
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        cardComletes.add(CardComplete.fromMap(maps[i]));
+      }
+      //await database.close();
+      return cardComletes;
+    } else {
+      Logv.Logprint("in ScheduleDaofetchCardCompletrAll() no maps");
+    }
+ 
+  }
+  Future<List<CardComplete>> fetchCardComletesByCatalogName(String catalogName)async{
+    
+    await _open();
+    CatalogDao catalogDao = new CatalogDao();
+    if(catalogName=='全部'){
+      return await fetchCardCompletesAll();
+    }
+    int catalogId = await catalogDao.getIdByName(catalogName);
+    String sql ='select test.id as testId,adderId,question,answer,type,test.tag,test.chaos,test.catalogId as catalogId,catalog.name,superiorId,schedule.id as scheduleId,schedule.testId,schedule.status,schedule.nextTime,schedule.ismark from test,schedule,catalog where test.catalogId=catalog.id and schedule.testid=test.id and catalog.id=test.catalogId  and catalog.id=$catalogId';
+    List<Map> maps = await _database.rawQuery(sql);
+    Logv.Logprint(maps.toString());
+    List<CardComplete> cardComletes = [];
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        cardComletes.add(CardComplete.fromMap(maps[i]));
+      }
+      //await database.close();
+      return cardComletes;
+    } else {
+      Logv.Logprint("in ScheduleDao.fetchCardComletesByCatalogName() no maps");
+    }
+ 
+  }
 
-  Future<List<CardComplete>> fetchCardCompletrAll() async {
+  Future<List<CardComplete>> fetchCardCompletesAll() async {
     //order by status
     await _open();
     String sql =
@@ -65,7 +107,7 @@ class ScheduleDao {
       //await database.close();
       return cardComletes;
     } else {
-      Logv.Logprint("in ScheduleDaofetchCardCompletrAll() \n no maps");
+      Logv.Logprint("in ScheduleDaofetchCardCompletrAll() no maps");
     }
   }
 
@@ -140,6 +182,7 @@ class ScheduleDao {
         return cardsComplete;
       }
     }
+    Logv.Logprint("in ScheduleDao.loadCardListwithSchedule $cardsComplete");
     return cardsComplete;
   }
 
@@ -177,6 +220,67 @@ class ScheduleDao {
     Logv.Logprint("in addStatus 影响行数$result");
     return result;
   }
+  Future<List<CatalogExtra>> loadCatalogExtraList() async {
+    //这里也需要一个超级大类
+    await _open();
+    CatalogDao catalogDao = new CatalogDao();
+    String name;
+    List<CatalogExtra> catalogExtras = [];
+    List<int> ints = await catalogDao.fetcbAllCatalogId(); //取出所有的catalogId 在每个id下取出所有的
+    for (var i in ints) {
+      int status1 = 0;
+      int status2 = 0;
+      int status3 = 0;
+      int status4 = 0;
+      List<Map> maps_h = await fetchCardsCompleteByCatalog(i);
+      //取出所有的List
+      if (maps_h.isEmpty) {
+        name = await catalogDao.getNamebyId(i);
+        CatalogExtra catalogExtra =CatalogExtra.create(i, 0, 0, 0, 0, 0, name);
+        catalogExtras.add(catalogExtra);
+        Logv.Logprint("当前目录$name为空\n");
+      } 
+      else {
+        //每次跑一个目录下的所有数据
+        int number = 0;
+        Logv.Logprint(
+              "in loadCatalogExtraList() 当前maps:\n" + maps_h.toString());
+        for (var map in maps_h) {
+          
+          int status = int.parse(map['status'].toString());
+          name = map['name'];
+          if (status <= 0) {
+            status1++;
+          }
+          if (status > 0 && status < 20) {
+            status2++;
+          }
+          if (status >= 20 && status <= 50) {
+            status3++;
+          }
+          if (status > 50) {
+            status4++;
+          }
+          number++;
+          i = int.parse(map[ColumnCatalogId].toString());
+        
+          //catalogStatusNumbers.add(CatalogStatusNumbers.create(catalogId,number,status1,status2,status3,status4));
+        }
+        CatalogExtra catalogExtra =CatalogExtra.create(i, number, status1, status2, status3, status4, name);
+        catalogExtras.add(catalogExtra);
+        Logv.Logprint("这里显示每一个目录信息${catalogExtra.toString()}");
+      }
+      //Logv.Logprint("fetchDataByCatalog maps_h:\n" + maps_h.toString());
+
+      //Logv.Logprint("in loadCatalogStatusNumbersList() 当前catalogStatusNumber:\n"+catalogStatusNumber.toString());
+      // Logv.Logprint(
+      //     "in loadCatalogStatusNumbersList() catalogStatusNumbers:\n" +
+      //         catalogStatusNumber.toString());
+    }
+    Logv.Logprint("loadCatalogStatusNumbersList():catalogStatusNumbers" +
+        catalogExtras.toString());
+    return catalogExtras;
+  }
 
 //  Future<void> status_add(int id,bool add)async{
 //    int status =await query_status(id);
@@ -191,6 +295,7 @@ class ScheduleDao {
 //    status=await query_status(id);
 //    print("修改后Status：$status");
 //  }
+
   Future<List<CatalogStatusNumbers>> loadCatalogStatusNumbersList() async {
     //这里也需要一个超级大类
     await _open();
@@ -240,7 +345,7 @@ class ScheduleDao {
         CatalogStatusNumbers catalogStatusNumber =CatalogStatusNumbers.create(i, number, status1, status2, status3, status4, name);
         catalogStatusNumbers.add(catalogStatusNumber);
       }
-      Logv.Logprint("fetchDataByCatalogmaps_h:\n" + maps_h.toString());
+     // Logv.Logprint("fetchDataByCatalogmaps_h:\n" + maps_h.toString());
 
       //Logv.Logprint("in loadCatalogStatusNumbersList() 当前catalogStatusNumber:\n"+catalogStatusNumber.toString());
       // Logv.Logprint(

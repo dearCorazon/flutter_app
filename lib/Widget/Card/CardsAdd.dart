@@ -2,9 +2,9 @@ import "package:flutter/material.dart";
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
 import 'package:flutter_app/Provider/DropDownMenuState.dart';
-import 'package:flutter_app/Widget/CardType.dart';
 import 'package:flutter_app/Widget/DropDownMenu.dart';
 import 'package:provider/provider.dart';
+import 'CardType.dart';
 
 class Addcards extends StatelessWidget {
   TextEditingController _questionController = new TextEditingController();
@@ -18,7 +18,6 @@ class Addcards extends StatelessWidget {
   Widget build(BuildContext context) {
     final dropDownMenuState= Provider.of<DropDownMenuState>(context);
     final cardsAddState= Provider.of<CardsAddState>(context);
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -43,7 +42,7 @@ class Addcards extends StatelessWidget {
                 Expanded(flex: 1, child: Text("目录")),
                 Expanded(
                   flex: 2,
-                  child: DropDownMenu_catalog(catalogs),
+                  child: DropDownMenu_catalog3(),
                 )
               ],
             ),

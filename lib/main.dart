@@ -8,11 +8,15 @@ import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Catalog_extra.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
+import 'package:flutter_app/Bloc/CardsBloc.dart';
+import 'package:flutter_app/Bloc/CatalogExtraBloc.dart';
+import 'package:flutter_app/Bloc/UserBloc.dart';
 import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
 import 'package:flutter_app/Provider/CardsShowState.dart';
+import 'package:flutter_app/Provider/CatalogExtrasState.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Provider/DropDownMenuState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
@@ -232,7 +236,19 @@ _Dbinit() async {
    CatalogDao catalogDao = new CatalogDao();
    TestDao testDao = new TestDao();
    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-   
+   CatalogExtraBloc catalogExtraBloc = new CatalogExtraBloc();
+   CardsBloc cardsBloc =new CardsBloc();
+   UserBloc userBloc = new UserBloc();
+  await catalogExtraBloc.loadCatalogExtraList();
+  await cardsBloc.loadCardCompleteList();
+  String email =await sharedPreferences.getString('email');
+  bool flag=await sharedPreferences.getBool('isLogin');
+  //Logv.Logprint("登录信息 是否登录：$flag 邮箱$email");
+  List<String > names = await catalogDao.queryAllCatalogNames();
+  Logv.Logprint("123456\n"+names.toString()) ;
+  
+  Logv.Logprint("userBloc user${userBloc.user}");
+  
   //  ImportCards importCards = new ImportCards();
   //  importCards.importZhengzhi();
   
@@ -320,6 +336,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          Provider<UserBloc>(
+            builder: (_)=>UserBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
+          Provider<CatalogExtraBloc>(
+            builder: (_) =>CatalogExtraBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
+          Provider<CardsBloc>(
+            builder: (_) =>CardsBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
+          // ChangeNotifierProvider<CatalogExtraState>(
+          //   builder: (context)=>,
+          // ),
           ChangeNotifierProvider<CardsShowState>(
             builder: (context)=>CardsShowState(),
           ),
@@ -348,6 +379,7 @@ class MyApp extends StatelessWidget {
           '/memory': (BuildContext context) => new memory(),
           '/personPage': (BuildContext context) => new PersonPage(),
           '/daotest': (BuildContext context) => new DaoTest(),
+          '/homepage':(BuildContext context) => new HomePage(),
         },
       ),
     );

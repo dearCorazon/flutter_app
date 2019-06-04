@@ -15,7 +15,7 @@ class CardsShowState with ChangeNotifier {
   int selcetedTagId;
   String selectedCatalogName;
   
-  List<Test> currentList= [Test.create("1", "2")];
+  List<Test> currentList= [Test.create("1", "2")];//TODO:這個是啥
   List<Test> currentListWithSchedule = new List<Test>();
   int currentListIndex = 0;
   void refreshListIndex(){
@@ -23,6 +23,7 @@ class CardsShowState with ChangeNotifier {
      notifyListeners();
   }
   void loadCurrentCardList(List<Test> tests){
+    //TODO：准备弃用
     currentList.addAll(tests);
     currentList=tests;
     notifyListeners();
@@ -44,6 +45,7 @@ class CardsShowState with ChangeNotifier {
   }
 
   void reloadCurrentListIndex() {
+    //准备弃用 跟第一个重复
     currentListIndex = 0;
     notifyListeners();
   }

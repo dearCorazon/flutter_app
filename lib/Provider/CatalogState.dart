@@ -7,12 +7,13 @@ import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/Log.dart';
 
 class CatalogState with ChangeNotifier{
+  //TODO:准备弃用
     CatalogDao catalogDao = new CatalogDao();
     ScheduleDao scheduleDao = new ScheduleDao();
     
     CatalogState(){
       Logv.Logprint("asdasdasdasdasdas1223123123123");
-    fetchData();
+    //fetchData();
     }
     //todo：可优化的地方:先取出所有的List<Catalog> 再根据数据的要求再整理成List 或者map，数据处理再这个dart文件中搞
     List<String> _allCatalogExtraNames=["全部"];

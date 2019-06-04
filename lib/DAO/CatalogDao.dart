@@ -92,10 +92,15 @@ class CatalogDao{
   }
   
   Future<String> getNamebyId(int id)async{
+    String name;
     List<Map> maps = await _database.rawQuery("select name from catalog where id = $id");
-    if(maps.length>0){
-      return maps.first.values.toList().toString();
-    }
+    
+    maps.first.forEach((k,v){
+      if(k=='name'){
+        name = v ;}
+    });
+    return name;
+
   }
   Future<int> getIdByName(String name)async{
     int id;

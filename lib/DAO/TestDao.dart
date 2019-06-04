@@ -1,6 +1,4 @@
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
@@ -13,7 +11,7 @@ import 'package:path/path.dart';
 import 'package:flutter_app/Log.dart';
 
 //static final _sql_createTableTest='CREATE TABLE TEST(
-//   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+//   id INTEGER NOT NULL PRIMARY KEY AUTOI NCREMENT,
 //   adderId INTEGER,
 //   question TEXT,
 //   chaos TEXT,

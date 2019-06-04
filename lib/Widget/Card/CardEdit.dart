@@ -4,7 +4,6 @@ import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
 import 'package:flutter_app/Provider/DropDownMenuState.dart';
-import 'package:flutter_app/Widget/CardsAdd.dart';
 import 'package:flutter_app/Widget/DropDownMenu.dart';
 import 'package:provider/provider.dart';
 
