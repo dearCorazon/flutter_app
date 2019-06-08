@@ -6,21 +6,30 @@ import 'package:flutter_app/Bean/CardComplete.dart';
 import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Catalog_extra.dart';
+import 'package:flutter_app/Bean/ChoiceCard.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
-import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/Bloc/CardsBloc.dart';
 import 'package:flutter_app/Bloc/CatalogExtraBloc.dart';
+import 'package:flutter_app/Bloc/ChoiceBloc.dart';
+import 'package:flutter_app/Bloc/JudgeBloc.dart';
+import 'package:flutter_app/Bloc/MutiBloc.dart';
+import 'package:flutter_app/Bloc/NewsBloc.dart';
 import 'package:flutter_app/Bloc/UserBloc.dart';
+import 'package:flutter_app/DAO/DaoApi.dart';
 import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
 import 'package:flutter_app/Log.dart';
+import 'package:flutter_app/Provider/BottomNavagatiorState.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
 import 'package:flutter_app/Provider/CardsShowState.dart';
 import 'package:flutter_app/Provider/CatalogExtrasState.dart';
 import 'package:flutter_app/Provider/CatalogState.dart';
+import 'package:flutter_app/Provider/ChoiceState.dart';
 import 'package:flutter_app/Provider/DropDownMenuState.dart';
 import 'package:flutter_app/Provider/UserState.dart';
 import 'package:flutter_app/Utils/Api.dart';
+import 'package:flutter_app/Utils/ProcessJson.dart';
+import 'package:flutter_app/Widget/Card/ChoiceCard.dart';
 import 'package:flutter_app/Widget/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +64,9 @@ void test()async{
   ScheduleDao scheduleDao= new ScheduleDao();
   //List<Map> maps =await scheduleDao.fetchCardsCompleteByCatalog(2);
   Api api = new Api();
+  //String test = await api.getNews();
+  //print(test);
+  
    //List <CardComplete> cards= await scheduleDao.loadCardListwithRSchedule(3,20);
   // Logv.Logprint("\n099999999999999999999999999999999999999999999999978567567 \n"+cards.toString());
   //await scheduleDao.loadCatalogStatusNumbersList();
@@ -224,11 +236,7 @@ void test()async{
   // print(dateTime2.toIso8601String());
   //测试DateTime.........................................
 }
-String getNameByID(List<Map> maps,int i){
-  String name;
- // name= maps.singleWhere((map)=>map["id"]==i).values.toList();
-  return name;
-}
+
 _Dbinit() async {
   //目录iD  1 为默认 2 为网络安全法 3 为英语 
    Logv.Logprint("Database init......................................");
@@ -239,6 +247,8 @@ _Dbinit() async {
    CatalogExtraBloc catalogExtraBloc = new CatalogExtraBloc();
    CardsBloc cardsBloc =new CardsBloc();
    UserBloc userBloc = new UserBloc();
+   NewsBloc newsBloc = new NewsBloc();
+   ChoiceBloc choiceBloc = new ChoiceBloc();
   await catalogExtraBloc.loadCatalogExtraList();
   await cardsBloc.loadCardCompleteList();
   String email =await sharedPreferences.getString('email');
@@ -246,9 +256,18 @@ _Dbinit() async {
   //Logv.Logprint("登录信息 是否登录：$flag 邮箱$email");
   List<String > names = await catalogDao.queryAllCatalogNames();
   Logv.Logprint("123456\n"+names.toString()) ;
-  
+  MutiBloc  mutiBloc = new MutiBloc();
   Logv.Logprint("userBloc user${userBloc.user}");
+  Api api = new Api();
+  DaoApi daoApi = new DaoApi();
   
+  
+  //await daoApi.insertChoicCard(ChoiceCard.creat("网络安全法规定，网络运营者应当制定________，及时处置系统漏洞、计算机病毒、网 络攻击、网络侵入等安全风险", "网站安全规章制度 ", "网络安全事件应急预案      ", "网络安全事件补救措施 ", "网络安全事件应急演练方案  "));
+  //List<Map> maps= await  daoApi.queryAll();
+  //Logv.Logprint("test daoApi:"+maps.toString());
+   //String response  = await  api.getNews();
+   //Logv.Logprint("(123)");
+   //Logv.Logprint("XinWen:"+response.toString());
   //  ImportCards importCards = new ImportCards();
   //  importCards.importZhengzhi();
   
@@ -336,6 +355,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          Provider<JudgeBloc>(
+            builder: (_)=>JudgeBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
+          Provider<MutiBloc>(
+            builder: (_)=>MutiBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
+          Provider<ChoiceBloc>(
+            builder: (_)=>ChoiceBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
+          Provider<NewsBloc>(
+            builder: (_)=>NewsBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
           Provider<UserBloc>(
             builder: (_)=>UserBloc(),
             dispose: (_,value)=>value.dispose(),
@@ -351,6 +386,21 @@ class MyApp extends StatelessWidget {
           // ChangeNotifierProvider<CatalogExtraState>(
           //   builder: (context)=>,
           // ),
+          ChangeNotifierProvider<JudgeBloc>(
+            builder: (context)=>JudgeBloc(),
+          ),
+          ChangeNotifierProvider<MutiBloc>(
+            builder: (context)=>MutiBloc(),
+          ),
+          ChangeNotifierProvider<ChoiceBloc>(
+            builder: (context)=>ChoiceBloc(),
+          ),
+          ChangeNotifierProvider<BottonBarState>(
+            builder: (context)=>BottonBarState(),
+          ),
+          ChangeNotifierProvider<ChoiceState>(
+            builder: (context)=>ChoiceState(),
+          ),
           ChangeNotifierProvider<CardsShowState>(
             builder: (context)=>CardsShowState(),
           ),
@@ -369,17 +419,16 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
         title: '大学生网络安全法记忆系统',
+        //color: Colors.redAccent,
         theme: ThemeData.light(),
-        home:  HomePage(),
-        // ChangeNotifierProvider<CatalogState>(
-        //   builder: (_) => CatalogState(), 
-        //   child:HomePage()
+        home:  HomePage2(),
+        
         routes: <String, WidgetBuilder>{
           '/login': (BuildContext context) => new Login(),
           '/memory': (BuildContext context) => new memory(),
           '/personPage': (BuildContext context) => new PersonPage(),
           '/daotest': (BuildContext context) => new DaoTest(),
-          '/homepage':(BuildContext context) => new HomePage(),
+          '/homepage':(BuildContext context) => new HomePage2(),
         },
       ),
     );

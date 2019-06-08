@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/CardComplete.dart';
-import 'package:flutter_app/Bean/Test.dart';
 import 'package:flutter_app/Bloc/CardsBloc.dart';
 import 'package:flutter_app/DAO/ScheduleDao.dart';
-import 'package:flutter_app/DAO/TestDao.dart';
-import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsShowState.dart';
-import 'package:flutter_app/Provider/CatalogState.dart';
 import 'package:flutter_app/Utils/MemoryAlgorithm.dart';
 import 'package:flutter_app/Utils/Reload.dart';
 import 'package:provider/provider.dart';

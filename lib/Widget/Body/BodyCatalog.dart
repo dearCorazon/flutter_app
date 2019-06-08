@@ -11,8 +11,7 @@ import 'package:flutter_app/Widget/NoDataWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app/Widget/homepage.dart';
 
-class ShowCatalogsExtras extends StatelessWidget {
-  const ShowCatalogsExtras({Key key}) : super(key: key);
+class BodyCatalog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,7 +19,7 @@ class ShowCatalogsExtras extends StatelessWidget {
         stream: Provider.of<CatalogExtraBloc>(context).stream,
         initialData: Provider.of<CatalogExtraBloc>(context).catalogExtras,
         builder: (context,snapshot){
-          return getList(context, snapshot);
+          return getList2(context, snapshot);
         },
 
       ),
@@ -28,6 +27,15 @@ class ShowCatalogsExtras extends StatelessWidget {
   }
 }
 
+Widget getList2(BuildContext context,AsyncSnapshot<List<CatalogExtra>> snapshot){
+  if(snapshot==null){
+    return Nodata();
+    
+  }
+    else{
+    return  createList(context, snapshot);
+  }
+}
 Widget getList(BuildContext context,AsyncSnapshot<List<CatalogExtra>> snapshot){
   if(snapshot.connectionState==ConnectionState.waiting){
     return CupertinoActivityIndicator();

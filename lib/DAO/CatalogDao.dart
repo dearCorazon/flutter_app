@@ -61,7 +61,7 @@ class CatalogDao{
     await _open();
     final String sql= 'select * from catalog';
     List<Map> maps= await _database.rawQuery(sql);
-    Logv.Logprint("fetcbAllCatalogId():.........................\n"+maps.toString());
+    //Logv.Logprint("fetcbAllCatalogId():.........................\n"+maps.toString());
     List<int> catalogIdlist =[];
     for(var map in maps){
        catalogIdlist.add(int.parse(map['id'].toString())); 

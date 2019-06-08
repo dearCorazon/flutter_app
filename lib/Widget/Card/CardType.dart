@@ -61,8 +61,7 @@ class ChoiceQuestion extends StatelessWidget {
       child:  Column(
         children: <Widget>[
           TextFormField(),
-          TextFormField(),
-          TextFormField(),
+            TextFormField(),
           TextFormField(),
         ],
       )

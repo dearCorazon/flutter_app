@@ -64,7 +64,6 @@ class SimpleCard extends StatelessWidget {
   TextEditingController questionController = new TextEditingController(); 
   TextEditingController answerController = new TextEditingController();
   TestDao testDao = new TestDao();
-
   @override
   Widget build(BuildContext context) {
     final cardAddState = Provider.of<CardsAddState>(context);

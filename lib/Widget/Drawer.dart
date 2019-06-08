@@ -45,7 +45,7 @@ class Mydrawer extends  StatelessWidget{
               },
             ),
              ListTile(
-              title :new Text("Card Browsers"),
+              title :new Text("题库浏览"),
               trailing: new Icon(Icons.alternate_email),
               onTap:(){
                 Navigator.push(context,

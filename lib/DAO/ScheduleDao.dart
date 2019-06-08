@@ -45,9 +45,9 @@ class ScheduleDao {
     //String sql='select test.id,test.question,test.answer,test.type,test.catalogId,test.tag,test.chaos,schedule.status,schedule.nextTime,schedule.ismark from test,schedule where test.catalogId=$catalogId and schedule.testid=test.id';
     await _open();
     List<Map> maps = await _database.rawQuery(sql);
-    Logv.Logprint(
-        "in  fetchCardsCompleteByCatalog++++++++++++++++++++++++++++++++++++++++++++++++/n" +
-            maps.toString());
+    // Logv.Logprint(
+    //     "in  fetchCardsCompleteByCatalog++++++++++++++++++++++++++++++++++++++++++++++++/n" +
+    //         maps.toString());
     return maps;
   }
   Future<List<CardComplete>> fetchCardComletesByCatalogId(int catalogId)async{
@@ -98,7 +98,7 @@ class ScheduleDao {
     String sql =
         'select test.id as testId,adderId,question,answer,type,test.tag,test.chaos,test.catalogId as catalogId,catalog.name,superiorId,schedule.id as scheduleId,schedule.testId,schedule.status,schedule.nextTime,schedule.ismark from test,schedule,catalog where test.catalogId=catalog.id and schedule.testid=test.id and catalog.id=test.catalogId ';
     List<Map> maps = await _database.rawQuery(sql);
-    Logv.Logprint(maps.toString());
+    //Logv.Logprint(maps.toString());
     List<CardComplete> cardComletes = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
@@ -243,8 +243,8 @@ class ScheduleDao {
       else {
         //每次跑一个目录下的所有数据
         int number = 0;
-        Logv.Logprint(
-              "in loadCatalogExtraList() 当前maps:\n" + maps_h.toString());
+        //Logv.Logprint(
+          //    "in loadCatalogExtraList() 当前maps:\n" + maps_h.toString());
         for (var map in maps_h) {
           
           int status = int.parse(map['status'].toString());
@@ -268,7 +268,7 @@ class ScheduleDao {
         }
         CatalogExtra catalogExtra =CatalogExtra.create(i, number, status1, status2, status3, status4, name);
         catalogExtras.add(catalogExtra);
-        Logv.Logprint("这里显示每一个目录信息${catalogExtra.toString()}");
+        //Logv.Logprint("这里显示每一个目录信息${catalogExtra.toString()}");
       }
       //Logv.Logprint("fetchDataByCatalog maps_h:\n" + maps_h.toString());
 
@@ -277,8 +277,8 @@ class ScheduleDao {
       //     "in loadCatalogStatusNumbersList() catalogStatusNumbers:\n" +
       //         catalogStatusNumber.toString());
     }
-    Logv.Logprint("loadCatalogStatusNumbersList():catalogStatusNumbers" +
-        catalogExtras.toString());
+    // Logv.Logprint("loadCatalogStatusNumbersList():catalogStatusNumbers" +
+    //     catalogExtras.toString());
     return catalogExtras;
   }
 
@@ -314,13 +314,13 @@ class ScheduleDao {
         name = await catalogDao.getNamebyId(i);
         CatalogStatusNumbers catalogStatusNumber =CatalogStatusNumbers.create(i, 0, 0, 0, 0, 0, name);
         catalogStatusNumbers.add(catalogStatusNumber);
-        Logv.Logprint("in maps_h ==NULL90909090909090909000000000000000000000000000000000000000000\n" + maps_h.toString());
+       // Logv.Logprint("in mapsR_h ==NULL90909090909090909000000000000000000000000000000000000000000\n" + maps_h.toString());
       } 
       else {
         //每次跑一个目录下的所有数据
         int number = 0;
-        Logv.Logprint(
-              "in loadCatalogStatusNumbersList() 当前maps:\n" + maps_h.toString());
+        // Logv.Logprint(
+        //       "in loadCatalogStatusNumbersList() 当前maps:\n" + maps_h.toString());
         for (var map in maps_h) {
           
           int status = int.parse(map['status'].toString());
@@ -352,8 +352,8 @@ class ScheduleDao {
       //     "in loadCatalogStatusNumbersList() catalogStatusNumbers:\n" +
       //         catalogStatusNumber.toString());
     }
-    Logv.Logprint("loadCatalogStatusNumbersList():catalogStatusNumbers" +
-        catalogStatusNumbers.toString());
+    // Logv.Logprint("loadCatalogStatusNumbersList():catalogStatusNumbers" +
+    //     catalogStatusNumbers.toString());
     return catalogStatusNumbers;
   }
 

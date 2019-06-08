@@ -38,7 +38,7 @@ class CardsBloc{
     //TODO:这个查询按 status排序？
     List<CardComplete> cards= await scheduleDao.fetchCardCompletesAll();
     _cardCompletes=cards;
-    await Logv.Logprint("in  loadCardCompleteList() 更新的卡片总数为："+cards.length.toString());
+    //await Logv.Logprint("in  loadCardCompleteList() 更新的卡片总数为："+cards.length.toString());
     _streamController.sink.add(cards);
   }
 
