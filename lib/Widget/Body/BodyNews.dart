@@ -33,6 +33,12 @@ class BodyNews extends StatelessWidget {
                               snapshot.data.data[index].title);
                         }));
                       },
+                      // trailing:  IconButton(
+                      //   // icon: Icon(Icons.star,),
+                      //   // onPressed: (){
+                          
+                      //   // },
+                      // ),
                       title: Text(snapshot.data.data[index].title),
                       subtitle: Row(
                         children: <Widget>[

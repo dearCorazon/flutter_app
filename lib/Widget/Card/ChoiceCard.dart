@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class ChoiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final choiceState = Provider.of<ChoiceState>(context);
+   
     final choiceBloc = Provider.of<ChoiceBloc>(context);
     return Container(
         decoration: BoxDecoration(
@@ -20,60 +20,51 @@ class ChoiceCard extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             actions: <Widget>[
-              Offstage(
-                offstage: choiceBloc.isHideCheckButton,
-                child: Container(
-                  margin: EdgeInsets.only(
-                      top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    color: Colors.brown,
-                    child: Text(
-                      "确定",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w600),
-                    ),
-                    onPressed: () async {
-                      if (choiceBloc.checkAnswer()) {
-                        Logv.Logprint("正确");
-                        await choiceBloc.rightAnswer();
-                      } else {
-                        choiceBloc.showAnswer();
-                        Logv.Logprint("错误 正确答案为✖");
-                        await choiceBloc.faultAnswer();
-                      }
-                      choiceBloc.showIcon();
-                      choiceBloc.hideCheckButton();
-                      choiceBloc.disableButtonTrue();
-                    },
-                  ),
-                ),
-              )
+              IconButton(
+                icon: Icon(Icons.star),
+                color: choiceBloc.card[choiceBloc.index].star == 0
+                    ? Colors.white
+                    : Colors.brown,
+                onPressed: () async {
+                  if (choiceBloc.card[choiceBloc.index].star == 0) {
+                    await choiceBloc.collect();
+                  } else {
+                    await choiceBloc.uncollect();
+                  }
+                },
+              ),
+              // Offstage(
+              //   offstage: choiceBloc.isHideCheckButton,
+              //   child: Container(
+              //     margin: EdgeInsets.only(
+              //         top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+              //     child: FlatButton(
+              //       shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(8.0)),
+              //       color: Colors.brown,
+              //       child: Text(
+              //         "确定",
+              //         style: TextStyle(
+              //             color: Colors.white, fontWeight: FontWeight.w600),
+              //       ),
+              //       onPressed: () async {
+              //         if (choiceBloc.checkAnswer()) {
+              //           Logv.Logprint("正确");
+              //           await choiceBloc.rightAnswer();
+              //         } else {
+              //           choiceBloc.showAnswer();
+              //           Logv.Logprint("错误 正确答案为✖");
+              //           await choiceBloc.faultAnswer();
+              //         }
+              //         choiceBloc.showIcon();
+              //         choiceBloc.hideCheckButton();
+              //         choiceBloc.disableButtonTrue();
+              //       },
+              //     ),
+              //   ),
+              // )
             ],
           ),
-          // AppBar(
-          //   actions: <Widget>[
-          //     FlatButton(
-          //       child: Text("确定"),
-          //       onPressed: () {
-          //         if(isToEnd(context)){
-          //           //TODO:退出时会红屏一下
-          //           Navigator.pop(context);
-          //         }
-          //         if (choiceState.isTrue == true) {
-          //           Logv.Logprint("正确");
-          //           choiceState.ShowIcon();
-          //           choiceBloc.addIndex();
-          //         } else {
-          //           Logv.Logprint("错误");
-          //           choiceBloc.addIndex();
-          //         }
-          //         Logv.Logprint("现在显示正确与错误的答案：${choiceState.isShowIcon}");
-          //       },
-          //     )
-          //   ],
-          // ),
           body: StreamBuilder<List<ChoiceCardBean>>(
               initialData: Provider.of<ChoiceBloc>(context).card,
               stream: Provider.of<ChoiceBloc>(context).stream,
@@ -89,7 +80,7 @@ class ChoiceCard extends StatelessWidget {
                           child: Card(
                             child: Column(
                               children: <Widget>[
-                                JudgeCard(context,snapshot),
+                                JudgeCard(context, snapshot),
                                 Container(
                                     margin: EdgeInsets.only(
                                         left: 10.0, right: 10.0, top: 20.0),
@@ -106,6 +97,7 @@ class ChoiceCard extends StatelessWidget {
                         Container(
                           child: rightAnswer(context),
                         ),
+                        Container(child: checkAnswer(context),),
                         Container(
                           child: isRightIcon(context),
                         ),
@@ -125,6 +117,113 @@ class ChoiceCard extends StatelessWidget {
               }),
         ));
   }
+}
+
+Widget isRightIcon(BuildContext context) {
+  final choiceBloc = Provider.of<ChoiceBloc>(context);
+  final dropdowmenuBloc = Provider.of<DropDownMenuBloc>(context);
+  return Container(
+    child: Offstage(
+      offstage: choiceBloc.isHideIcon,
+      child: FloatingActionButton.extended(
+        heroTag: 2,
+        icon: choiceBloc.checkAnswer()
+            ? Icon(Icons.check)
+            : Icon(Icons.invert_colors_off),
+        label: Text("下一题"),
+        onPressed: () async {
+          if (choiceBloc.isToEnd()) {
+            choiceBloc.refreshAll();
+            await dropdowmenuBloc.loadInformation();
+            Navigator.pop(context);
+          } else {
+            choiceBloc.addIndex();
+            choiceBloc.refreshWiget();
+          }
+        },
+      ),
+    ),
+  );
+}
+
+Widget checkAnswer(BuildContext context) {
+  final choiceBloc = Provider.of<ChoiceBloc>(context);
+  return Offstage(
+    offstage: choiceBloc.isHideCheckButton,
+    child: Container(
+      //margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+      child: FloatingActionButton.extended(
+        heroTag: 1,
+        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+       // color: Colors.brown,
+        label: Text('确定'),
+        // child: Text(
+        //   "确定",
+        //   style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        // ),
+        onPressed: () async {
+          if (choiceBloc.checkAnswer()) {
+            Logv.Logprint("正确");
+            await choiceBloc.rightAnswer();
+          } else {
+            choiceBloc.showAnswer();
+            Logv.Logprint("错误 正确答案为✖");
+            await choiceBloc.faultAnswer();
+          }
+          choiceBloc.showIcon();
+          choiceBloc.hideCheckButton();
+          choiceBloc.disableButtonTrue();
+        }, 
+      ),
+    ),
+  );
+}
+// Offstage(
+//               offstage: choiceBloc.isHideCheckButton,
+//               child: Container(
+//                 margin: EdgeInsets.only(
+//                     top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+//                 child: FlatButton(
+//                   shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(8.0)),
+//                   color: Colors.brown,
+//                   child: Text(
+//                     "确定",
+//                     style: TextStyle(
+//                         color: Colors.white, fontWeight: FontWeight.w600),
+//                   ),
+//                   onPressed: () async {
+//                     if (choiceBloc.checkAnswer()) {
+//                       Logv.Logprint("正确");
+//                       await choiceBloc.rightAnswer();
+//                     } else {
+//                       choiceBloc.showAnswer();
+//                       Logv.Logprint("错误 正确答案为✖");
+//                       await choiceBloc.faultAnswer();
+//                     }
+//                     choiceBloc.showIcon();
+//                     choiceBloc.hideCheckButton();
+//                     choiceBloc.disableButtonTrue();
+//                   },
+//                 ),
+//               ),
+//             )
+
+Widget rightAnswer(BuildContext context) {
+  final choiceBloc = Provider.of<ChoiceBloc>(context);
+  return Container(
+    child: Offstage(
+      offstage: choiceBloc.ishideAnswer,
+      child: Card(
+        child: ListTile(
+          title: Text(
+            '错误！ 正确答案为${choiceBloc.card[choiceBloc.index].answer}',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 Widget JudgeCard(
@@ -166,47 +265,6 @@ Widget JudgeCard(
         Divider(),
         ListTile(title: Text(snapshot.data[choiceBloc.index].question)),
       ],
-    ),
-  );
-}
-Widget rightAnswer(BuildContext context) {
-  final choiceBloc = Provider.of<ChoiceBloc>(context);
-  return Container(
-    child: Offstage(
-      offstage: choiceBloc.ishideAnswer,
-      child: Card(
-        child: ListTile(
-          title: Text(
-            '错误！ 正确答案为${choiceBloc.card[choiceBloc.index].answer}',
-            style: TextStyle(color: Colors.red),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-Widget isRightIcon(BuildContext context) {
-  final choiceBloc = Provider.of<ChoiceBloc>(context);
-  final dropdowmenuBloc = Provider.of<DropDownMenuBloc>(context);
-  return Container(
-    child: Offstage(
-      offstage: choiceBloc.isHideIcon,
-      child: FloatingActionButton.extended(
-        icon: choiceBloc.checkAnswer()
-            ? Icon(Icons.check)
-            : Icon(Icons.invert_colors_off),
-        label: Text("下一题"),
-        onPressed: () async {
-          if (choiceBloc.isToEnd()) {
-            choiceBloc.refreshAll();
-            await dropdowmenuBloc.loadInformation();
-            Navigator.pop(context);
-          } else {
-            choiceBloc.addIndex();
-            choiceBloc.refreshWiget();
-          }
-        },
-      ),
     ),
   );
 }

@@ -13,6 +13,12 @@ class JudgementBean {
     this.answer = answer;
     assert(answer=='true'||answer=='false');
   }
+  JudgementBean.create2(String question, String answer) {
+    this.question = question;
+     catalogId = 2;
+    this.answer = answer;
+    assert(answer=='true'||answer=='false');
+  }
 
   JudgementBean.fromMap(Map<String, dynamic> map) {
     id = map['id'];
@@ -36,5 +42,10 @@ class JudgementBean {
       'star': star
     };
     return map;
+  }
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "qustion: $question,answer$answer";
   }
 }

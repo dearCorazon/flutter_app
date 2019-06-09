@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Bean/UserBean.dart';
+import 'package:flutter_app/Bloc/UserBloc.dart';
+import 'package:flutter_app/Bloc/WrongBookBloc.dart';
+import 'package:flutter_app/Widget/Login.dart';
+import 'package:flutter_app/Widget/Page/WrongBook.dart';
+import 'package:provider/provider.dart';
 
 class Me extends StatelessWidget {
   const Me({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final  wrongBloc = Provider.of<WrongBookBloc>(context);
     return Container(
       child: Scaffold(
         body: Container(
@@ -13,50 +20,69 @@ class Me extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                     Padding(
-                       padding: EdgeInsets.only(top: 20.0,bottom: 20.0),
-                     ),
-                     Stack(
-                      alignment:  AlignmentDirectional.topCenter,
-                      children: <Widget>[
-                        Card(
-                          child: Container(
-                            height: 80.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(top: 15),
-                                  child: Column(
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                    ),
+                    StreamBuilder<UserBean>(
+                        initialData: Provider.of<UserBloc>(context).user,
+                        stream: Provider.of<UserBloc>(context).stream,
+                        builder: (context, snapshot) {
+                          return Stack(
+                            alignment: AlignmentDirectional.topCenter,
+                            children: <Widget>[
+                              Card(
+                                child: Container(
+                                  height: 80.0,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
-                                      Text("奖励积分"),
-                                      Text('--')
+                                      Container(
+                                        padding: EdgeInsets.only(top: 15),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text("奖励积分"),
+                                            Text(snapshot.data.isLogin
+                                                ? '${snapshot.data.score}'
+                                                : '--')
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 15),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text("答题次数"),
+                                            Text(snapshot.data.isLogin
+                                                ? '${snapshot.data.numberofanswer}'
+                                                : '--')
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
-                                Divider(),
-                                Container(
-                                  padding: EdgeInsets.only(top: 15),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text("答题次数"),
-                                      Text("--")
-                                    ],
-                                  ),
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return Login2();
+                                    }
 
-                                )
-                              ],
-                          ),
-                          ),
-                        ),
-                        CircleAvatar(
-
-                        radius: 30,
-                          backgroundColor: Colors.blueAccent,
-                          child:
-                          Text("鑫")),
-                      ],
-                    ),
+                                  ));
+                                },
+                                child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.blueAccent,
+                                    child: Text(snapshot.data.isLogin
+                                        ? '${snapshot.data.numberofanswer}'
+                                        : '未登录')),
+                              ),
+                            ],
+                          );
+                        }),
                     // Center(
                     //   child: Card(
                     //     elevation: 1.5,
@@ -91,8 +117,17 @@ class Me extends StatelessWidget {
                           children: <Widget>[
                             ListTile(
                               leading: Icon(Icons.account_balance_wallet),
-                              title: Text("挑战错题"),
-                              onTap: () {},
+                              title: Text("错题本"),
+                              onTap: () async{
+                                await wrongBloc.loadCatalog();
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return WrongBook();
+                                  }
+
+                                ));
+                                
+                              },
                             ),
                             Divider(),
                             ListTile(
@@ -109,7 +144,6 @@ class Me extends StatelessWidget {
                         ),
                       ),
                     ),
-                 
                   ],
                 ),
               )

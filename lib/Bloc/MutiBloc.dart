@@ -38,11 +38,20 @@ class MutiBloc with ChangeNotifier{
       _streamController.close();
   }
   
+  void loadWrongBook()async{
+    _cards= await daoApi.queryStarMuti();
+    _streamController.sink.add(_cards);
+
+  }
   void rightAnswer()async{
     _cards[index].number = _cards[index].number+1;
     int id=_cards[index].id;
     await  daoApi.mutiright(_cards[index].number, id);
     
+  }
+  loadTop5()async{
+    _cards=await daoApi.topmuti();
+    await _streamController.sink.add(_cards);
   }
   void faultAnswer()async{
     _cards[index].number= _cards[index].number+1;
@@ -83,6 +92,20 @@ class MutiBloc with ChangeNotifier{
     hideIcon();
     refreshselected();
     showCheckButton();
+  }
+  collect()async{
+     int id = _cards[index].id;
+      _cards[index].star=1;
+     notifyListeners();
+   await daoApi.collectMuti(id, 1);
+   Logv.Logprint("收藏");
+  }
+  uncollect()async{
+    int id = _cards[index].id;
+      _cards[index].star=0;
+     notifyListeners();
+     Logv.Logprint("取消收藏");
+   await daoApi.collectMuti(id, 0);
   }
    void refreshAll(){
     hideAnswer();

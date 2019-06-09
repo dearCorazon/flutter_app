@@ -21,8 +21,13 @@ class DropDownMenuBloc with ChangeNotifier {
 
   Stream<CatalogBean> get stream =>_stream;
   CatalogBean get  catalogBean =>_catalogBean;
-
-
+  
+  setCatalogIdInShardPrefrence(int catalogId)async{
+     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+     sharedPreferences.setInt("currentCatalogId",catalogId);
+     chooseCatalogId= catalogId;
+    notifyListeners();
+  }
   loadCatalogId()async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int catalogId= sharedPreferences.getInt("currentCatalogId");

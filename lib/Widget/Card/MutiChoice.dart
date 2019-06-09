@@ -22,6 +22,20 @@ class MutiChoice extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.star),
+                color: mutiBloc.card[mutiBloc.index].star == 0
+                    ? Colors.white
+                    : Colors.brown,
+                onPressed: () async {
+                  if (mutiBloc.card[mutiBloc.index].star == 0) {
+                    await mutiBloc.collect();
+                  }
+                  else {
+                    await mutiBloc.uncollect();
+                  }
+                },
+              ),
               Offstage(
                 offstage: mutiBloc.isHideCheckButton,
                 child: Container(

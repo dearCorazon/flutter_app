@@ -16,6 +16,7 @@ class MutiChoiceBean {
   String catalogname;
   int number=0;
   int faultnumber=0;
+  int star=0;
   String question;
   String answer;
   String chaos1;
@@ -23,6 +24,9 @@ class MutiChoiceBean {
   String chaos3;
   String chaos4;
   MutiChoiceBean.creat(this.question,this.answer,this.chaos1,this.chaos2,this.chaos3,this.chaos4);
+  MutiChoiceBean.creat2(this.question,this.answer,this.chaos1,this.chaos2,this.chaos3,this.chaos4){
+    catalogId=2;
+  }
   MutiChoiceBean.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     catalogId = map['catalogId;'];
@@ -35,6 +39,7 @@ class MutiChoiceBean {
     chaos2 = map['chaos2'];
     chaos3 = map['chaos3'];
     chaos4= map['chaos4'];
+    star=map['star'];
   }
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -49,6 +54,7 @@ class MutiChoiceBean {
       'chaos2': chaos2,
       'chaos3': chaos3,
       'chaos4': chaos4,
+      'star':star,
     };
     return map;
   }

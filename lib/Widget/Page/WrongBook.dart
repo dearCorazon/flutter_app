@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bean/CatalogBean.dart';
-import 'package:flutter_app/Bloc/CatalogBloc.dart';
-import 'package:flutter_app/Bloc/DropDownMenuBloc.dart';
-import 'package:flutter_app/Log.dart';
-import 'package:flutter_app/Widget/DropDownMenu.dart';
+import 'package:flutter_app/Bloc/ChoiceBloc.dart';
+import 'package:flutter_app/Bloc/MutiBloc.dart';
+import 'package:flutter_app/Bloc/WrongBookBloc.dart';
+import 'package:flutter_app/Widget/Card/ChoiceCard.dart';
+import 'package:flutter_app/Widget/Card/Judge.dart';
+import 'package:flutter_app/Widget/Card/MutiChoice.dart';
+import 'package:flutter_app/Widget/Wrongbook/WJudge.dart';
 import 'package:provider/provider.dart';
 
-class CatalogPage extends StatelessWidget {
+class WrongBook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final catalogBloc = Provider.of<CatalogBloc>(context);
+    final wrongbookBloc = Provider.of<WrongBookBloc>(context);
     return Container(
       child: Scaffold(
           appBar: AppBar(),
@@ -21,21 +23,22 @@ class CatalogPage extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       ListTile(
-                        title: Text("选择题库"),
+                        title: Text("错题本"),
                         //subtitle: DropDownMenu_catalog2(),
                       ),
-                      ListTile(
-                          title: DropDownMenu_catalog(catalogBloc.catalognames),
-                          )
+                      
                     ],
                   ),
                 ),
                 Expanded(
                   flex: 5,
                   child: StreamBuilder<CatalogBean>(
-                    initialData: Provider.of<DropDownMenuBloc>(context).catalogBean,
-                    stream: Provider.of<DropDownMenuBloc>(context).stream,
+                   initialData: Provider.of<WrongBookBloc>(context).catalogBean,
+                    stream: Provider.of<WrongBookBloc>(context).catalogStream,
+                    
                     builder: (context, snapshot) {
+                      final mutiBloc = Provider.of<MutiBloc>(context);
+                      final choiceBloc = Provider.of<ChoiceBloc>(context);
                       return Card(
                         child: Column(
                           children: <Widget>[
@@ -48,12 +51,28 @@ class CatalogPage extends StatelessWidget {
                           leading: Icon(Icons.ac_unit),
                           title: Text("单项选择"),
                           subtitle: Text(snapshot.data.choicenumber.toString()),
+                          onTap: snapshot.data.choicenumber==0?()=>null:()async{
+                            await choiceBloc.loadWrongBook();
+                            await  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                               return ChoiceCard();
+                              }
+                                
+                              ));
+                          },
                         ),
                         Divider(),
                         ListTile(
                           leading: Icon(Icons.access_time),
                           title: Text("多项选择题"),
                           subtitle:Text(snapshot.data.mutinumber.toString()),
+                          onTap: snapshot.data.mutinumber==0?()=>null:()async{
+                            await mutiBloc.loadWrongBook();
+                            await  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                                return MutiChoice();
+                              }
+                                
+                              ));
+                          },
                           
                         ),
                         Divider(),
@@ -61,6 +80,14 @@ class CatalogPage extends StatelessWidget {
                           leading: Icon(Icons.accessibility_new),
                           title: Text("判断题"),
                           subtitle: Text(snapshot.data.judgenumber.toString()),
+                          onTap: snapshot.data.judgenumber==0?()=>null:()async{
+                            await wrongbookBloc.loadJudge();
+                             await  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                                return WJudge();
+                              }
+                                
+                              ));
+                          },
                           
                         )
                             // ListTile(title: Text("选择题"+snapshot.data.choicenumber.toString()),),
@@ -82,27 +109,3 @@ class CatalogPage extends StatelessWidget {
     );
   }
 }
-
-Widget getList(BuildContext context) {
-  return StreamBuilder(
-      initialData: Provider.of<CatalogBloc>(context).catalogs,
-      stream: Provider.of<CatalogBloc>(context).stream,
-      builder: (BuildContext context, AsyncSnapshot<List<Catalog>> snapshot) {
-            //return DropDownMenu_catalog(snapshot.data);
-      }
-    );
-}
-Widget getDropDownMenu(){
-  return DropdownButton<Catalog>(
-   // value:  ,
-    items: <DropdownMenuItem<Catalog>>[
-      
-
-    ], 
-    onChanged: (value) {
-      
-    },
-    
-  );
-}
-

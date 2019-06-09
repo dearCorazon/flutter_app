@@ -3,12 +3,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_app/Bean/Judgement.dart';
 import 'package:flutter_app/Bloc/DropDownMenuBloc.dart';
 import 'package:flutter_app/Bloc/JudgeBloc.dart';
+import 'package:flutter_app/Bloc/WrongBookBloc.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:provider/provider.dart';
 
-class Judge extends StatelessWidget {
-  const Judge({Key key}) : super(key: key);
-
+class WJudge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,33 +18,34 @@ class Judge extends StatelessWidget {
 
           ),
       child: StreamBuilder<List<JudgementBean>>(
-        initialData: Provider.of<JudgeBloc>(context).card,
-        stream: Provider.of<JudgeBloc>(context).stream,
+        initialData: Provider.of<WrongBookBloc>(context).judges,
+        stream: Provider.of<WrongBookBloc>(context).judgeStream,
         builder: (BuildContext context,
             AsyncSnapshot<List<JudgementBean>> snapshot) {
-          final judegBloc = Provider.of<JudgeBloc>(context);
-          return Scaffold(
+          final wrongbook = Provider.of<WrongBookBloc>(context);
+          return 
+          Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
 
               backgroundColor: Colors.transparent,
               //toolbarOpacity: 0.0,
               actions: <Widget>[
-                IconButton(
-                icon: Icon(Icons.star),
-                color: judegBloc.card[judegBloc.index].star == 0
-                    ? Colors.white
-                    : Colors.brown,
-                onPressed: () async {
-                  if (judegBloc.card[judegBloc.index].star == 0) {
-                    await judegBloc.collect();
-                  } else {
-                    await judegBloc.uncollect();
-                  }
-                },
-              ),
+              //   IconButton(
+              //   icon: Icon(Icons.star),
+              //   color: wrongbook.judges[wrongbook.index].star == 0
+              //       ? Colors.white
+              //       : Colors.brown,
+              //   onPressed: () async {
+              //     // if (wrongbook.judges[wrongbook.index].star == 0) {
+              //     //   await wrongbook.collect();
+              //     // } else {
+              //     //   await wrongbook.uncollect();
+              //     // }
+              //   },
+              // ),
                 Offstage(
-                  offstage: judegBloc.isHideCheckButton,
+                  offstage: wrongbook.isHideCheckButton,
                   child: Container(
                     margin: EdgeInsets.only(
                         top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
@@ -59,17 +59,17 @@ class Judge extends StatelessWidget {
                             color: Colors.white, fontWeight: FontWeight.w600),
                       ),
                       onPressed: () async {
-                        if (judegBloc.checkAnswer()) {
+                        if (wrongbook.checkAnswer()) {
                           Logv.Logprint("正确");
-                          await judegBloc.rightAnswer();
+                          await wrongbook.rightAnswer();
                         } else {
-                          judegBloc.showAnswer();
+                          wrongbook.showAnswer();
                           Logv.Logprint("错误 正确答案为✖");
-                          await judegBloc.faultAnswer();
+                          await wrongbook.faultAnswer();
                         }
-                        judegBloc.showIcon();
-                        judegBloc.hideCheckButton();
-                        judegBloc.disableButtonTrue();
+                        wrongbook.showIcon();
+                        wrongbook.hideCheckButton();
+                        wrongbook.disableButtonTrue();
                       },
                     ),
                   ),
@@ -113,7 +113,7 @@ class Judge extends StatelessWidget {
 
 Widget JudgeCard(
     BuildContext context, AsyncSnapshot<List<JudgementBean>> snapshot) {
-  final judegBloc = Provider.of<JudgeBloc>(context);
+  final wrongBookBloc = Provider.of<WrongBookBloc>(context);
   return Container(
     child: Column(
       children: <Widget>[
@@ -133,12 +133,12 @@ Widget JudgeCard(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      "${judegBloc.index + 1}",
+                      "${wrongBookBloc.index + 1}",
                       style:
                           TextStyle(fontSize: 35, fontWeight: FontWeight.w700),
                     ),
                     Text(
-                      "/${judegBloc.card.length}",
+                      "/${wrongBookBloc.judges.length}",
                       style: TextStyle(color: Colors.grey),
                     ),
                   ],
@@ -148,14 +148,14 @@ Widget JudgeCard(
           ),
         ),
         Divider(),
-        ListTile(title: Text(snapshot.data[judegBloc.index].question)),
+        ListTile(title: Text(snapshot.data[wrongBookBloc.index].question)),
       ],
     ),
   );
 }
 
 Widget isRightIcon(BuildContext context) {
-  final judgeBloc = Provider.of<JudgeBloc>(context);
+  final judgeBloc = Provider.of<WrongBookBloc>(context);
   final dropdowmenuBloc = Provider.of<DropDownMenuBloc>(context);
 
   return Container(
@@ -199,7 +199,7 @@ Widget isRightIcon(BuildContext context) {
 }
 
 Widget judgeBar(BuildContext context) {
-  final judgeBloc = Provider.of<JudgeBloc>(context);
+  final wrongBookBloc = Provider.of<WrongBookBloc>(context);
   return Container(
     child: Column(
       children: <Widget>[
@@ -207,10 +207,10 @@ Widget judgeBar(BuildContext context) {
           child: ListTile(
             title: Text(
               "正确",
-              style: TextStyle(color: judgeBloc.colorTrue),
+              style: TextStyle(color: wrongBookBloc.colorTrue),
             ),
             onTap: () {
-              judgeBloc.isButtomTrueDisabled ? null : judgeBloc.tapTrue();
+              wrongBookBloc.isButtomTrueDisabled ? null : wrongBookBloc.tapTrue();
             },
           ),
         ),
@@ -218,10 +218,10 @@ Widget judgeBar(BuildContext context) {
           child: ListTile(
             title: Text(
               "错误",
-              style: TextStyle(color: judgeBloc.colorFalse),
+              style: TextStyle(color: wrongBookBloc.colorFalse),
             ),
             onTap: () {
-              judgeBloc.isButtomTrueDisabled ? null : judgeBloc.tapFalse();
+              wrongBookBloc.isButtomTrueDisabled ? null : wrongBookBloc.tapFalse();
             },
           ),
         )
@@ -231,13 +231,13 @@ Widget judgeBar(BuildContext context) {
 }
 
 Widget rightAnswer(BuildContext context) {
-  final judgeBloc = Provider.of<JudgeBloc>(context);
+  final wrongBookBloc = Provider.of<WrongBookBloc>(context);
   return Container(
     child: Offstage(
-      offstage: judgeBloc.ishideAnswer,
+      offstage: wrongBookBloc.ishideAnswer,
       child: Card(
         child: ListTile(
-          title: judgeBloc.checkAnswer()
+          title: wrongBookBloc.checkAnswer()
               ? Text(
                   '错误 正确答案为✔',
                   style: TextStyle(color: Colors.red),

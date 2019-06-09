@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_app/Bean/Judgement.dart';
 import 'package:flutter_app/DAO/DaoApi.dart';
 import 'package:flutter_app/Log.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class JudgeBloc with ChangeNotifier {
   DaoApi daoApi = new DaoApi();
@@ -20,20 +21,42 @@ class JudgeBloc with ChangeNotifier {
   List<JudgementBean> get card => _cards;
 
   loadCards() async {
+     await loadCatalogId();
     _cards = await daoApi.queryCardsInJudgeByCatalogId(catalogId);
     await _streamController.sink.add(_cards);
   }
-
-  loadCardsBycatalog(int id) async {
-    _cards = await daoApi.queryCardsInJudgeByCatalogId(id);
+  loadCatalogId()async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    catalogId= sharedPreferences.getInt("currentCatalogId");
+    Logv.Logprint("in loadCatalogId"+catalogId.toString());
+    notifyListeners();
+    
+  }
+  loadTop5()async{
+    _cards=await daoApi.topJudge();
     await _streamController.sink.add(_cards);
   }
-
+  loadCardsBycatalog() async {
+    await loadCatalogId();
+    _cards = await daoApi.queryCardsInJudgeByCatalogId(catalogId);
+    await _streamController.sink.add(_cards);
+  }
+  collect()async{
+     int id = _cards[index].id;
+     _cards[index].star=1;
+     notifyListeners();
+   await daoApi.collecjudge(id, 1);
+  }
+  uncollect()async{
+    int id = _cards[index].id;
+     _cards[index].star=0;
+     notifyListeners();
+   await daoApi.collecjudge(id, 0);
+  }
   /////////////////////state
-  int catalogId = 1;
+  int catalogId ;
   int index = 0;
-  bool trueCardcanTap = true; //TODO:准备弃用
-  bool falseCardcanTap = true; //同上
+ 
   bool judgeChoose;
   bool isHideIcon = true;
   bool ishideAnswer = true;

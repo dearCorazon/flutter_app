@@ -32,6 +32,7 @@ class UserBloc{
     bool isLogin = sharedPreferences.getBool('isLogin');
     String name =sharedPreferences.getString('name');
     _user= UserBean(uid,name,email,isLogin);
+    Logv.Logprint("in loadUser:"+_user.toMap().toString());
     await _streamController.sink.add(_user);
   }
   

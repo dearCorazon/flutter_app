@@ -22,8 +22,12 @@ class ChoiceCardBean {
   String chaos2;
   String chaos3;
   String chaos4;
+  int star=0;
   ChoiceCardBean.creat(this.question,this.answer,this.chaos1,this.chaos2,this.chaos3,this.chaos4);
   ChoiceCardBean.createWithCatalogId(this.question,this.answer,this.chaos1,this.chaos2,this.chaos3,this.chaos4,this.catalogId);
+  ChoiceCardBean.create2(this.question,this.answer,this.chaos1,this.chaos2,this.chaos3,this.chaos4){
+    catalogId=2;
+  }
   ChoiceCardBean.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     catalogId = map['catalogId;'];
@@ -36,6 +40,7 @@ class ChoiceCardBean {
     chaos2 = map['chaos2'];
     chaos3 = map['chaos3'];
     chaos4= map['chaos4'];
+    star= map['star'];
   }
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -51,6 +56,7 @@ class ChoiceCardBean {
       'chaos2': chaos2,
       'chaos3': chaos3,
       'chaos4': chaos4,
+      'star':star,
     };
     return map;
   }

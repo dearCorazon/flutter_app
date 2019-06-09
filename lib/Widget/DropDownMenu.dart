@@ -82,7 +82,9 @@ class _StateCatalog extends State<DropDownMenu_catalog> {
         value: _currentCatalog,
         onChanged: (String newValue) async{
           int chooseId= await catalogDao.getIdByName(newValue);
-          dropDownMenuBloc.updateCatalogId(chooseId);
+          await dropDownMenuBloc.setCatalogIdInShardPrefrence(chooseId);
+          //dropDownMenuBloc.updateCatalogId(chooseId);
+          Logv.Logprint('现在选择的catalogId为$chooseId');
           dropDownMenuBloc.loadInformation();
            setState(() {
             _currentCatalog = newValue;

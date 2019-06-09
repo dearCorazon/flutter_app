@@ -7,6 +7,7 @@ import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bean/CatalogStatusNumbers.dart';
 import 'package:flutter_app/Bean/Catalog_extra.dart';
 import 'package:flutter_app/Bean/ChoiceCard.dart';
+import 'package:flutter_app/Bean/MutiChoiceBean.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bloc/CardsBloc.dart';
 import 'package:flutter_app/Bloc/CatalogBloc.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_app/Bloc/JudgeBloc.dart';
 import 'package:flutter_app/Bloc/MutiBloc.dart';
 import 'package:flutter_app/Bloc/NewsBloc.dart';
 import 'package:flutter_app/Bloc/UserBloc.dart';
+import 'package:flutter_app/Bloc/WrongBookBloc.dart';
 import 'package:flutter_app/DAO/DaoApi.dart';
 import 'package:flutter_app/DAO/ScheduleDao.dart';
 import 'package:flutter_app/DAO/TestDao.dart';
@@ -70,6 +72,10 @@ void test()async{
   //print(test);
   DaoApi daoApi = new DaoApi();
   await daoApi.queryCatalogInformationByCatalogId(1);
+  await daoApi.topmuti();
+  List<MutiChoiceBean> cards= await daoApi.topmuti();
+  Logv.Logprint(cards.length.toString());
+
    //List <CardComplete> cards= await scheduleDao.loadCardListwithRSchedule(3,20);
   // Logv.Logprint("\n099999999999999999999999999999999999999999999999978567567 \n"+cards.toString());
   //await scheduleDao.loadCatalogStatusNumbersList();
@@ -264,6 +270,7 @@ _Dbinit() async {
   Logv.Logprint("userBloc user${userBloc.user}");
   Api api = new Api();
   DaoApi daoApi = new DaoApi();
+ await  daoApi.queryCatalogInformationByCatalogId(2);
   
   
   //await daoApi.insertChoicCard(ChoiceCard.creat("网络安全法规定，网络运营者应当制定________，及时处置系统漏洞、计算机病毒、网 络攻击、网络侵入等安全风险", "网站安全规章制度 ", "网络安全事件应急预案      ", "网络安全事件补救措施 ", "网络安全事件应急演练方案  "));
@@ -359,6 +366,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          Provider<WrongBookBloc>(
+            builder: (_)=>WrongBookBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
           Provider<DropDownMenuBloc>(
             builder: (_)=>DropDownMenuBloc(),
             dispose: (_,value)=>value.dispose(),
@@ -395,7 +406,9 @@ class MyApp extends StatelessWidget {
             builder: (_) =>CardsBloc(),
             dispose: (_,value)=>value.dispose(),
           ),
-        
+        ChangeNotifierProvider<WrongBookBloc>(
+            builder: (context)=>WrongBookBloc(),
+          ),
           ChangeNotifierProvider<JudgeBloc>(
             builder: (context)=>JudgeBloc(),
           ),

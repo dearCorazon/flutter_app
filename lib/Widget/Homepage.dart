@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:flutter_app/Bean/Catalog.dart';
 import 'package:flutter_app/Bloc/CardsBloc.dart';
 import 'package:flutter_app/Bloc/CatalogExtraBloc.dart';
+import 'package:flutter_app/Bloc/DropDownMenuBloc.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/BottomNavagatiorState.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_app/Utils/ImportCards.dart';
 import 'package:flutter_app/Widget/Body/Body.dart';
 import 'package:flutter_app/Widget/BottomBar.dart';
 import 'package:flutter_app/Widget/Catalog/CatalogShow.dart';
-import 'package:flutter_app/Widget/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'Card/CardsAdd.dart';
@@ -126,8 +126,8 @@ class HomePage extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.sync),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage3()));
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => HomePage3()));
               }),
           IconButton(
             icon: Icon(Icons.menu),
@@ -190,6 +190,7 @@ class HomePage2 extends StatelessWidget {
     final catalogState = Provider.of<CatalogState>(context);
     final catalogBloc = Provider.of<CatalogExtraBloc>(context);
     final buttomNavigatorState = Provider.of<BottonBarState>(context);
+    final dropdownBloc= Provider.of<DropDownMenuBloc>(context);
     final buttonlist = [
       UnicornButton(
           currentButton: FloatingActionButton(
@@ -279,6 +280,7 @@ class HomePage2 extends StatelessWidget {
                   }))),
     ];
     return Scaffold(
+      //drawer: Mydrawer(),
       floatingActionButton: UnicornDialer(
           parentButton: Icon(Icons.add), childButtons: buttonlist),
       appBar: AppBar(
@@ -286,15 +288,15 @@ class HomePage2 extends StatelessWidget {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.sync),
+              onPressed: (){
+            dropdownBloc.loadInformation();
+              },
               // onPressed: () {
               //   Navigator.push(context,
               //       MaterialPageRoute(builder: (context) => ()));
               // }
               ),
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {},
-          ),
+          
         ],
       ),
       body: Scrollbar(child: Container(
@@ -306,7 +308,7 @@ class HomePage2 extends StatelessWidget {
         )
       ),
         
-        child: getBody[buttomNavigatorState.index])),
+      child: getBody[buttomNavigatorState.index])),
       bottomNavigationBar: BottomBar(),
     );
   }

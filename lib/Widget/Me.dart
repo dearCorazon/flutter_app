@@ -29,7 +29,7 @@ class Me extends StatelessWidget {
                       subtitle: Text("uid"),
                       trailing: IconButton(icon:Icon(Icons.arrow_right),onPressed:(){
                         Navigator.push(context, MaterialPageRoute(
-                          builder: (context)=>Login()
+                          builder: (context)=>Login2()
                         ));
                       },),
                     )
