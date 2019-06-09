@@ -57,6 +57,18 @@ class JudgeBloc with ChangeNotifier {
       return false;
     }
   }
+  void rightAnswer()async{
+    _cards[index].number = _cards[index].number+1;
+    int id=_cards[index].id;
+    await  daoApi.judgeright(_cards[index].number, id);
+    
+  }
+  void faultAnswer()async{
+    _cards[index].number= _cards[index].number+1;
+    _cards[index].faultnumber=  _cards[index].faultnumber+1;
+    int id=_cards[index].id;
+    await  daoApi.judgefalse(_cards[index].number, id,_cards[index].faultnumber);
+  }
   void refreshWiget(){
     hideAnswer();
     hideIcon();

@@ -34,11 +34,29 @@ class MutiBloc with ChangeNotifier{
     notifyListeners();
   }
   
-   dispose(){
+  dispose(){
       _streamController.close();
-   }
-
-
+  }
+  
+  void rightAnswer()async{
+    _cards[index].number = _cards[index].number+1;
+    int id=_cards[index].id;
+    await  daoApi.mutiright(_cards[index].number, id);
+    
+  }
+  void faultAnswer()async{
+    _cards[index].number= _cards[index].number+1;
+    _cards[index].faultnumber=  _cards[index].faultnumber+1;
+    int id=_cards[index].id;
+    await  daoApi.mutifalse(_cards[index].number, id,_cards[index].faultnumber);
+  }
+  // void right()async{
+  //   int catalogId = _cards[index].catalogId;
+  //   int id = _cards[index].id;
+  //   int number= _cards[index].number++;
+  //   await daoApi.mutiright(number, id);
+    
+  // }
    //State:
   int index=0;
   bool isSelectedA=false;
@@ -47,16 +65,40 @@ class MutiBloc with ChangeNotifier{
   bool isSelectedD=false;
   bool ishideAnswer= true;
   bool isHideIcon= true;
+  bool isButtomTrueDisabled= false;
 
+ bool isHideCheckButton =false;
 
-  // void updateIsshowAnser(){
-  //   ishideAnswer=!ishideAnswer;
-  //   notifyListeners();
-  // }
-  // void updateIsshowIcon(){
-  //   isHideIcon=!isHideIcon;
-  //   notifyListeners();
-  // }
+ 
+  bool isToEnd(){
+    if(index==_cards.length-1){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  void refreshWiget(){
+    hideAnswer();
+    hideIcon();
+    refreshselected();
+    showCheckButton();
+  }
+   void refreshAll(){
+    hideAnswer();
+    hideIcon();
+    refreshselected();
+    showCheckButton();
+    refreshIndex();
+  }
+  void showCheckButton() {
+    isHideCheckButton = false;
+    notifyListeners();
+  }
+  void hideCheckButton() {
+    isHideCheckButton = true;
+    notifyListeners();
+  }
   void hideAnswer(){
     ishideAnswer=true;
     notifyListeners();
@@ -73,7 +115,10 @@ class MutiBloc with ChangeNotifier{
      isHideIcon=false;
      notifyListeners();
   }
-
+ void disableButtonTrue(){
+    isButtomTrueDisabled=true;
+    notifyListeners();
+  }
   
   void updateA(){
     isSelectedA=!isSelectedA;

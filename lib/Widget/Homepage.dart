@@ -298,6 +298,13 @@ class HomePage2 extends StatelessWidget {
         ],
       ),
       body: Scrollbar(child: Container(
+         decoration: BoxDecoration(
+        image:DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage('images/backgruond2.jpeg')
+          
+        )
+      ),
         
         child: getBody[buttomNavigatorState.index])),
       bottomNavigationBar: BottomBar(),

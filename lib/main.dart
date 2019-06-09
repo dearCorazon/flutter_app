@@ -9,8 +9,10 @@ import 'package:flutter_app/Bean/Catalog_extra.dart';
 import 'package:flutter_app/Bean/ChoiceCard.dart';
 import 'package:flutter_app/Bean/Schedule.dart';
 import 'package:flutter_app/Bloc/CardsBloc.dart';
+import 'package:flutter_app/Bloc/CatalogBloc.dart';
 import 'package:flutter_app/Bloc/CatalogExtraBloc.dart';
 import 'package:flutter_app/Bloc/ChoiceBloc.dart';
+import 'package:flutter_app/Bloc/DropDownMenuBloc.dart';
 import 'package:flutter_app/Bloc/JudgeBloc.dart';
 import 'package:flutter_app/Bloc/MutiBloc.dart';
 import 'package:flutter_app/Bloc/NewsBloc.dart';
@@ -42,14 +44,14 @@ import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/DAO/DaoTest.dart';
 
 void main() async{
-  //更新目录列表在
+
 
   //TODO:登录注册
   //TODO:从网络获取题库
-  //TODO：Drawer 返回主页
-  //TODO：准备选择题的模板
-  //TODO：同步
-  //TODO:美化
+
+
+
+
 
   await _Dbinit();
   await test();
@@ -66,7 +68,8 @@ void test()async{
   Api api = new Api();
   //String test = await api.getNews();
   //print(test);
-  
+  DaoApi daoApi = new DaoApi();
+  await daoApi.queryCatalogInformationByCatalogId(1);
    //List <CardComplete> cards= await scheduleDao.loadCardListwithRSchedule(3,20);
   // Logv.Logprint("\n099999999999999999999999999999999999999999999999978567567 \n"+cards.toString());
   //await scheduleDao.loadCatalogStatusNumbersList();
@@ -249,13 +252,14 @@ _Dbinit() async {
    UserBloc userBloc = new UserBloc();
    NewsBloc newsBloc = new NewsBloc();
    ChoiceBloc choiceBloc = new ChoiceBloc();
+   DropDownMenuBloc downMenuBloc = new DropDownMenuBloc();
   await catalogExtraBloc.loadCatalogExtraList();
   await cardsBloc.loadCardCompleteList();
   String email =await sharedPreferences.getString('email');
   bool flag=await sharedPreferences.getBool('isLogin');
   //Logv.Logprint("登录信息 是否登录：$flag 邮箱$email");
   List<String > names = await catalogDao.queryAllCatalogNames();
-  Logv.Logprint("123456\n"+names.toString()) ;
+  //Logv.Logprint("123456\n"+names.toString()) ;
   MutiBloc  mutiBloc = new MutiBloc();
   Logv.Logprint("userBloc user${userBloc.user}");
   Api api = new Api();
@@ -355,6 +359,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          Provider<DropDownMenuBloc>(
+            builder: (_)=>DropDownMenuBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
+           Provider<CatalogBloc>(
+            builder: (_)=>CatalogBloc(),
+            dispose: (_,value)=>value.dispose(),
+          ),
           Provider<JudgeBloc>(
             builder: (_)=>JudgeBloc(),
             dispose: (_,value)=>value.dispose(),
@@ -383,9 +395,7 @@ class MyApp extends StatelessWidget {
             builder: (_) =>CardsBloc(),
             dispose: (_,value)=>value.dispose(),
           ),
-          // ChangeNotifierProvider<CatalogExtraState>(
-          //   builder: (context)=>,
-          // ),
+        
           ChangeNotifierProvider<JudgeBloc>(
             builder: (context)=>JudgeBloc(),
           ),

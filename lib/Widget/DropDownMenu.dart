@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/CatalogExtra.dart';
 import 'package:flutter_app/Bloc/CardsBloc.dart';
 import 'package:flutter_app/Bloc/CatalogExtraBloc.dart';
+import 'package:flutter_app/Bloc/DropDownMenuBloc.dart';
 import 'package:flutter_app/DAO/CatalogDao.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:flutter_app/Provider/CardsAddState.dart';
@@ -39,13 +40,14 @@ class _State extends State<DropDownMenu_type> {
 
 class DropDownMenu_catalog extends StatefulWidget {
   List<String> catalogs;
-  List<String> get getcatalogs => catalogs;
+  //List<String> get getcatalogs => catalogs;
   DropDownMenu_catalog(this.catalogs,{Key key}):super(key:key);
   @override
   _StateCatalog createState() => _StateCatalog(catalogs);
 }
 
 class _StateCatalog extends State<DropDownMenu_catalog> {
+  CatalogDao catalogDao  = new CatalogDao();
   List<String> catalogs;
   _StateCatalog(this.catalogs); 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
@@ -75,12 +77,13 @@ class _StateCatalog extends State<DropDownMenu_catalog> {
 
   @override
   Widget build(BuildContext context) {
-    final catalogDropdownMunuState = Provider.of<DropDownMenuState>(context);
+    final  dropDownMenuBloc= Provider.of<DropDownMenuBloc>(context);
     return DropdownButton<String>(
         value: _currentCatalog,
-        onChanged: (String newValue) {
-          catalogDropdownMunuState.loadCurrentCatologName(newValue);
-          catalogDropdownMunuState.changeCurrentCatalogNumber(newValue);
+        onChanged: (String newValue) async{
+          int chooseId= await catalogDao.getIdByName(newValue);
+          dropDownMenuBloc.updateCatalogId(chooseId);
+          dropDownMenuBloc.loadInformation();
            setState(() {
             _currentCatalog = newValue;
           });
@@ -112,7 +115,7 @@ class _StateCatalog2 extends State<DropDownMenu_catalog2> {
 
   @override
   Widget build(BuildContext context) {
-    final catalogDropdownMunuState = Provider.of<DropDownMenuState>(context);
+    final catalogDropdownMunuState = Provider.of<DropDownMenuBloc>(context);
     return StreamBuilder<List<CatalogExtra>>(
       stream: Provider.of<CatalogExtraBloc>(context).stream2,
       initialData: Provider.of<CatalogExtraBloc>(context).catalogExtras2,

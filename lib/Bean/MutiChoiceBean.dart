@@ -13,7 +13,7 @@ class MutiChoiceBean {
 
   int id;
   int catalogId=1;
-  String catalogname='默认';
+  String catalogname;
   int number=0;
   int faultnumber=0;
   String question;

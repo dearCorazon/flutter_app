@@ -13,7 +13,7 @@ class ChoiceCardBean {
 
   int id;
   int catalogId=1;
-  String catalogname='默认';
+  String catalogname;
   int number=0;
   int faultnumber=0;
   String question;
@@ -23,10 +23,11 @@ class ChoiceCardBean {
   String chaos3;
   String chaos4;
   ChoiceCardBean.creat(this.question,this.answer,this.chaos1,this.chaos2,this.chaos3,this.chaos4);
+  ChoiceCardBean.createWithCatalogId(this.question,this.answer,this.chaos1,this.chaos2,this.chaos3,this.chaos4,this.catalogId);
   ChoiceCardBean.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     catalogId = map['catalogId;'];
-    catalogname = map['catalogname'];
+    //catalogname = map['catalogname'];
     number = map['number'];
     faultnumber = map['faultnumber'];
     question = map['question'];
@@ -40,7 +41,8 @@ class ChoiceCardBean {
     var map = <String, dynamic>{
       'id': id,
       'catalogId': catalogId,
-      'catalogname': catalogname,
+      //'catalogname': catalogname,
+      //TODO：如何解决冲突
       'number': number,
       'faultnumber': faultnumber,
       'question': question,
@@ -52,4 +54,4 @@ class ChoiceCardBean {
     };
     return map;
   }
-}
+  }

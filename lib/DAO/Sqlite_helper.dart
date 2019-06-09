@@ -1,4 +1,5 @@
 import 'package:flutter_app/Bean/Catalog.dart';
+import 'package:flutter_app/Bean/CatalogBean.dart';
 import 'package:flutter_app/Bean/ChoiceCard.dart';
 import 'package:flutter_app/Bean/Judgement.dart';
 import 'package:flutter_app/Bean/MutiChoiceBean.dart';
@@ -25,7 +26,8 @@ class Sqlite_helper{
     static final sql_table_mutiCard='create table muti(id integer not null primary key autoincrement,catalogId integer, star integer,catalogname text,number integer,faultnumber integer,answer text,chaos1 text,chaos2 text,chaos3 text,chaos4 text,question text)';
     static final sql_table_judge='create table judge(id integer not null primary key autoincrement,catalogId integer, star integer,catalogname text,number integer,faultnumber integer,answer text,question text)';
     Sqlite_helper._privateConstructor();
-    static final Sqlite_helper instance = Sqlite_helper._privateConstructor();
+    //static final sql_table_bank = 'CREATE TABLE bank(catalogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,catalogname TEXT UNIQUE)';
+    static final Sqlite_helper instance = Sqlite_helper._privateConstructor(); 
     String tableTest ='test';
     String tableCatalog='catalog';
     String tableSchedule='schedule';
@@ -59,12 +61,12 @@ class Sqlite_helper{
             await db.insert(tableTest,Test.create("1+2=?", "3").toMap());//default 
             await db.insert(tableTest,Test.create("1+3=?", "4").toMap());//default 
             await db.insert(tableTest,Test.createWithCatalog("English", "英语",3).toMap());//TODO：一开始没有加await ，该语句执行，但后面的部分都没有执行，why？
-
-            await db.insert(tableCatalog, Catalog.create("默认").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =1
-            await db.insert(tableCatalog, Catalog.create("网络安全法").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =2 
-            await db.insert(tableCatalog, Catalog.create("English").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =3
             
-            //var schedule= Schedule.create(3, 1);
+            await db.insert(tableCatalog, Catalog.create("网络安全法考试(一)").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
+             await db.insert(tableCatalog, Catalog.create("网络安全法考试(二)").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =1
+            //await db.insert(tableCatalog, Catalog.create("网络安全法").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =2 
+           // await db.insert(tableCatalog, Catalog.create("English").toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);//id =3
+            //await db.insert('bank', CatalogBean('网络安全法考试(一)').toMap());
             await db.insert(tableSchedule,Schedule.create(1, 1).toMap());
             await db.insert(tableSchedule,Schedule.create(2, 1).toMap());
             await db.insert(tableSchedule,Schedule.create(3, 1).toMap());
@@ -74,10 +76,11 @@ class Sqlite_helper{
 //    await daoApi.insertChoicCard(ChoiceCard.creat("网络安全法规定，网络运营者应当制定________，及时处置系统漏洞、计算机病毒、网络攻击、网络侵入等安全风险", "网站安全规章制度 ", "网络安全事件应急预案      ", "网络安全事件补救措施 ", "网络安全事件应急演练方案  "));
 
             SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-            await sharedPreferences.setString('name', '本地用户');
-            await sharedPreferences.setString('email', 'null');
+            await sharedPreferences.setString('name', '未设置');
+            await sharedPreferences.setString('email', '未登录');
             await sharedPreferences.setInt('userId', 1);
             await sharedPreferences.setBool('isLogin', false);
+            await sharedPreferences.setInt("currentCatalogId", 1);
             await Logv.Logprint("用户信息初始化 userId为"+"${sharedPreferences.getInt("userId")}");
             
             //await db.insert(tableSchedule,Schedule.create(-1,1).toMap());

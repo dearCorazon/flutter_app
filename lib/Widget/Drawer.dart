@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Bean/User.dart';
+import 'package:flutter_app/Bean/UserBean.dart';
 import 'package:flutter_app/Bloc/UserBloc.dart';
 import 'package:flutter_app/Provider/UserState.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class Mydrawer extends  StatelessWidget{
       child:   Container(
         child:   ListView(
           children: <Widget>[
-              StreamBuilder<User>(
+              StreamBuilder<UserBean>(
                 initialData: userBloc.user,
                 stream: userBloc.stream,
                 builder: (context, snapshot) {

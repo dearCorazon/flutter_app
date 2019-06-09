@@ -3,26 +3,26 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/Bean/User.dart';
+import 'package:flutter_app/Bean/UserBean.dart';
 import 'package:flutter_app/Log.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserBloc{
-  User _user;
+  UserBean _user;
   
-  StreamController<User> _streamController = new StreamController();
-  Stream<User>  _stream;
+  StreamController<UserBean> _streamController = new StreamController();
+  Stream<UserBean>  _stream;
 
   UserBloc(){
     Logv.Logprint("in UserBloc constructor:");
     _streamController=StreamController.broadcast();
-
     _stream=_streamController.stream;
     loadUser();
   }
 
-  User get user=>_user;
-  StreamController<User> get streamController=> _streamController;
-  Stream<User> get  stream=>_stream;
+  UserBean get user=>_user;
+  StreamController<UserBean> get streamController=> _streamController;
+  Stream<UserBean> get  stream=>_stream;
   
 
   loadUser()async{
@@ -30,12 +30,13 @@ class UserBloc{
     int uid =sharedPreferences.getInt('userId');
     String email = sharedPreferences.getString('email');
     bool isLogin = sharedPreferences.getBool('isLogin');
-    _user= User(email, uid,isLogin);
+    String name =sharedPreferences.getString('name');
+    _user= UserBean(uid,name,email,isLogin);
     await _streamController.sink.add(_user);
   }
   
   login(String email,int uid)async{
-    _user = User(email,uid,true);
+    _user = UserBean.createwithoutname(uid,email,true);
     SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
     await sharedPreferences.setBool('isLogin', true);
     await sharedPreferences.setString('email', email);

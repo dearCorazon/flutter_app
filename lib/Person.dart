@@ -17,8 +17,8 @@ class Person {
 
 
 }
-final Persons=[
-    new Person(id: 1,password:"123456",name: 'fan',email: "chopperfan@qq.com" ),
-    new Person(id:2,password: "123456",name: 'zhang',email: "zhangqiang@qq.com")
-  ];
+// final Persons=[
+//     new Person(id: 1,password:"123456",name: 'fan',email: "chopperfan@qq.com" ),
+//     new Person(id:2,password: "123456",name: 'zhang',email: "zhangqiang@qq.com")
+//   ];
 
