@@ -172,7 +172,7 @@ class Login2 extends StatelessWidget {
                           child: Text("注册"),
                           onPressed: () async {
                             await api.register(
-                                _emailController.value.toString(),
+                                _emailController.text,
                                 _passwordController.text);
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text("注册成功"),

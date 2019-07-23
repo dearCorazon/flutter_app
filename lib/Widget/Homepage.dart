@@ -280,7 +280,7 @@ class HomePage2 extends StatelessWidget {
                   }))),
     ];
     return Scaffold(
-      //drawer: Mydrawer(),
+      drawer: Mydrawer(),
       floatingActionButton: UnicornDialer(
           parentButton: Icon(Icons.add), childButtons: buttonlist),
       appBar: AppBar(

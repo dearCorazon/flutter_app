@@ -25,10 +25,10 @@ class BottomBar extends StatelessWidget {
               ),
               title: Text("首页")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.access_alarm), title: Text("案例")),
+              icon: Icon(Icons.network_cell), title: Text("案例")),
           //BottomNavigationBarItem(icon: Icon(Icons.ac_unit), title: Text("统计")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.access_time), title: Text("我的")),
+              icon: Icon(Icons.portrait), title: Text("我的")),
         ],
       ),
     );

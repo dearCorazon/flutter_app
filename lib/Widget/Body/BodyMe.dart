@@ -3,6 +3,7 @@ import 'package:flutter_app/Bean/UserBean.dart';
 import 'package:flutter_app/Bloc/UserBloc.dart';
 import 'package:flutter_app/Bloc/WrongBookBloc.dart';
 import 'package:flutter_app/Widget/Login.dart';
+import 'package:flutter_app/Widget/NewsDetail.dart';
 import 'package:flutter_app/Widget/Page/WrongBook.dart';
 import 'package:provider/provider.dart';
 
@@ -139,6 +140,13 @@ class Me extends StatelessWidget {
                             ListTile(
                               leading: Icon(Icons.data_usage),
                               title: Text("网络安全法总则"),
+                              onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return NewsWebPage('https://duxiaofa.baidu.com/detail?searchType=statute&from=aladdin_28231&originquery=%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%B3%95&count=79&cid=f66f830e45c0490d589f1de2fe05e942_law',
+                              '网络安全法总则');
+                        }));
+                      },
                             ),
                           ],
                         ),
